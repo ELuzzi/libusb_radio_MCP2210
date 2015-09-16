@@ -5,10 +5,14 @@
 	\version 2.4
 	\date 08/2014
 */
+
 #include <stdio.h>
 #include <sys/types.h>
 
 #include <libusb-1.0/libusb.h>
+
+#include <my_global.h>
+#include <mysql.h>	
 
 /**
 @def DEV_ENDPOINT
@@ -35,21 +39,34 @@
  */  	   	  
 #define DEV_PID 222	   	   		   
 
+#if 0
+void finish_with_error(MYSQL *con, libusb_device_handle *handle, libusb_context *ctx)
+{
+  fprintf(stderr, "%s\n", mysql_error(con));
+  mysql_close(con);
+  libusb_close(handle); // closes the library	
+  libusb_exit(ctx); // exit context
+  exit(1);        
+}  	   		   
+#endif
+
 /**
 @brief transfer_data()
  	  This function calls the bulk transfer available on libusb.
  */
-int transfer_data(libusb_device_handle *handle, unsigned char *data)
+int transfer_data(libusb_device_handle *handle, unsigned char *data, MYSQL *con) 
 {
 	int byte_count, rslt;
+	float dataF = 0;
 	unsigned char ReceivedData[64];
 	unsigned char *Response = ReceivedData;
+	char query[100];
 	
 	/**
 	@brief libusb_bulk_transfer()
  	  Send data to MCP2210.
 	*/
-	rslt = libusb_bulk_transfer(handle, DEV_ENDPOINT, data, 64, &byte_count, 0);
+	rslt = libusb_bulk_transfer(handle, DEV_ENDPOINT, data, 64, &byte_count, 0); 
 	if(rslt == 0 && byte_count == 64)
 	{
 		/**
@@ -57,10 +74,24 @@ int transfer_data(libusb_device_handle *handle, unsigned char *data)
 			 Receives device response.
 		*/
 		rslt = libusb_bulk_transfer(handle, HOST_ENDPOINT, Response, 64, &byte_count, 0);
-		if(rslt == 0 && byte_count == 64) // if successfully received all bytes	
+		if(rslt == 0 && byte_count == 64) // successfully received all bytes	
 		{
-			if(ReceivedData[0]==0x42 && ReceivedData[1]==0x00 && ReceivedData[3]==0x10)
-				return 2;
+			if(ReceivedData[0]==0x42 && ReceivedData[1]==0x00 && ReceivedData[2] == 0x01 && ReceivedData[3]==0x10) // condition for a new data read
+			{
+				printf("Received Data = %#02x\n", ReceivedData[4]); // prints received data
+
+				dataF = ReceivedData[4];
+
+				// generate query string to insert new data into the database
+				snprintf(query, 100, "INSERT INTO subjectdata (subject_id, details, temperature) VALUES (1, 'MCP2210', ('%.2f'))", dataF);
+				
+				if (mysql_query(con, query)) {
+      					fprintf(stderr, "%s\n", mysql_error(con));
+ 					mysql_close(con);
+  				}
+				return 3; // data succesfully read
+			}
+			return 2;
 		}
 		else
 		{
@@ -78,12 +109,26 @@ int transfer_data(libusb_device_handle *handle, unsigned char *data)
 
 int main(void)
 {
+	MYSQL *con = mysql_init(NULL);
+
+	if (con == NULL) 
+  	{
+      		fprintf(stderr, "%s\n", mysql_error(con));
+      		exit(1);
+  	}  
+  	// Connects to mysql database
+	if (mysql_real_connect(con, "localhost", "bernardo", "bernardo", "storeddata", 0, NULL, 0) == NULL) // init var, server name, user, pass, db name 
+  	{
+      		fprintf(stderr, "%s\n", mysql_error(con));
+  		mysql_close(con);
+ 	}
+
 	libusb_device **list, *found = NULL;
 	libusb_device_handle *handle = NULL;
 	libusb_context *ctx = NULL;
 	
 	int r;
-	ssize_t cnt, i, n;
+	ssize_t cnt, i, n, c=0;
 	
 	unsigned char SetCS[64], SetSpiS[64], TxSpi[64];
 	unsigned char *SetChipSettings = SetCS, *SetSpiSettings = SetSpiS, *TransferSpiData = TxSpi;
@@ -118,7 +163,7 @@ int main(void)
 	SetSpiSettings[7] = 0x00; // 6.000.000 bps = 005B8D80 hex
 	SetSpiSettings[8] = 0xFF; // Idle Chip Select Value
 	SetSpiSettings[9] = 0xFF; 
-	SetSpiSettings[10] = 0xEF; // Active Chip Select Value
+	SetSpiSettings[10] = 0xFF; // Active Chip Select Value, GP4 = 0
 	SetSpiSettings[11] = 0xFF; 
 	SetSpiSettings[12] = 0x00; // Chip Select to Data Delay (low byte)
 	SetSpiSettings[13] = 0x00; // Chip Select to Data Delay (high byte)
@@ -126,21 +171,21 @@ int main(void)
 	SetSpiSettings[15] = 0x00; // Last Data Byte to CS (high byte)
 	SetSpiSettings[16] = 0x00; // Delay Between Subsequent Data Bytes (low byte)
 	SetSpiSettings[17] = 0x00; // Delay Between Subsequent Data Bytes (high byte)
-	SetSpiSettings[18] = 0x03; // Bytes to Transfer per SPI Transaction (low byte)
+	SetSpiSettings[18] = 0x01; // Bytes to Transfer per SPI Transaction (low byte)
 	SetSpiSettings[19] = 0x00; // Bytes to Transfer per SPI Transaction (high byte)
-	SetSpiSettings[20] = 0x00; // SPI mode 0
+	SetSpiSettings[20] = 0x03; // SPI mode 3 - For communincation with PIC
 	for(n=21;n<64;n++)
 	{
 		SetSpiSettings[n] = 0x00; // Reserved 
 	}
 		/* TRANSFER SPI DATA */
 	TransferSpiData[0] = 0x42; // Transfer SPI Data Command Code
-	TransferSpiData[1] = 0x03; // Number of bytes to be transferred
+	TransferSpiData[1] = 0x01; // Number of bytes to be transferred
 	TransferSpiData[2] = 0x00; 	
 	TransferSpiData[3] = 0x00; // Reserved	
-	TransferSpiData[4] = 0x40; // SPI data to be sent
-	TransferSpiData[5] = 0x00; 
-	TransferSpiData[6] = 0x00; 
+	TransferSpiData[4] = 0x00; // SPI data to be sent
+	TransferSpiData[5] = 0xFF; 
+	TransferSpiData[6] = 0xFF; 
 	for(n=7;n<64;n++)
 	{
 		TransferSpiData[n] = 0xFF;  
@@ -149,21 +194,19 @@ int main(void)
 	@brief libusb_init()
 		Initialize library session.
 	*/
-	r = libusb_init(&ctx);
+	r = libusb_init(&ctx); // initialize library session
 	if (r < 0)
 		return r;
-	
 	/**
 	@brief libusb_set_debug()
 		Set log message verbosity.
 	*/
 	libusb_set_debug(ctx, 3);	
-	
 	/**
 	@brief libusb_get_device_list()
 		Get list of devices connected.
 	*/
-	cnt = libusb_get_device_list(ctx, &list);
+	cnt = libusb_get_device_list(ctx, &list); // get list of devices connected
 	if (cnt < 0)
 		return (int) cnt;
 
@@ -172,13 +215,12 @@ int main(void)
 		libusb_device *device = list[i];
 
 		struct libusb_device_descriptor desc;
-		
 		/**
 		@brief libusb_get_device_descriptor()
 			Get device descriptor.
-		*/		
-		libusb_get_device_descriptor(device, &desc);
-
+		*/
+		libusb_get_device_descriptor(device, &desc); // get device descriptor
+		
 		if (desc.idVendor == DEV_VID && desc.idProduct == DEV_PID) 
 		{
 			found = device;
@@ -191,8 +233,8 @@ int main(void)
 		/**
 		@brief libusb_open_device_with_vid_pid()
 			Try to get a handle to MCP2210 using corresponding VID and PID.
-		*/		
-		handle = libusb_open_device_with_vid_pid(ctx, DEV_VID, DEV_PID);
+		*/
+		handle = libusb_open_device_with_vid_pid(ctx, DEV_VID, DEV_PID); // try to get a handle to MCP2210 using corresponding VID and PID
 		if(handle == NULL)
 			printf("Error opening device!\n\t-ERROR CODE: %d\n",r);
 		else
@@ -231,56 +273,40 @@ int main(void)
 	}
 	printf("\t->Claimed interface!\n");
 		// First Step: Write command to Configure all GP's as CS
-	r = transfer_data(handle, SetChipSettings);
+	r = transfer_data(handle, SetChipSettings, con);
 	if(r == 1)
 	{
 		libusb_close (handle); 	
 		libusb_exit(ctx);
 		return 1;
 	}
-		// Second Step: Set SPI settings and select MCP23S08 (GP4=0)
-	r = transfer_data(handle, SetSpiSettings);
+		// Second Step: Set SPI settings and select TC77 (GP7=0)
+	r = transfer_data(handle, SetSpiSettings, con);
 	if(r == 1)
 	{
 		libusb_close (handle); 	
 		libusb_exit(ctx);
 		return 1;
 	}
-		// Third Step: Send commands and data to MCP23S08
-	while (1)
-	{	
-		r = transfer_data(handle, TransferSpiData);
-		if(r == 2)
-			break; // SPI data transfer completed
-		
-		else if(r == 1)
-		{
-			libusb_close (handle); 	
-			libusb_exit(ctx);
-			return 1;
-		}
-	}	
-	TransferSpiData[4] = 0x40; TransferSpiData[5] = 0x0A; TransferSpiData[6] = 0xFF;// SPI data to be sent
-		
-	while(1)
-	{	
-		r = transfer_data(handle, TransferSpiData);
-		if(r == 2)
-			break; // SPI data transfer completed
-		
-		else if(r == 1)
+
+	r = 0;
+	// Third Step: Data read
+	while(r != 3)
+	{
+		r = transfer_data(handle, TransferSpiData, con);
+		sleep(1);
+		if(r == 1) // error during communication
 		{
 			libusb_close (handle); 	
 			libusb_exit(ctx);
 			return 1;
 		}
 	}
-	printf("\t\t->Data Sent\n");
 	/**
 	@brief libusb_release_interface()
 		Release the claimed interface.
 	*/
-	r = libusb_release_interface(handle, 0);
+	r = libusb_release_interface(handle, 0); //release the claimed interface
 	if(r!=0) 
 	{
 	        printf("Cannot Release Interface\n");
@@ -293,12 +319,12 @@ int main(void)
 	@brief libusb_close()
 		Closes the library.
 	*/
-	libusb_close(handle);
+	libusb_close(handle); // closes the library	
 	/**
 	@brief libusb_exit()
 		Exit context.
 	*/
-	libusb_exit(ctx); 
+	libusb_exit(ctx); // exit context
 	return 0;
 }
 
