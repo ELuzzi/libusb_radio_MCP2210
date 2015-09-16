@@ -789,34 +789,6 @@ void Initialize() {
     ADDRESS_long_2[i] = 2;
   }
 
-  ADCON1 = 0x0F;
-  GIE_bit = 0;           // Disable interrupts
-
-  TRISA = 0x00;          // Set direction to be output
-  TRISB = 0x00;          // Set direction to be output
-  TRISC = 0x00;          // Set direction to be output
-  TRISD = 0x00;          // Set direction to be output
-
-  CS2_Direction = 0;      // Set direction to be output
-  RST_Direction  = 0;    // Set direction to be output
-  INT_Direction  = 1;    // Set direction to be input
-  WAKE_Direction = 0;    // Set direction to be output
-
-  DATA_TX[0] = 0;        // Initialize first byte
-  DATA_TX[1] = 0;        // Initialize first byte
-  DATA_TX[2] = 0;        // Initialize first byte
-  DATA_TX[3] = 0;        // Initialize first byte
-  DATA_TX[4] = 0;        // Initialize first byte
-
-  PORTD = 0;             // Clear PORTD register
-  LATD  = 0;             // Clear LATD register
-
-  Delay_ms(15);
-  
-  Lcd_Init();                        // Initialize LCD
-  Lcd_Cmd(_LCD_CLEAR);               // Clear display
-  Lcd_Cmd(_LCD_CURSOR_OFF);          // Cursor off
-
   // Initialize SPI module
   SPI1_Init_Advanced(_SPI_MASTER_OSC_DIV4, _SPI_DATA_SAMPLE_MIDDLE, _SPI_CLK_IDLE_LOW, _SPI_LOW_2_HIGH);
   pin_reset();                              // Activate reset from pin
