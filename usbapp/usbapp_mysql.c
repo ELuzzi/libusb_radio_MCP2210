@@ -39,6 +39,7 @@
  */  	   	  
 #define DEV_PID 222	   	   		   
 
+/*
 #if 0
 void finish_with_error(MYSQL *con, libusb_device_handle *handle, libusb_context *ctx)
 {
@@ -49,7 +50,7 @@ void finish_with_error(MYSQL *con, libusb_device_handle *handle, libusb_context 
   exit(1);        
 }  	   		   
 #endif
-
+*/
 /**
 @brief transfer_data()
  	  This function calls the bulk transfer available on libusb.
@@ -81,14 +82,15 @@ int transfer_data(libusb_device_handle *handle, unsigned char *data, MYSQL *con)
 				printf("Received Data = %#02x\n", ReceivedData[4]); // prints received data
 
 				dataF = ReceivedData[4];
-
+				
+				/*
 				// generate query string to insert new data into the database
 				snprintf(query, 100, "INSERT INTO subjectdata (subject_id, details, temperature) VALUES (1, 'MCP2210', ('%.2f'))", dataF);
 				
 				if (mysql_query(con, query)) {
       					fprintf(stderr, "%s\n", mysql_error(con));
  					mysql_close(con);
-  				}
+  				}  */
 				return 3; // data succesfully read
 			}
 			return 2;
@@ -109,6 +111,7 @@ int transfer_data(libusb_device_handle *handle, unsigned char *data, MYSQL *con)
 
 int main(void)
 {
+	/*
 	MYSQL *con = mysql_init(NULL);
 
 	if (con == NULL) 
@@ -122,7 +125,8 @@ int main(void)
       		fprintf(stderr, "%s\n", mysql_error(con));
   		mysql_close(con);
  	}
-
+	*/
+	
 	libusb_device **list, *found = NULL;
 	libusb_device_handle *handle = NULL;
 	libusb_context *ctx = NULL;
