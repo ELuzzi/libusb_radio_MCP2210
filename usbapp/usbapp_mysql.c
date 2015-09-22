@@ -5,7 +5,7 @@
 	\version 2.4
 	\date 08/2014
 */
-//testando
+
 #include <stdio.h>
 #include <sys/types.h>
 
@@ -39,6 +39,135 @@
  */  	   	  
 #define DEV_PID 222	   	   		   
 
+
+/////////////////////////////////////////
+////// short address registers  /////////
+/////////////////////////////////////////
+
+#define RXMCR     0x00
+#define PANIDL    0x01
+#define PANIDH    0x02
+#define SADRL     0x03
+#define SADRH     0x04
+#define EADR0     0x05
+#define EADR1     0x06
+#define EADR2     0x07
+#define EADR3     0x08
+#define EADR4     0x09
+#define EADR5     0x0A
+#define EADR6     0x0B
+#define EADR7     0x0C
+#define RXFLUSH   0x0D
+#define ORDER     0x10
+#define TXMCR     0x11
+#define ACKTMOUT  0x12
+#define ESLOTG1   0x13
+#define SYMTICKL  0x14
+#define SYMTICKH  0x15
+#define PACON0    0x16
+#define PACON1    0x17
+#define PACON2    0x18
+#define TXBCON0   0x1A
+#define TXNCON    0x1B
+#define TXG1CON   0x1C
+#define TXG2CON   0x1D
+#define ESLOTG23  0x1E
+#define ESLOTG45  0x1F
+#define ESLOTG67  0x20
+#define TXPEND    0x21
+#define WAKECON   0x22
+#define FRMOFFSET 0x23
+#define TXSTAT    0x24
+#define TXBCON1   0x25
+#define GATECLK   0x26
+#define TXTIME    0x27
+#define HSYMTMRL  0x28
+#define HSYMTMRH  0x29
+#define SOFTRST   0x2A
+#define SECCON0   0x2C
+#define SECCON1   0x2D
+#define TXSTBL    0x2E
+#define RXSR      0x30
+#define INTSTAT   0x31
+#define INTCON_M  0x32
+#define GPIO      0x33
+#define TRISGPIO  0x34
+#define SLPACK    0x35
+#define RFCTL     0x36
+#define SECCR2    0x37
+#define BBREG0    0x38
+#define BBREG1    0x39
+#define BBREG2    0x3A
+#define BBREG3    0x3B
+#define BBREG4    0x3C
+#define BBREG6    0x3E
+#define CCAEDTH   0x3F
+
+///////////////////////////////////////////
+//////// long address registers  //////////
+///////////////////////////////////////////
+
+#define RFCON0    0x200
+#define RFCON1    0x201
+#define RFCON2    0x202
+#define RFCON3    0x203
+#define RFCON5    0x205
+#define RFCON6    0x206
+#define RFCON7    0x207
+#define RFCON8    0x208
+#define SLPCAL0   0x209
+#define SLPCAL1   0x20A
+#define SLPCAL2   0x20B
+#define RFSTATE   0x20F
+#define RSSI      0x210
+#define SLPCON0   0x211
+#define SLPCON1   0x220
+#define WAKETIMEL 0x222
+#define WAKETIMEH 0x223
+#define REMCNTL   0x224
+#define REMCNTH   0x225
+#define MAINCNT0  0x226
+#define MAINCNT1  0x227
+#define MAINCNT2  0x228
+#define MAINCNT3  0x229
+#define ASSOEADR0 0x230
+#define ASSOEADR1 0x231
+#define ASSOEADR2 0x232
+#define ASSOEADR3 0x233
+#define ASSOEADR4 0x234
+#define ASSOEADR5 0x235
+#define ASSOEADR6 0x236
+#define ASSOEADR7 0x237
+#define ASSOSADR0 0x238
+#define ASSOSADR1 0x239
+#define UPNONCE0  0x240
+#define UPNONCE1  0x241
+#define UPNONCE2  0x242
+#define UPNONCE3  0x243
+#define UPNONCE4  0x244
+#define UPNONCE5  0x245
+#define UPNONCE6  0x246
+#define UPNONCE7  0x247
+#define UPNONCE8  0x248
+#define UPNONCE9  0x249
+#define UPNONCE10 0x24A
+#define UPNONCE11 0x24B
+#define UPNONCE12 0x24C
+
+const unsigned short int DATA_LENGHT = 5;
+const unsigned short int HEADER_LENGHT = 11;
+
+int address_RX_FIFO, address_TX_normal_FIFO;
+short int data_RX_FIFO[1 + HEADER_LENGHT + DATA_LENGHT + 2 + 1 + 1], lost_data;
+
+short int ADDRESS_short_1[2], ADDRESS_long_1[8];        // Source address
+short int ADDRESS_short_2[2], ADDRESS_long_2[8];        // Destination address
+short int PAN_ID_1[2];               // Source PAN ID
+short int PAN_ID_2[2];               // Destination PAN ID
+short int DATA_RX[DATA_LENGHT], DATA_TX[DATA_LENGHT], data_TX_normal_FIFO[DATA_LENGHT + HEADER_LENGHT + 2];
+short int LQI, RSSI2, SEQ_NUMBER;
+short int temp1;
+
 /*
 #if 0
 void finish_with_error(MYSQL *con, libusb_device_handle *handle, libusb_context *ctx)
@@ -51,10 +180,64 @@ void finish_with_error(MYSQL *con, libusb_device_handle *handle, libusb_context 
 }  	   		   
 #endif
 */
+
+
+/*
+ * Functions for reading and writing registers in short address memory space
+ */
+// write data in short address register
+void write_ZIGBEE_short(short int address, short int data_r) {
+  CS2 = 0;
+
+  address = ((address << 1) & 0b01111111) | 0x01; // calculating addressing mode
+  SPI1_Write(address);       // addressing register
+  SPI1_Write(data_r);        // write data in register
+
+  CS2 = 1;
+}
+
+// read data from short address register
+short int read_ZIGBEE_short(short int address) {
+  short int data_r = 0, dummy_data_r = 0;
+
+  CS2 = 0;
+
+  address = (address << 1) & 0b01111110;      // calculating addressing mode
+  SPI1_Write(address);                        // addressing register
+  data_r = SPI1_Read(dummy_data_r);           // read data from register
+
+  CS2 = 1;
+  return data_r;
+}
+
+/*
+ * Wake
+ */
+void set_wake_from_pin() {
+  	short int temp = 0;
+
+  	WAKE = 0;
+  	temp = read_ZIGBEE_short(RXFLUSH);
+  	temp = temp | 0x60;                     // mask
+  	write_ZIGBEE_short(RXFLUSH, temp);
+
+  	temp = read_ZIGBEE_short(WAKECON);
+  	temp = temp | 0x80;
+  	write_ZIGBEE_short(WAKECON, temp);
+}
+
+void pin_wake() {
+  	WAKE = 1;
+  	Delay_ms(5);
+}
+
+
 /**
 @brief transfer_data()
  	  This function calls the bulk transfer available on libusb.
  */
+
+
 int transfer_data(libusb_device_handle *handle, unsigned char *data, MYSQL *con) 
 {
 	int byte_count, rslt;
@@ -109,6 +292,62 @@ int transfer_data(libusb_device_handle *handle, unsigned char *data, MYSQL *con)
 	return 0;
 }
 
+void software_reset() {                // PWR_reset,BB_reset and MAC_reset at once
+  	write_ZIGBEE_short(SOFTRST, 0x07);
+}
+
+void RF_reset() {
+  	short int temp = 0;
+  	temp = read_ZIGBEE_short(RFCTL);
+  	temp = temp | 0x04;                  // mask for RFRST bit
+  	write_ZIGBEE_short(RFCTL, temp);
+  	temp = temp & (!0x04);               // mask for RFRST bit
+  	write_ZIGBEE_short(RFCTL, temp);
+  	Delay_ms(1);
+}
+
+void Initialize() {
+	short int i = 0;
+  	//variable initialization
+  	LQI = 0;
+  	RSSI2 = 0;
+  	SEQ_NUMBER = 0x23;
+  	lost_data = 0;
+  	address_RX_FIFO = 0x300;
+  	address_TX_normal_FIFO = 0;
+
+  	for (i = 0; i < 2; i++) {
+    		ADDRESS_short_1[i] = 1;
+   		ADDRESS_short_2[i] = 2;
+    		PAN_ID_1[i] = 3;
+    		PAN_ID_2[i] = 3;
+  	}
+
+  	for (i = 0; i < 8; i++) {
+    		ADDRESS_long_1[i] = 1;
+    		ADDRESS_long_2[i] = 2;
+  	}
+
+  	// Initialize SPI module
+
+
+  	software_reset();                         // Activate software reset
+  	RF_reset();                               // RF reset
+  set_WAKE_from_pin();                      // Set wake from pin
+
+  set_long_address(ADDRESS_long_2);         // Set long address
+  set_short_address(ADDRESS_short_2);       // Set short address
+  set_PAN_ID(PAN_ID_2);                     // Set PAN_ID
+
+  init_ZIGBEE_nonbeacon();                  // Initialize ZigBee module
+  nonbeacon_PAN_coordinator_device();
+  set_TX_power(31);                         // Set max TX power
+  set_frame_format_filter(1);               // 1 all frames, 3 data frame only
+  set_reception_mode(1);                    // 1 normal mode
+
+  pin_wake();                               // Wake from pin
+}
+
 int main(void)
 {
 	/*
@@ -136,13 +375,17 @@ int main(void)
 	
 	unsigned char SetCS[64], SetSpiS[64], TxSpi[64];
 	unsigned char *SetChipSettings = SetCS, *SetSpiSettings = SetSpiS, *TransferSpiData = TxSpi;
+
+	char dig1=0, dig2=0, dig3=0, degrees=0, battery=0;
 		
 		/* SET CHIP SETTINGS POWER-UP DEFAULT */
 	SetChipSettings[0] = 0x60; // Set NVRAM Parameters Comand Code
 	SetChipSettings[1] = 0x20; // Set Chip Settings
 	SetChipSettings[2] = 0x00;
 	SetChipSettings[3] = 0x00;
-	for(n=4;n<13;n++)
+	SetChipSettings[4] = 0x00; //GP0 as GPIO =>RST
+	SetChipSettings[5] = 0x00; //GP1 as GPIO =>WAKE
+	for(n=6;n<13;n++)
 	{
 		SetChipSettings[n] = 0x01; // All GP's as Chip Select	
 	}	
@@ -194,6 +437,9 @@ int main(void)
 	{
 		TransferSpiData[n] = 0xFF;  
 	}
+	
+	Initialize();                      // Initialize MCU and Bee click board
+	
 	/**
 	@brief libusb_init()
 		Initialize library session.
