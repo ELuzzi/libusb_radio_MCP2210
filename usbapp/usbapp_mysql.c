@@ -168,6 +168,10 @@ short int DATA_RX[DATA_LENGHT], DATA_TX[DATA_LENGHT], data_TX_normal_FIFO[DATA_L
 short int LQI, RSSI2, SEQ_NUMBER;
 short int temp1;
 
+//configurações MCP2210
+unsigned char SetCS[64], SetSpiS[64], TxSpi[64];
+unsigned char *SetChipSettings = SetCS, *SetSpiSettings = SetSpiS, *TransferSpiData = TxSpi;
+
 /*
 #if 0
 void finish_with_error(MYSQL *con, libusb_device_handle *handle, libusb_context *ctx)
@@ -292,6 +296,69 @@ int transfer_data(libusb_device_handle *handle, unsigned char *data, MYSQL *con)
 	return 0;
 }
 
+void pin_reset() {
+	int r;
+  		/* ACTIVATE RESET */
+	SetChipSettings[0] = 0x60; // Set NVRAM Parameters Comand Code
+	SetChipSettings[1] = 0x20; // Set Chip Settings
+	SetChipSettings[2] = 0x00;
+	SetChipSettings[3] = 0x00;
+	SetChipSettings[4] = 0x00; //GP0 as GPIO =>RST
+	SetChipSettings[5] = 0x00; //GP1 as GPIO =>WAKE
+	for(n=6;n<13;n++)
+	{
+		SetChipSettings[n] = 0x01; // All GP's as Chip Select	
+	}	
+	SetChipSettings[13] = 0xFE; // GPIO Value
+	SetChipSettings[14] = 0xFF;
+	SetChipSettings[15] = 0xFF; // GPIO Direction
+	SetChipSettings[16] = 0xFF;
+	SetChipSettings[17] = 0x01; // Wake-up Disabled, No Interrupt Counting, SPI Bus is Released Between Transfer
+	SetChipSettings[18] = 0x00; // Chip Settings not protected
+	for(n=19;n<64;n++)
+	{
+		SetChipSettings[n] = 0x00; // Reserved	
+	}
+	r = transfer_data(handle, SetChipSettings, con);
+	if(r == 1)
+	{
+		libusb_close (handle); 	
+		libusb_exit(ctx);
+		return 1;
+	}
+	Delay_ms(5);
+	int r;
+  		/* DEACTIVATE RESET */
+	SetChipSettings[0] = 0x60; // Set NVRAM Parameters Comand Code
+	SetChipSettings[1] = 0x20; // Set Chip Settings
+	SetChipSettings[2] = 0x00;
+	SetChipSettings[3] = 0x00;
+	SetChipSettings[4] = 0x00; //GP0 as GPIO =>RST
+	SetChipSettings[5] = 0x00; //GP1 as GPIO =>WAKE
+	for(n=6;n<13;n++)
+	{
+		SetChipSettings[n] = 0x01; // All GP's as Chip Select	
+	}	
+	SetChipSettings[13] = 0xFF; // GPIO Value
+	SetChipSettings[14] = 0xFF;
+	SetChipSettings[15] = 0xFF; // GPIO Direction
+	SetChipSettings[16] = 0xFF;
+	SetChipSettings[17] = 0x01; // Wake-up Disabled, No Interrupt Counting, SPI Bus is Released Between Transfer
+	SetChipSettings[18] = 0x00; // Chip Settings not protected
+	for(n=19;n<64;n++)
+	{
+		SetChipSettings[n] = 0x00; // Reserved	
+	}
+	r = transfer_data(handle, SetChipSettings, con);
+	if(r == 1)
+	{
+		libusb_close (handle); 	
+		libusb_exit(ctx);
+		return 1;
+	}
+	Delay_ms(5);
+}
+
 void software_reset() {                // PWR_reset,BB_reset and MAC_reset at once
   	write_ZIGBEE_short(SOFTRST, 0x07);
 }
@@ -330,7 +397,7 @@ void Initialize() {
 
   	// Initialize SPI module
 
-
+	pin_reset();                              // Activate reset from pin
   	software_reset();                         // Activate software reset
   	RF_reset();                               // RF reset
   set_WAKE_from_pin();                      // Set wake from pin
@@ -372,9 +439,6 @@ int main(void)
 	
 	int r;
 	ssize_t cnt, i, n, c=0;
-	
-	unsigned char SetCS[64], SetSpiS[64], TxSpi[64];
-	unsigned char *SetChipSettings = SetCS, *SetSpiSettings = SetSpiS, *TransferSpiData = TxSpi;
 
 	char dig1=0, dig2=0, dig3=0, degrees=0, battery=0;
 		
@@ -437,8 +501,6 @@ int main(void)
 	{
 		TransferSpiData[n] = 0xFF;  
 	}
-	
-	Initialize();                      // Initialize MCU and Bee click board
 	
 	/**
 	@brief libusb_init()
@@ -539,6 +601,8 @@ int main(void)
 		return 1;
 	}
 
+	Initialize();                      // Initialize MCU and Bee click board
+	
 	r = 0;
 	// Third Step: Data read
 	while(r != 3)
