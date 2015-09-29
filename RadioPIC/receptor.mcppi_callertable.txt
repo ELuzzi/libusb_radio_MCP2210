@@ -1,12 +1,15 @@
 main
-	Initialize
-		Lcd_Init
-			Delay_5500us
-			Delay_1us
+	Lcd_Out
 		Lcd_Cmd
 			Delay_1us
 			Delay_5500us
 			Delay_50us
+		Lcd_Chr_CP
+			Lcd_Cmd
+				Delay_1us
+				Delay_5500us
+				Delay_50us
+	Initialize
 		SPI1_Init_Advanced
 		pin_reset
 		software_reset
@@ -94,34 +97,6 @@ main
 			write_ZIGBEE_short
 				SPI1_Write
 		pin_wake
-	Lcd_Out
-		Lcd_Cmd
-			Delay_1us
-			Delay_5500us
-			Delay_50us
-		Lcd_Chr_CP
-			Lcd_Cmd
-				Delay_1us
-				Delay_5500us
-				Delay_50us
-	Debounce_INT
-	read_ZIGBEE_short
-		SPI1_Write
-		SPI1_Read
-	read_RX_FIFO
-		read_ZIGBEE_short
-			SPI1_Write
-			SPI1_Read
-		write_ZIGBEE_short
-			SPI1_Write
-		read_ZIGBEE_long
-			SPI1_Write
-			SPI1_Read
-	Lcd_Chr
-		Lcd_Cmd
-			Delay_1us
-			Delay_5500us
-			Delay_50us
 	write_TX_normal_FIFO
 		write_ZIGBEE_long
 			SPI1_Write
@@ -143,4 +118,22 @@ main
 				SPI1_Read
 			write_ZIGBEE_short
 				SPI1_Write
+	read_ZIGBEE_short
+		SPI1_Write
+		SPI1_Read
+	Debounce_INT
+	read_RX_FIFO
+		read_ZIGBEE_short
+			SPI1_Write
+			SPI1_Read
+		write_ZIGBEE_short
+			SPI1_Write
+		read_ZIGBEE_long
+			SPI1_Write
+			SPI1_Read
+	Lcd_Chr
+		Lcd_Cmd
+			Delay_1us
+			Delay_5500us
+			Delay_50us
 	__CC2DW

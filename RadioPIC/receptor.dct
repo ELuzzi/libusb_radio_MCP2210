@@ -245,7 +245,6 @@ b5
 b6
 b7
 banked
-battery
 baudcon
 baudctl
 bb_reset
@@ -382,8 +381,6 @@ cke
 cke_bit
 ckp
 ckp_bit
-clk_therm
-clk_therm_direction
 clki
 clki_bit
 clko
@@ -455,8 +452,6 @@ dc2b1_bit
 debounce_int
 dec2bcd
 dec2bcd16
-decoder_therm
-degrees
 delay_100ms
 delay_10ms
 delay_10us
@@ -469,9 +464,6 @@ delay_5500us
 delay_80us
 delay_8ms
 delay_cyc
-dig1
-dig2
-dig3
 disable_pll
 div
 div_16x16_s
@@ -596,12 +588,6 @@ go
 go_bit
 go_done
 go_done_bit
-h1
-h1_direction
-h2
-h2_direction
-h3
-h3_direction
 halfbits
 header_lenght
 hlvdcon
@@ -826,8 +812,6 @@ lcd_out
 lcd_out_cp
 lcd_rs
 lcd_rs_direction
-ld
-ld_direction
 ldexp
 ldiv
 log
@@ -1250,7 +1234,6 @@ re2_bit
 re3
 re3_bit
 read_rx_fifo
-read_therm_serial
 read_zigbee_long
 read_zigbee_short
 res032
@@ -1302,8 +1285,6 @@ sen_bit
 sendb
 sendb_bit
 seq_number
-serial_in
-serial_in_direction
 set_ack
 set_cca_mode
 set_channel

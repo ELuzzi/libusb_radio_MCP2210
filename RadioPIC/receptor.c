@@ -789,34 +789,6 @@ void Initialize() {
     ADDRESS_long_2[i] = 2;
   }
 
-  ADCON1 = 0x0F;
-  GIE_bit = 0;           // Disable interrupts
-
-  TRISA = 0x00;          // Set direction to be output
-  TRISB = 0x00;          // Set direction to be output
-  TRISC = 0x00;          // Set direction to be output
-  TRISD = 0x00;          // Set direction to be output
-
-  CS2_Direction = 0;      // Set direction to be output
-  RST_Direction  = 0;    // Set direction to be output
-  INT_Direction  = 1;    // Set direction to be input
-  WAKE_Direction = 0;    // Set direction to be output
-
-  DATA_TX[0] = 0;        // Initialize first byte
-  DATA_TX[1] = 0;        // Initialize first byte
-  DATA_TX[2] = 0;        // Initialize first byte
-  DATA_TX[3] = 0;        // Initialize first byte
-  DATA_TX[4] = 0;        // Initialize first byte
-
-  PORTD = 0;             // Clear PORTD register
-  LATD  = 0;             // Clear LATD register
-
-  Delay_ms(15);
-
-  Lcd_Init();                        // Initialize LCD
-  Lcd_Cmd(_LCD_CLEAR);               // Clear display
-  Lcd_Cmd(_LCD_CURSOR_OFF);          // Cursor off
-
   // Initialize SPI module
   SPI1_Init_Advanced(_SPI_MASTER_OSC_DIV4, _SPI_DATA_SAMPLE_MIDDLE, _SPI_CLK_IDLE_LOW, _SPI_LOW_2_HIGH);
   pin_reset();                              // Activate reset from pin
@@ -843,13 +815,13 @@ void main() {
       char dig1=0, dig2=0, dig3=0, degrees=0, battery=0;
       short int temp = 0;
       int trans=1;
-
+      Lcd_Out(2, 0, "DEU");
+      delay_ms(1000);
       Initialize();                      // Initialize MCU and Bee click board
-      Lcd_Out(1,0,"Iniciado");
-      
+
       while(1){
                 if(trans == 1){
-                        Lcd_Out(2, 0, "Modo trans");
+
                         delay_ms(100);
                         DATA_TX[0]=dig1;
                         DATA_TX[1]=dig2;
@@ -857,21 +829,17 @@ void main() {
                         DATA_TX[3]=degrees;
                         DATA_TX[4]=battery;
                         write_TX_normal_FIFO();
-                
-                        delay_ms(100);
-                        trans = 0;
 
-                        Lcd_Out(2, 0, "Tranmitiu");
-                        /*temp = read_ZIGBEE_short(TXNCON);
+                        temp = read_ZIGBEE_short(TXNCON);
                         temp = temp & 0x10;
 
                         if(temp == 0x10){
                                 delay_ms(100);
                                 trans = 0;
-                        }*/
                         }
+        }
                 if(trans == 0){
-                
+
                         if(Debounce_INT() == 0 ){
                                 temp1 = read_ZIGBEE_short(INTSTAT); // Read and flush register INTSTAT
                                 read_RX_FIFO();                     // Read receive data
@@ -880,7 +848,7 @@ void main() {
                                 dig3=DATA_RX[2];
                                 degrees=DATA_RX[3];
                                 battery=DATA_RX[4];
-          
+
                                 Lcd_Chr(1, 1, dig1);
                                 Lcd_Chr(1, 2, dig2);
                                 if ((dig3 == 'i')||(dig3 == 'o')){
@@ -912,3 +880,4 @@ void main() {
       }
 
 }
+

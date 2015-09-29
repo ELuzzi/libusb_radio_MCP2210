@@ -191,7 +191,7 @@ void write_TX_normal_FIFO() {
  write_ZIGBEE_long(address_TX_normal_FIFO + i, data_TX_normal_FIFO[i]);
  }
 
- set_not_ACK();
+ set_ACK();
  set_not_encrypt();
  start_transmit();
 }
@@ -603,6 +603,34 @@ void Initialize() {
  ADDRESS_long_2[i] = 2;
  }
 
+ ADCON1 = 0x0F;
+ GIE_bit = 0;
+
+ TRISA = 0x00;
+ TRISB = 0x00;
+ TRISC = 0x00;
+ TRISD = 0x00;
+
+ CS2_Direction = 0;
+ RST_Direction = 0;
+ INT_Direction = 1;
+ WAKE_Direction = 0;
+
+ DATA_TX[0] = 0;
+ DATA_TX[1] = 0;
+ DATA_TX[2] = 0;
+ DATA_TX[3] = 0;
+ DATA_TX[4] = 0;
+
+ PORTD = 0;
+ LATD = 0;
+
+ Delay_ms(15);
+
+ Lcd_Init();
+ Lcd_Cmd(_LCD_CLEAR);
+ Lcd_Cmd(_LCD_CURSOR_OFF);
+
 
  SPI1_Init_Advanced(_SPI_MASTER_OSC_DIV4, _SPI_DATA_SAMPLE_MIDDLE, _SPI_CLK_IDLE_LOW, _SPI_LOW_2_HIGH);
  pin_reset();
@@ -627,11 +655,31 @@ void Initialize() {
 
 void main() {
  char dig1=0, dig2=0, dig3=0, degrees=0, battery=0;
-
+ short int temp = 0;
+ int trans=1;
 
  Initialize();
+ Lcd_Out(1,0,"Iniciado");
 
  while(1){
+ if(trans == 1){
+ Lcd_Out(2, 0, "Modo trans");
+ delay_ms(100);
+ DATA_TX[0]=dig1;
+ DATA_TX[1]=dig2;
+ DATA_TX[2]=dig3;
+ DATA_TX[3]=degrees;
+ DATA_TX[4]=battery;
+ write_TX_normal_FIFO();
+
+ delay_ms(100);
+ trans = 0;
+
+ Lcd_Out(2, 0, "Tranmitiu");
+#line 872 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC/Receptor_term2/Receptor_term2.c"
+ }
+ if(trans == 0){
+
  if(Debounce_INT() == 0 ){
  temp1 = read_ZIGBEE_short( 0x31 );
  read_RX_FIFO();
@@ -646,7 +694,8 @@ void main() {
  if ((dig3 == 'i')||(dig3 == 'o')){
  Lcd_Chr(1, 3, dig3);
  Lcd_Chr(1, 4, ' ');
- }else{
+ }
+ else{
  Lcd_Chr(1, 3, '.');
  Lcd_Chr(1, 4, dig3);
  }
@@ -654,7 +703,7 @@ void main() {
  if (battery == 'b'){
  Lcd_Out(2, 0, "           ");
  }
- else {
+ else{
  Lcd_Out(2, 0, "low battery");
  }
 
@@ -663,6 +712,9 @@ void main() {
  }
  else {
  Lcd_Chr(1, 5, ' ');
+ }
+ delay_ms(100);
+ trans=1;
  }
  }
  }

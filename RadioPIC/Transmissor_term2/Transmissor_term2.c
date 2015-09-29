@@ -343,7 +343,7 @@ void write_TX_normal_FIFO() {
     write_ZIGBEE_long(address_TX_normal_FIFO + i, data_TX_normal_FIFO[i]); // write frame into normal FIFO
   }
 
-  set_not_ACK();
+  set_ACK();
   set_not_encrypt();
   start_transmit();
 }
@@ -1099,19 +1099,76 @@ void Initialize() {
 
 
 void main() {
+      int trans=0;
+      
+
       
       Initialize();                      // Initialize MCU and Bee click board
-
+      Lcd_Out(2, 0, "Iniciando");
       
       while(1) {
 
-        delay_ms(100);
-        Read_therm_serial();
-        DATA_TX[0]=dig1;
-        DATA_TX[1]=dig2;
-        DATA_TX[2]=dig3;
-        DATA_TX[3]=degrees;
-        DATA_TX[4]=battery;
-        write_TX_normal_FIFO();
+                if(trans == 0){
+                         Lcd_Out(2, 0, "Modo RX");
+                        if(Debounce_INT() == 0 ){
+                                temp1 = read_ZIGBEE_short(INTSTAT); // Read and flush register INTSTAT
+                                read_RX_FIFO();                     // Read receive data
+                                dig1=DATA_RX[0];
+                                dig2=DATA_RX[1];
+                                dig3=DATA_RX[2];
+                                degrees=DATA_RX[3];
+                                battery=DATA_RX[4];
+          
+                                Lcd_Chr(1, 1, dig1);
+                                Lcd_Chr(1, 2, dig2);
+                                if ((dig3 == 'i')||(dig3 == 'o')){
+                                        Lcd_Chr(1, 3, dig3);
+                                        Lcd_Chr(1, 4, ' ');
+                                }
+                                else{
+                                        Lcd_Chr(1, 3, '.');
+                                        Lcd_Chr(1, 4, dig3);
+                                }
+
+                                if (battery == 'b'){
+                                        Lcd_Out(2, 0, "           ");
+                                }
+                                else{
+                                        Lcd_Out(2, 0, "low battery");
+                                }
+
+                                if (degrees == 'C'){
+                                        Lcd_Chr(1, 5, 'C');
+                                }
+                                else {
+                                        Lcd_Chr(1, 5, ' ');
+                                }
+                                delay_ms(100);
+                                trans=1;
+                        }
+                }
+                if(trans == 1){
+                        Lcd_Out(2, 0, "Modo TX");
+                        delay_ms(100);
+                        //Read_therm_serial();
+                        DATA_TX[0]=1;
+                        DATA_TX[1]=2;
+                        DATA_TX[2]=3;
+                        DATA_TX[3]=4;
+                        DATA_TX[4]=5;
+                        write_TX_normal_FIFO();
+                        
+                        delay_ms(100);
+                        trans = 0;
+                
+                        /*temp1 = read_ZIGBEE_short(TXNCON);
+                        temp1 = temp1 & 0x10;
+
+                        if(temp1 == 0x10){
+                                delay_ms(100);
+                                trans = 0;
+                        }*/
+                }
+        
       }
 }
