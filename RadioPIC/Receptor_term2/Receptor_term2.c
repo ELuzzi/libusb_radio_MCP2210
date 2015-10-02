@@ -1,4 +1,3 @@
-
 /////////////////////////////////////////
 ////// short address registers  /////////
 /////////////////////////////////////////
@@ -841,14 +840,15 @@ void Initialize() {
 
 void main() {
       char dig1=0, dig2=0, dig3=0, degrees=0, battery=0;
-      short int temp = 0;
+      char temp = 0;
       int trans=1;
 
       Initialize();                      // Initialize MCU and Bee click board
-      Lcd_Out(1,0,"Iniciado");
       
       while(1){
-                if(trans == 1){
+               if(trans == 1){
+                        temp = read_ZIGBEE_short(TXSTAT);
+                        Lcd_Chr(1, 0, temp);
                         Lcd_Out(2, 0, "Modo trans");
                         delay_ms(100);
                         DATA_TX[0]=dig1;
@@ -857,21 +857,15 @@ void main() {
                         DATA_TX[3]=degrees;
                         DATA_TX[4]=battery;
                         write_TX_normal_FIFO();
-                
-                        delay_ms(100);
-                        trans = 0;
 
-                        Lcd_Out(2, 0, "Tranmitiu");
-                        /*temp = read_ZIGBEE_short(TXNCON);
-                        temp = temp & 0x10;
+                        /*temp = temp & 0x01;
 
-                        if(temp == 0x10){
+                        if(temp == 0x00){
                                 delay_ms(100);
                                 trans = 0;
                         }*/
-                        }
-                if(trans == 0){
-                
+               }
+               /*if(trans == 0){
                         if(Debounce_INT() == 0 ){
                                 temp1 = read_ZIGBEE_short(INTSTAT); // Read and flush register INTSTAT
                                 read_RX_FIFO();                     // Read receive data
@@ -880,7 +874,7 @@ void main() {
                                 dig3=DATA_RX[2];
                                 degrees=DATA_RX[3];
                                 battery=DATA_RX[4];
-          
+
                                 Lcd_Chr(1, 1, dig1);
                                 Lcd_Chr(1, 2, dig2);
                                 if ((dig3 == 'i')||(dig3 == 'o')){
@@ -908,7 +902,7 @@ void main() {
                                 delay_ms(100);
                                 trans=1;
                         }
-                        }
+                        }*/
       }
 
 }

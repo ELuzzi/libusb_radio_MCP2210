@@ -4,13 +4,13 @@ warning: 0	1501	Specified search path does not exist: 'C:\Users\Public\Documents
 warning: 0	1501	Specified search path does not exist: 'C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18'	 
 warning: 0	1501	Specified search path does not exist: 'D:\Dados\Dropbox\UFSM\Gmicro\Term_Radio\0Versao_1\Transmissor_term2'	 
 warning: 0	1501	Specified search path does not exist: 'D:\Dados\Dropbox\UFSM\Gmicro\Term_Radio\Transmissor_term2'	 
-diagnostics: 0	125	All files Preprocessed in 78 ms	 
+diagnostics: 0	125	All files Preprocessed in 109 ms	 
 diagnostics: 0	121	Compilation Started	Transmissor_term2.c
-diagnostics: 1174	122	Compiled Successfully	Transmissor_term2.c
-diagnostics: 0	126	All files Compiled in 1638 ms	 
-hint: 0	1140	Used RAM (bytes): 163 (11%)  Free RAM (bytes): 1352 (89%)	Used RAM (bytes): 163 (11%)  Free RAM (bytes): 1352 (89%)
-hint: 0	1140	Used ROM (bytes): 3913 (12%)  Free ROM (bytes): 28855 (88%)	Used ROM (bytes): 3913 (12%)  Free ROM (bytes): 28855 (88%)
+diagnostics: 1170	122	Compiled Successfully	Transmissor_term2.c
+diagnostics: 0	126	All files Compiled in 1419 ms	 
+hint: 0	1140	Used RAM (bytes): 155 (10%)  Free RAM (bytes): 1360 (90%)	Used RAM (bytes): 155 (10%)  Free RAM (bytes): 1360 (90%)
+hint: 0	1140	Used ROM (bytes): 3935 (12%)  Free ROM (bytes): 28833 (88%)	Used ROM (bytes): 3935 (12%)  Free ROM (bytes): 28833 (88%)
 diagnostics: 0	124	Project Linked Successfully	Transmissor_term2.mcppi
-diagnostics: 0	127	Linked in 1388 ms	 
-diagnostics: 0	128	Project 'Transmissor_term2.mcppi' completed: 3712 ms	 
-diagnostics: 0	103	Finished successfully: 29 set 2015, 17:04:13	Transmissor_term2.mcppi
+diagnostics: 0	127	Linked in 1248 ms	 
+diagnostics: 0	128	Project 'Transmissor_term2.mcppi' completed: 3385 ms	 
+diagnostics: 0	103	Finished successfully: 01 out 2015, 16:55:13	Transmissor_term2.mcppi

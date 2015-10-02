@@ -1109,7 +1109,6 @@ void main() {
       while(1) {
 
                 if(trans == 0){
-                         Lcd_Out(2, 0, "Modo RX");
                         if(Debounce_INT() == 0 ){
                                 temp1 = read_ZIGBEE_short(INTSTAT); // Read and flush register INTSTAT
                                 read_RX_FIFO();                     // Read receive data
@@ -1157,17 +1156,14 @@ void main() {
                         DATA_TX[3]=4;
                         DATA_TX[4]=5;
                         write_TX_normal_FIFO();
-                        
-                        delay_ms(100);
-                        trans = 0;
                 
-                        /*temp1 = read_ZIGBEE_short(TXNCON);
-                        temp1 = temp1 & 0x10;
+                        temp1 = read_ZIGBEE_short(TXSTAT);
+                        temp1 = temp1 & 0x01;
 
-                        if(temp1 == 0x10){
+                        if(temp1 == 0x00){
                                 delay_ms(100);
                                 trans = 0;
-                        }*/
+                        }
                 }
         
       }

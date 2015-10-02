@@ -923,7 +923,6 @@ void main() {
  while(1) {
 
  if(trans == 0){
- Lcd_Out(2, 0, "Modo RX");
  if(Debounce_INT() == 0 ){
  temp1 = read_ZIGBEE_short( 0x31 );
  read_RX_FIFO();
@@ -972,9 +971,13 @@ void main() {
  DATA_TX[4]=5;
  write_TX_normal_FIFO();
 
+ temp1 = read_ZIGBEE_short( 0x24 );
+ temp1 = temp1 & 0x01;
+
+ if(temp1 == 0x00){
  delay_ms(100);
  trans = 0;
-#line 1171 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC/Transmissor_term2/Transmissor_term2.c"
+ }
  }
 
  }
