@@ -69,16 +69,16 @@ _write_ZIGBEE_long:
 	MOVF        FARG_write_ZIGBEE_long_address+1, 0 
 	MOVWF       R1 
 	MOVF        R2, 0 
-L__write_ZIGBEE_long204:
-	BZ          L__write_ZIGBEE_long205
+L__write_ZIGBEE_long205:
+	BZ          L__write_ZIGBEE_long206
 	RRCF        R1, 1 
 	RRCF        R0, 1 
 	BCF         R1, 7 
 	BTFSC       R1, 6 
 	BSF         R1, 7 
 	ADDLW       255
-	GOTO        L__write_ZIGBEE_long204
-L__write_ZIGBEE_long205:
+	GOTO        L__write_ZIGBEE_long205
+L__write_ZIGBEE_long206:
 	MOVLW       127
 	ANDWF       R0, 0 
 	MOVWF       FARG_SPI1_Write_data_+0 
@@ -89,13 +89,13 @@ L__write_ZIGBEE_long205:
 	MOVF        FARG_write_ZIGBEE_long_address+0, 0 
 	MOVWF       write_ZIGBEE_long_address_low_L0+0 
 	MOVF        R0, 0 
-L__write_ZIGBEE_long206:
-	BZ          L__write_ZIGBEE_long207
+L__write_ZIGBEE_long207:
+	BZ          L__write_ZIGBEE_long208
 	RLCF        write_ZIGBEE_long_address_low_L0+0, 1 
 	BCF         write_ZIGBEE_long_address_low_L0+0, 0 
 	ADDLW       255
-	GOTO        L__write_ZIGBEE_long206
-L__write_ZIGBEE_long207:
+	GOTO        L__write_ZIGBEE_long207
+L__write_ZIGBEE_long208:
 	MOVLW       224
 	ANDWF       write_ZIGBEE_long_address_low_L0+0, 1 
 	BSF         write_ZIGBEE_long_address_low_L0+0, 4 
@@ -129,16 +129,16 @@ _read_ZIGBEE_long:
 	MOVF        FARG_read_ZIGBEE_long_address+1, 0 
 	MOVWF       R1 
 	MOVF        R2, 0 
-L__read_ZIGBEE_long208:
-	BZ          L__read_ZIGBEE_long209
+L__read_ZIGBEE_long209:
+	BZ          L__read_ZIGBEE_long210
 	RRCF        R1, 1 
 	RRCF        R0, 1 
 	BCF         R1, 7 
 	BTFSC       R1, 6 
 	BSF         R1, 7 
 	ADDLW       255
-	GOTO        L__read_ZIGBEE_long208
-L__read_ZIGBEE_long209:
+	GOTO        L__read_ZIGBEE_long209
+L__read_ZIGBEE_long210:
 	MOVLW       127
 	ANDWF       R0, 0 
 	MOVWF       FARG_SPI1_Write_data_+0 
@@ -149,13 +149,13 @@ L__read_ZIGBEE_long209:
 	MOVF        FARG_read_ZIGBEE_long_address+0, 0 
 	MOVWF       read_ZIGBEE_long_address_low_L0+0 
 	MOVF        R0, 0 
-L__read_ZIGBEE_long210:
-	BZ          L__read_ZIGBEE_long211
+L__read_ZIGBEE_long211:
+	BZ          L__read_ZIGBEE_long212
 	RLCF        read_ZIGBEE_long_address_low_L0+0, 1 
 	BCF         read_ZIGBEE_long_address_low_L0+0, 0 
 	ADDLW       255
-	GOTO        L__read_ZIGBEE_long210
-L__read_ZIGBEE_long211:
+	GOTO        L__read_ZIGBEE_long211
+L__read_ZIGBEE_long212:
 	MOVLW       224
 	ANDWF       read_ZIGBEE_long_address_low_L0+0, 1 
 ;sensor.c,230 :: 		SPI1_Write(address_high);            // addressing register
@@ -219,10 +219,10 @@ L_read_RX_FIFO0:
 	MOVLW       128
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__read_RX_FIFO212
+	GOTO        L__read_RX_FIFO213
 	MOVLW       128
 	SUBWF       read_RX_FIFO_i_L0+0, 0 
-L__read_RX_FIFO212:
+L__read_RX_FIFO213:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_read_RX_FIFO1
 ;sensor.c,261 :: 		if(i <  (1 + DATA_LENGHT + HEADER_LENGHT + 2 + 1 + 1))
@@ -232,10 +232,10 @@ L__read_RX_FIFO212:
 	MOVLW       128
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__read_RX_FIFO213
+	GOTO        L__read_RX_FIFO214
 	MOVLW       21
 	SUBWF       read_RX_FIFO_i_L0+0, 0 
-L__read_RX_FIFO213:
+L__read_RX_FIFO214:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_read_RX_FIFO3
 ;sensor.c,262 :: 		data_RX_FIFO[i] = read_ZIGBEE_long(address_RX_FIFO + i);  // reading valid data from RX FIFO
@@ -264,10 +264,10 @@ L_read_RX_FIFO3:
 	MOVLW       128
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__read_RX_FIFO214
+	GOTO        L__read_RX_FIFO215
 	MOVLW       21
 	SUBWF       read_RX_FIFO_i_L0+0, 0 
-L__read_RX_FIFO214:
+L__read_RX_FIFO215:
 	BTFSS       STATUS+0, 0 
 	GOTO        L_read_RX_FIFO4
 ;sensor.c,264 :: 		lost_data = read_ZIGBEE_long(address_RX_FIFO + i);        // reading invalid data from RX FIFO
@@ -325,18 +325,13 @@ L_read_RX_FIFO1:
 ; end of _read_RX_FIFO
 
 _set_ACK:
+	CLRF        set_ACK_temp_L0+0 
 ;sensor.c,284 :: 		void set_ACK(void){
-;sensor.c,287 :: 		temp = read_ZIGBEE_short(TXNCON);
-	MOVLW       27
-	MOVWF       FARG_read_ZIGBEE_short_address+0 
-	CALL        _read_ZIGBEE_short+0, 0
-;sensor.c,288 :: 		temp = temp | 0x04;                   // 0x04 mask for set ACK
-	MOVLW       4
-	IORWF       R0, 0 
-	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;sensor.c,289 :: 		write_ZIGBEE_short(TXNCON, temp);
+;sensor.c,289 :: 		write_ZIGBEE_short(TXNCON, 0b00000001);
 	MOVLW       27
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
+	MOVLW       1
+	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
 ;sensor.c,290 :: 		}
 	RETURN      0
@@ -464,10 +459,10 @@ L_write_TX_normal_FIFO5:
 	MOVLW       128
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__write_TX_normal_FIFO215
+	GOTO        L__write_TX_normal_FIFO216
 	MOVLW       18
 	SUBWF       write_TX_normal_FIFO_i_L0+0, 0 
-L__write_TX_normal_FIFO215:
+L__write_TX_normal_FIFO216:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_write_TX_normal_FIFO6
 ;sensor.c,343 :: 		write_ZIGBEE_long(address_TX_normal_FIFO + i, data_TX_normal_FIFO[i]); // write frame into normal FIFO
@@ -492,12 +487,8 @@ L__write_TX_normal_FIFO215:
 ;sensor.c,344 :: 		}
 	GOTO        L_write_TX_normal_FIFO5
 L_write_TX_normal_FIFO6:
-;sensor.c,346 :: 		set_not_ACK();
-	CALL        _set_not_ACK+0, 0
-;sensor.c,347 :: 		set_not_encrypt();
-	CALL        _set_not_encrypt+0, 0
-;sensor.c,348 :: 		start_transmit();
-	CALL        _start_transmit+0, 0
+;sensor.c,346 :: 		set_ACK();
+	CALL        _set_ACK+0, 0
 ;sensor.c,349 :: 		}
 	RETURN      0
 ; end of _write_TX_normal_FIFO
@@ -650,7 +641,7 @@ _set_channel:
 	XORWF       FARG_set_channel_channel_number+0, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 0 
-	GOTO        L__set_channel187
+	GOTO        L__set_channel188
 	MOVLW       128
 	XORWF       FARG_set_channel_channel_number+0, 0 
 	MOVWF       R0 
@@ -658,9 +649,9 @@ _set_channel:
 	XORLW       11
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 0 
-	GOTO        L__set_channel187
+	GOTO        L__set_channel188
 	GOTO        L_set_channel13
-L__set_channel187:
+L__set_channel188:
 	MOVLW       11
 	MOVWF       FARG_set_channel_channel_number+0 
 L_set_channel13:
@@ -1643,13 +1634,13 @@ _set_TX_power:
 	MOVLW       0
 	SUBWF       FARG_set_TX_power_power+0, 0 
 	BTFSS       STATUS+0, 0 
-	GOTO        L__set_TX_power188
+	GOTO        L__set_TX_power189
 	MOVF        FARG_set_TX_power_power+0, 0 
 	SUBLW       31
 	BTFSS       STATUS+0, 0 
-	GOTO        L__set_TX_power188
+	GOTO        L__set_TX_power189
 	GOTO        L_set_TX_power58
-L__set_TX_power188:
+L__set_TX_power189:
 ;sensor.c,746 :: 		power = 31;
 	MOVLW       31
 	MOVWF       FARG_set_TX_power_power+0 
@@ -1858,13 +1849,13 @@ L_Decoder_therm71:
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       2
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm198
+	GOTO        L__Decoder_therm199
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       3
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm198
+	GOTO        L__Decoder_therm199
 	GOTO        L_Decoder_therm74
-L__Decoder_therm198:
+L__Decoder_therm199:
 ;sensor.c,808 :: 		return '0';
 	MOVLW       48
 	MOVWF       R0 
@@ -1879,13 +1870,13 @@ L_Decoder_therm75:
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       2
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm197
+	GOTO        L__Decoder_therm198
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       3
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm197
+	GOTO        L__Decoder_therm198
 	GOTO        L_Decoder_therm78
-L__Decoder_therm197:
+L__Decoder_therm198:
 ;sensor.c,814 :: 		return '1';
 	MOVLW       49
 	MOVWF       R0 
@@ -1900,13 +1891,13 @@ L_Decoder_therm79:
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       2
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm196
+	GOTO        L__Decoder_therm197
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       3
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm196
+	GOTO        L__Decoder_therm197
 	GOTO        L_Decoder_therm82
-L__Decoder_therm196:
+L__Decoder_therm197:
 ;sensor.c,820 :: 		return '2';
 	MOVLW       50
 	MOVWF       R0 
@@ -1921,13 +1912,13 @@ L_Decoder_therm83:
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       2
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm195
+	GOTO        L__Decoder_therm196
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       3
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm195
+	GOTO        L__Decoder_therm196
 	GOTO        L_Decoder_therm86
-L__Decoder_therm195:
+L__Decoder_therm196:
 ;sensor.c,826 :: 		return '3';
 	MOVLW       51
 	MOVWF       R0 
@@ -1942,13 +1933,13 @@ L_Decoder_therm87:
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       2
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm194
+	GOTO        L__Decoder_therm195
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       3
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm194
+	GOTO        L__Decoder_therm195
 	GOTO        L_Decoder_therm90
-L__Decoder_therm194:
+L__Decoder_therm195:
 ;sensor.c,832 :: 		return '4';
 	MOVLW       52
 	MOVWF       R0 
@@ -1963,13 +1954,13 @@ L_Decoder_therm91:
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       2
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm193
+	GOTO        L__Decoder_therm194
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       3
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm193
+	GOTO        L__Decoder_therm194
 	GOTO        L_Decoder_therm94
-L__Decoder_therm193:
+L__Decoder_therm194:
 ;sensor.c,838 :: 		return '5';
 	MOVLW       53
 	MOVWF       R0 
@@ -1984,13 +1975,13 @@ L_Decoder_therm95:
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       2
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm192
+	GOTO        L__Decoder_therm193
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       3
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm192
+	GOTO        L__Decoder_therm193
 	GOTO        L_Decoder_therm98
-L__Decoder_therm192:
+L__Decoder_therm193:
 ;sensor.c,844 :: 		return '6';
 	MOVLW       54
 	MOVWF       R0 
@@ -2005,13 +1996,13 @@ L_Decoder_therm99:
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       2
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm191
+	GOTO        L__Decoder_therm192
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       3
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm191
+	GOTO        L__Decoder_therm192
 	GOTO        L_Decoder_therm102
-L__Decoder_therm191:
+L__Decoder_therm192:
 ;sensor.c,850 :: 		return '7';
 	MOVLW       55
 	MOVWF       R0 
@@ -2026,13 +2017,13 @@ L_Decoder_therm103:
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       2
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm190
+	GOTO        L__Decoder_therm191
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       3
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm190
+	GOTO        L__Decoder_therm191
 	GOTO        L_Decoder_therm106
-L__Decoder_therm190:
+L__Decoder_therm191:
 ;sensor.c,856 :: 		return '8';
 	MOVLW       56
 	MOVWF       R0 
@@ -2058,13 +2049,13 @@ L_Decoder_therm109:
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       2
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm189
+	GOTO        L__Decoder_therm190
 	MOVF        FARG_Decoder_therm_digit+0, 0 
 	XORLW       3
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Decoder_therm189
+	GOTO        L__Decoder_therm190
 	GOTO        L_Decoder_therm112
-L__Decoder_therm189:
+L__Decoder_therm190:
 ;sensor.c,865 :: 		return '9';
 	MOVLW       57
 	MOVWF       R0 
@@ -2188,10 +2179,10 @@ L_Decoder_therm65:
 	MOVLW       0
 	XORWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__Decoder_therm216
+	GOTO        L__Decoder_therm217
 	MOVLW       0
 	XORWF       FARG_Decoder_therm_code_d+0, 0 
-L__Decoder_therm216:
+L__Decoder_therm217:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_Decoder_therm103
 	MOVF        FARG_Decoder_therm_code_d+0, 0 
@@ -2284,7 +2275,7 @@ L_Read_therm_serial127:
 	SUBLW       3
 	BTFSS       STATUS+0, 0 
 	GOTO        L_Read_therm_serial131
-L__Read_therm_serial203:
+L__Read_therm_serial204:
 ;sensor.c,917 :: 		dig2 <<= 1;
 	RLCF        _dig2+0, 1 
 	BCF         _dig2+0, 0 
@@ -2309,7 +2300,7 @@ L_Read_therm_serial131:
 	SUBLW       6
 	BTFSS       STATUS+0, 0 
 	GOTO        L_Read_therm_serial135
-L__Read_therm_serial202:
+L__Read_therm_serial203:
 ;sensor.c,921 :: 		dig3 <<= 1;
 	RLCF        _dig3+0, 1 
 	BCF         _dig3+0, 0 
@@ -2407,7 +2398,7 @@ L_Read_therm_serial143:
 	SUBLW       3
 	BTFSS       STATUS+0, 0 
 	GOTO        L_Read_therm_serial147
-L__Read_therm_serial201:
+L__Read_therm_serial202:
 ;sensor.c,942 :: 		dig2 <<= 1;
 	RLCF        _dig2+0, 1 
 	BCF         _dig2+0, 0 
@@ -2432,7 +2423,7 @@ L_Read_therm_serial147:
 	SUBLW       6
 	BTFSS       STATUS+0, 0 
 	GOTO        L_Read_therm_serial151
-L__Read_therm_serial200:
+L__Read_therm_serial201:
 ;sensor.c,946 :: 		dig3 <<= 1;
 	RLCF        _dig3+0, 1 
 	BCF         _dig3+0, 0 
@@ -2670,23 +2661,23 @@ L_Read_therm_serial157:
 	MOVLW       0
 	XORWF       _dig3+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__Read_therm_serial217
-	MOVLW       105
-	XORWF       _dig3+0, 0 
-L__Read_therm_serial217:
-	BTFSC       STATUS+0, 2 
-	GOTO        L__Read_therm_serial199
-	MOVLW       0
-	XORWF       _dig3+1, 0 
-	BTFSS       STATUS+0, 2 
 	GOTO        L__Read_therm_serial218
-	MOVLW       111
+	MOVLW       105
 	XORWF       _dig3+0, 0 
 L__Read_therm_serial218:
 	BTFSC       STATUS+0, 2 
-	GOTO        L__Read_therm_serial199
+	GOTO        L__Read_therm_serial200
+	MOVLW       0
+	XORWF       _dig3+1, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__Read_therm_serial219
+	MOVLW       111
+	XORWF       _dig3+0, 0 
+L__Read_therm_serial219:
+	BTFSC       STATUS+0, 2 
+	GOTO        L__Read_therm_serial200
 	GOTO        L_Read_therm_serial171
-L__Read_therm_serial199:
+L__Read_therm_serial200:
 ;sensor.c,994 :: 		Lcd_Chr(1, 3, dig3);
 	MOVLW       1
 	MOVWF       FARG_Lcd_Chr_row+0 
@@ -2728,10 +2719,10 @@ L_Read_therm_serial172:
 	MOVLW       0
 	XORWF       _battery+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__Read_therm_serial219
+	GOTO        L__Read_therm_serial220
 	MOVLW       1
 	XORWF       _battery+0, 0 
-L__Read_therm_serial219:
+L__Read_therm_serial220:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_Read_therm_serial173
 ;sensor.c,1002 :: 		battery = 'b';
@@ -2771,10 +2762,10 @@ L_Read_therm_serial174:
 	MOVLW       0
 	XORWF       _degrees+1, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__Read_therm_serial220
+	GOTO        L__Read_therm_serial221
 	MOVLW       2
 	XORWF       _degrees+0, 0 
-L__Read_therm_serial220:
+L__Read_therm_serial221:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_Read_therm_serial175
 ;sensor.c,1011 :: 		degrees = 'C';
@@ -3067,16 +3058,16 @@ L_Initialize183:
 
 _main:
 ;sensor.c,1101 :: 		void main() {
-;sensor.c,1102 :: 		Initialize();                      // Initialize MCU and Bee click board
+;sensor.c,1105 :: 		Initialize();                      // Initialize MCU and Bee click board
 	CALL        _Initialize+0, 0
-;sensor.c,1104 :: 		while(1) {
+;sensor.c,1107 :: 		while(1) {
 L_main184:
-;sensor.c,1106 :: 		delay_ms(100);
-	MOVLW       2
+;sensor.c,1109 :: 		delay_ms(2000);
+	MOVLW       26
 	MOVWF       R11, 0
-	MOVLW       69
+	MOVLW       94
 	MOVWF       R12, 0
-	MOVLW       169
+	MOVLW       110
 	MOVWF       R13, 0
 L_main186:
 	DECFSZ      R13, 1, 0
@@ -3086,26 +3077,109 @@ L_main186:
 	DECFSZ      R11, 1, 0
 	BRA         L_main186
 	NOP
-	NOP
-;sensor.c,1108 :: 		DATA_TX[0]=dig1;
+;sensor.c,1111 :: 		DATA_TX[0]=dig1;
 	MOVF        _dig1+0, 0 
 	MOVWF       _DATA_TX+0 
-;sensor.c,1109 :: 		DATA_TX[1]=dig2;
+;sensor.c,1112 :: 		DATA_TX[1]=dig2;
 	MOVF        _dig2+0, 0 
 	MOVWF       _DATA_TX+1 
-;sensor.c,1110 :: 		DATA_TX[2]=dig3;
+;sensor.c,1113 :: 		DATA_TX[2]=dig3;
 	MOVF        _dig3+0, 0 
 	MOVWF       _DATA_TX+2 
-;sensor.c,1111 :: 		DATA_TX[3]=degrees;
+;sensor.c,1114 :: 		DATA_TX[3]=degrees;
 	MOVF        _degrees+0, 0 
 	MOVWF       _DATA_TX+3 
-;sensor.c,1112 :: 		DATA_TX[4]=battery;
+;sensor.c,1115 :: 		DATA_TX[4]=battery;
 	MOVF        _battery+0, 0 
 	MOVWF       _DATA_TX+4 
-;sensor.c,1113 :: 		write_TX_normal_FIFO();
+;sensor.c,1116 :: 		write_TX_normal_FIFO();
 	CALL        _write_TX_normal_FIFO+0, 0
-;sensor.c,1114 :: 		}
+;sensor.c,1117 :: 		i = read_ZIGBEE_short(TXSTAT);
+	MOVLW       36
+	MOVWF       FARG_read_ZIGBEE_short_address+0 
+	CALL        _read_ZIGBEE_short+0, 0
+;sensor.c,1118 :: 		IntToStr(i, texto); //converte o valor em string
+	MOVF        R0, 0 
+	MOVWF       FARG_IntToStr_input+0 
+	MOVLW       0
+	BTFSC       R0, 7 
+	MOVLW       255
+	MOVWF       FARG_IntToStr_input+1 
+	MOVLW       main_texto_L0+0
+	MOVWF       FARG_IntToStr_output+0 
+	MOVLW       hi_addr(main_texto_L0+0
+	MOVWF       FARG_IntToStr_output+1 
+	CALL        _IntToStr+0, 0
+;sensor.c,1119 :: 		Lcd_Out(1,1,texto); //envia para o lcd o valor string
+	MOVLW       1
+	MOVWF       FARG_Lcd_Out_row+0 
+	MOVLW       1
+	MOVWF       FARG_Lcd_Out_column+0 
+	MOVLW       main_texto_L0+0
+	MOVWF       FARG_Lcd_Out_text+0 
+	MOVLW       hi_addr(main_texto_L0+0
+	MOVWF       FARG_Lcd_Out_text+1 
+	CALL        _Lcd_Out+0, 0
+;sensor.c,1121 :: 		delay_ms(2000);
+	MOVLW       26
+	MOVWF       R11, 0
+	MOVLW       94
+	MOVWF       R12, 0
+	MOVLW       110
+	MOVWF       R13, 0
+L_main187:
+	DECFSZ      R13, 1, 0
+	BRA         L_main187
+	DECFSZ      R12, 1, 0
+	BRA         L_main187
+	DECFSZ      R11, 1, 0
+	BRA         L_main187
+	NOP
+;sensor.c,1123 :: 		DATA_TX[0]='3';
+	MOVLW       51
+	MOVWF       _DATA_TX+0 
+;sensor.c,1124 :: 		DATA_TX[1]='4';
+	MOVLW       52
+	MOVWF       _DATA_TX+1 
+;sensor.c,1125 :: 		DATA_TX[2]='5';
+	MOVLW       53
+	MOVWF       _DATA_TX+2 
+;sensor.c,1126 :: 		DATA_TX[3]=degrees;
+	MOVF        _degrees+0, 0 
+	MOVWF       _DATA_TX+3 
+;sensor.c,1127 :: 		DATA_TX[4]=battery;
+	MOVF        _battery+0, 0 
+	MOVWF       _DATA_TX+4 
+;sensor.c,1128 :: 		write_TX_normal_FIFO();
+	CALL        _write_TX_normal_FIFO+0, 0
+;sensor.c,1129 :: 		i = read_ZIGBEE_short(TXSTAT);
+	MOVLW       36
+	MOVWF       FARG_read_ZIGBEE_short_address+0 
+	CALL        _read_ZIGBEE_short+0, 0
+;sensor.c,1130 :: 		IntToStr(i, texto); //converte o valor em string
+	MOVF        R0, 0 
+	MOVWF       FARG_IntToStr_input+0 
+	MOVLW       0
+	BTFSC       R0, 7 
+	MOVLW       255
+	MOVWF       FARG_IntToStr_input+1 
+	MOVLW       main_texto_L0+0
+	MOVWF       FARG_IntToStr_output+0 
+	MOVLW       hi_addr(main_texto_L0+0
+	MOVWF       FARG_IntToStr_output+1 
+	CALL        _IntToStr+0, 0
+;sensor.c,1131 :: 		Lcd_Out(1,1,texto); //envia para o lcd o valor string
+	MOVLW       1
+	MOVWF       FARG_Lcd_Out_row+0 
+	MOVLW       1
+	MOVWF       FARG_Lcd_Out_column+0 
+	MOVLW       main_texto_L0+0
+	MOVWF       FARG_Lcd_Out_text+0 
+	MOVLW       hi_addr(main_texto_L0+0
+	MOVWF       FARG_Lcd_Out_text+1 
+	CALL        _Lcd_Out+0, 0
+;sensor.c,1133 :: 		}
 	GOTO        L_main184
-;sensor.c,1115 :: 		}
+;sensor.c,1134 :: 		}
 	GOTO        $+0
 ; end of _main

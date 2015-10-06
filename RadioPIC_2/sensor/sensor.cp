@@ -153,9 +153,9 @@ void read_RX_FIFO() {
 void set_ACK(void){
  short int temp = 0;
 
- temp = read_ZIGBEE_short( 0x1B );
- temp = temp | 0x04;
- write_ZIGBEE_short( 0x1B , temp);
+
+
+ write_ZIGBEE_short( 0x1B , 0b00000001);
 }
 
 void set_not_ACK(void){
@@ -209,9 +209,9 @@ void write_TX_normal_FIFO() {
  write_ZIGBEE_long(address_TX_normal_FIFO + i, data_TX_normal_FIFO[i]);
  }
 
- set_not_ACK();
- set_not_encrypt();
- start_transmit();
+ set_ACK();
+
+
 }
 #line 357 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void pin_reset() {
@@ -913,11 +913,14 @@ void Initialize() {
 
 
 void main() {
+ short int i;
+ char texto[16];
+
  Initialize();
 
  while(1) {
 
- delay_ms(100);
+ delay_ms(2000);
 
  DATA_TX[0]=dig1;
  DATA_TX[1]=dig2;
@@ -925,5 +928,21 @@ void main() {
  DATA_TX[3]=degrees;
  DATA_TX[4]=battery;
  write_TX_normal_FIFO();
+ i = read_ZIGBEE_short( 0x24 );
+ IntToStr(i, texto);
+ Lcd_Out(1,1,texto);
+
+ delay_ms(2000);
+
+ DATA_TX[0]='3';
+ DATA_TX[1]='4';
+ DATA_TX[2]='5';
+ DATA_TX[3]=degrees;
+ DATA_TX[4]=battery;
+ write_TX_normal_FIFO();
+ i = read_ZIGBEE_short( 0x24 );
+ IntToStr(i, texto);
+ Lcd_Out(1,1,texto);
+
  }
 }

@@ -97,22 +97,23 @@ main
 	write_TX_normal_FIFO
 		write_ZIGBEE_long
 			SPI1_Write
-		set_not_ACK
-			read_ZIGBEE_short
-				SPI1_Write
-				SPI1_Read
+		set_ACK
 			write_ZIGBEE_short
 				SPI1_Write
-		set_not_encrypt
-			read_ZIGBEE_short
-				SPI1_Write
-				SPI1_Read
-			write_ZIGBEE_short
-				SPI1_Write
-		start_transmit
-			read_ZIGBEE_short
-				SPI1_Write
-				SPI1_Read
-			write_ZIGBEE_short
-				SPI1_Write
+	read_ZIGBEE_short
+		SPI1_Write
+		SPI1_Read
+	IntToStr
+		WordToStr
+			Div_16x16_U
+	Lcd_Out
+		Lcd_Cmd
+			Delay_1us
+			Delay_5500us
+			Delay_50us
+		Lcd_Chr_CP
+			Lcd_Cmd
+				Delay_1us
+				Delay_5500us
+				Delay_50us
 	__CC2DW

@@ -284,9 +284,9 @@ void read_RX_FIFO() {
 void set_ACK(void){
   short int temp = 0;
 
-  temp = read_ZIGBEE_short(TXNCON);
-  temp = temp | 0x04;                   // 0x04 mask for set ACK
-  write_ZIGBEE_short(TXNCON, temp);
+  //temp = read_ZIGBEE_short(TXNCON);
+  //temp = temp | 0x04;                   // 0x04 mask for set ACK
+  write_ZIGBEE_short(TXNCON, 0b00000001);
 }
 
 void set_not_ACK(void){
@@ -343,9 +343,9 @@ void write_TX_normal_FIFO() {
     write_ZIGBEE_long(address_TX_normal_FIFO + i, data_TX_normal_FIFO[i]); // write frame into normal FIFO
   }
 
-  set_not_ACK();
-  set_not_encrypt();
-  start_transmit();
+  set_ACK();
+  //set_not_encrypt();
+  //start_transmit();
 }
 
 
@@ -1099,11 +1099,14 @@ void Initialize() {
 
 
 void main() {
+     short int i;
+     char texto[16];
+     
      Initialize();                      // Initialize MCU and Bee click board
 
      while(1) {
 
-        delay_ms(100);
+        delay_ms(2000);
         //Read_therm_serial();
         DATA_TX[0]=dig1;
         DATA_TX[1]=dig2;
@@ -1111,5 +1114,21 @@ void main() {
         DATA_TX[3]=degrees;
         DATA_TX[4]=battery;
         write_TX_normal_FIFO();
+        i = read_ZIGBEE_short(TXSTAT);
+        IntToStr(i, texto); //converte o valor em string
+        Lcd_Out(1,1,texto); //envia para o lcd o valor string
+        
+        delay_ms(2000);
+        //Read_therm_serial();
+        DATA_TX[0]='3';
+        DATA_TX[1]='4';
+        DATA_TX[2]='5';
+        DATA_TX[3]=degrees;
+        DATA_TX[4]=battery;
+        write_TX_normal_FIFO();
+        i = read_ZIGBEE_short(TXSTAT);
+        IntToStr(i, texto); //converte o valor em string
+        Lcd_Out(1,1,texto); //envia para o lcd o valor string
+        
       }
 }
