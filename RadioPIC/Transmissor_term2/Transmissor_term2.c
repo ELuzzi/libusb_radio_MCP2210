@@ -1101,10 +1101,7 @@ void Initialize() {
 void main() {
       int trans=0;
       
-
-      
       Initialize();                      // Initialize MCU and Bee click board
-      Lcd_Out(2, 0, "Iniciando");
       
       while(1) {
 
@@ -1142,11 +1139,11 @@ void main() {
                                 else {
                                         Lcd_Chr(1, 5, ' ');
                                 }
-                                delay_ms(100);
-                                trans=1;
+                                /*delay_ms(100);
+                                trans=1;*/
                         }
                 }
-                if(trans == 1){
+                /*if(trans == 1){
                         Lcd_Out(2, 0, "Modo TX");
                         delay_ms(100);
                         //Read_therm_serial();
@@ -1156,7 +1153,7 @@ void main() {
                         DATA_TX[3]=4;
                         DATA_TX[4]=5;
                         write_TX_normal_FIFO();
-                
+
                         temp1 = read_ZIGBEE_short(TXSTAT);
                         temp1 = temp1 & 0x01;
 
@@ -1164,7 +1161,7 @@ void main() {
                                 delay_ms(100);
                                 trans = 0;
                         }
-                }
+                }*/
         
       }
 }

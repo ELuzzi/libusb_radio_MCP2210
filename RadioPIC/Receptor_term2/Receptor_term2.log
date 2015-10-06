@@ -3,13 +3,13 @@ Line	MessageNo	File Name
 warning: 0	1501	Specified search path does not exist: 'C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\defs'	 
 warning: 0	1501	Specified search path does not exist: 'C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18'	 
 warning: 0	1501	Specified search path does not exist: 'D:\Dados\Dropbox\UFSM\Gmicro\Term_Radio\Receptor_term2'	 
-diagnostics: 0	125	All files Preprocessed in 93 ms	 
+diagnostics: 0	125	All files Preprocessed in 125 ms	 
 diagnostics: 0	121	Compilation Started	Receptor_term2.c
-diagnostics: 909	122	Compiled Successfully	Receptor_term2.c
-diagnostics: 0	126	All files Compiled in 1046 ms	 
-hint: 0	1140	Used RAM (bytes): 106 (7%)  Free RAM (bytes): 1409 (93%)	Used RAM (bytes): 106 (7%)  Free RAM (bytes): 1409 (93%)
-hint: 0	1140	Used ROM (bytes): 2978 (9%)  Free ROM (bytes): 29790 (91%)	Used ROM (bytes): 2978 (9%)  Free ROM (bytes): 29790 (91%)
+diagnostics: 908	122	Compiled Successfully	Receptor_term2.c
+diagnostics: 0	126	All files Compiled in 1139 ms	 
+hint: 0	1140	Used RAM (bytes): 83 (5%)  Free RAM (bytes): 1432 (95%)	Used RAM (bytes): 83 (5%)  Free RAM (bytes): 1432 (95%)
+hint: 0	1140	Used ROM (bytes): 2656 (8%)  Free ROM (bytes): 30112 (92%)	Used ROM (bytes): 2656 (8%)  Free ROM (bytes): 30112 (92%)
 diagnostics: 0	124	Project Linked Successfully	Receptor_term2.mcppi
-diagnostics: 0	127	Linked in 1170 ms	 
-diagnostics: 0	128	Project 'Receptor_term2.mcppi' completed: 2933 ms	 
-diagnostics: 0	103	Finished successfully: 01 out 2015, 17:55:34	Receptor_term2.mcppi
+diagnostics: 0	127	Linked in 1107 ms	 
+diagnostics: 0	128	Project 'Receptor_term2.mcppi' completed: 3010 ms	 
+diagnostics: 0	103	Finished successfully: 05 out 2015, 15:06:43	Receptor_term2.mcppi

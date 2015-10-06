@@ -848,8 +848,8 @@ void main() {
       while(1){
                if(trans == 1){
                         temp = read_ZIGBEE_short(TXSTAT);
-                        Lcd_Chr(1, 0, temp);
-                        Lcd_Out(2, 0, "Modo trans");
+                        //Lcd_Chr(1, 0, temp);
+                        //Lcd_Out(2, 0, "Modo trans");
                         delay_ms(100);
                         DATA_TX[0]=dig1;
                         DATA_TX[1]=dig2;

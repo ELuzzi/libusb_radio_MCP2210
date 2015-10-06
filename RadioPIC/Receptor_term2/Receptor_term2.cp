@@ -659,13 +659,12 @@ void main() {
  int trans=1;
 
  Initialize();
- Lcd_Out(1,0,"Iniciado");
 
  while(1){
  if(trans == 1){
  temp = read_ZIGBEE_short( 0x24 );
- Lcd_Chr(1, 0, temp);
- Lcd_Out(2, 0, "Modo trans");
+
+
  delay_ms(100);
  DATA_TX[0]=dig1;
  DATA_TX[1]=dig2;
@@ -673,9 +672,9 @@ void main() {
  DATA_TX[3]=degrees;
  DATA_TX[4]=battery;
  write_TX_normal_FIFO();
-#line 868 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC/Receptor_term2/Receptor_term2.c"
+#line 867 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC/Receptor_term2/Receptor_term2.c"
  }
-#line 907 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC/Receptor_term2/Receptor_term2.c"
+#line 906 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC/Receptor_term2/Receptor_term2.c"
  }
 
 }

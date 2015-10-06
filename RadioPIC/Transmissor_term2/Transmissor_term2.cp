@@ -915,10 +915,7 @@ void Initialize() {
 void main() {
  int trans=0;
 
-
-
  Initialize();
- Lcd_Out(2, 0, "Iniciando");
 
  while(1) {
 
@@ -956,29 +953,9 @@ void main() {
  else {
  Lcd_Chr(1, 5, ' ');
  }
- delay_ms(100);
- trans=1;
+#line 1144 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC/Transmissor_term2/Transmissor_term2.c"
  }
  }
- if(trans == 1){
- Lcd_Out(2, 0, "Modo TX");
- delay_ms(100);
-
- DATA_TX[0]=1;
- DATA_TX[1]=2;
- DATA_TX[2]=3;
- DATA_TX[3]=4;
- DATA_TX[4]=5;
- write_TX_normal_FIFO();
-
- temp1 = read_ZIGBEE_short( 0x24 );
- temp1 = temp1 & 0x01;
-
- if(temp1 == 0x00){
- delay_ms(100);
- trans = 0;
- }
- }
-
+#line 1166 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC/Transmissor_term2/Transmissor_term2.c"
  }
 }

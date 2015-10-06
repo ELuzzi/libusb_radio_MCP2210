@@ -2074,18 +2074,9 @@ _main:
 ;Receptor_term2.c,841 :: 		void main() {
 ;Receptor_term2.c,846 :: 		Initialize();                      // Initialize MCU and Bee click board
 	CALL        _Initialize+0, 0
-;Receptor_term2.c,847 :: 		Lcd_Out(1,0,"Iniciado");
-	MOVLW       1
-	MOVWF       FARG_Lcd_Out_row+0 
-	CLRF        FARG_Lcd_Out_column+0 
-	MOVLW       ?lstr1_Receptor_term2+0
-	MOVWF       FARG_Lcd_Out_text+0 
-	MOVLW       hi_addr(?lstr1_Receptor_term2+0
-	MOVWF       FARG_Lcd_Out_text+1 
-	CALL        _Lcd_Out+0, 0
-;Receptor_term2.c,849 :: 		while(1){
+;Receptor_term2.c,848 :: 		while(1){
 L_main72:
-;Receptor_term2.c,850 :: 		if(trans == 1){
+;Receptor_term2.c,849 :: 		if(trans == 1){
 	MOVLW       0
 	XORWF       main_trans_L0+1, 0 
 	BTFSS       STATUS+0, 2 
@@ -2095,27 +2086,11 @@ L_main72:
 L__main90:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main74
-;Receptor_term2.c,851 :: 		temp = read_ZIGBEE_short(TXSTAT);
+;Receptor_term2.c,850 :: 		temp = read_ZIGBEE_short(TXSTAT);
 	MOVLW       36
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;Receptor_term2.c,852 :: 		Lcd_Chr(1, 0, temp);
-	MOVLW       1
-	MOVWF       FARG_Lcd_Chr_row+0 
-	CLRF        FARG_Lcd_Chr_column+0 
-	MOVF        R0, 0 
-	MOVWF       FARG_Lcd_Chr_out_char+0 
-	CALL        _Lcd_Chr+0, 0
-;Receptor_term2.c,853 :: 		Lcd_Out(2, 0, "Modo trans");
-	MOVLW       2
-	MOVWF       FARG_Lcd_Out_row+0 
-	CLRF        FARG_Lcd_Out_column+0 
-	MOVLW       ?lstr2_Receptor_term2+0
-	MOVWF       FARG_Lcd_Out_text+0 
-	MOVLW       hi_addr(?lstr2_Receptor_term2+0
-	MOVWF       FARG_Lcd_Out_text+1 
-	CALL        _Lcd_Out+0, 0
-;Receptor_term2.c,854 :: 		delay_ms(100);
+;Receptor_term2.c,853 :: 		delay_ms(100);
 	MOVLW       2
 	MOVWF       R11, 0
 	MOVLW       4
@@ -2130,27 +2105,27 @@ L_main75:
 	DECFSZ      R11, 1, 0
 	BRA         L_main75
 	NOP
-;Receptor_term2.c,855 :: 		DATA_TX[0]=dig1;
+;Receptor_term2.c,854 :: 		DATA_TX[0]=dig1;
 	MOVF        main_dig1_L0+0, 0 
 	MOVWF       _DATA_TX+0 
-;Receptor_term2.c,856 :: 		DATA_TX[1]=dig2;
+;Receptor_term2.c,855 :: 		DATA_TX[1]=dig2;
 	MOVF        main_dig2_L0+0, 0 
 	MOVWF       _DATA_TX+1 
-;Receptor_term2.c,857 :: 		DATA_TX[2]=dig3;
+;Receptor_term2.c,856 :: 		DATA_TX[2]=dig3;
 	MOVF        main_dig3_L0+0, 0 
 	MOVWF       _DATA_TX+2 
-;Receptor_term2.c,858 :: 		DATA_TX[3]=degrees;
+;Receptor_term2.c,857 :: 		DATA_TX[3]=degrees;
 	MOVF        main_degrees_L0+0, 0 
 	MOVWF       _DATA_TX+3 
-;Receptor_term2.c,859 :: 		DATA_TX[4]=battery;
+;Receptor_term2.c,858 :: 		DATA_TX[4]=battery;
 	MOVF        main_battery_L0+0, 0 
 	MOVWF       _DATA_TX+4 
-;Receptor_term2.c,860 :: 		write_TX_normal_FIFO();
+;Receptor_term2.c,859 :: 		write_TX_normal_FIFO();
 	CALL        _write_TX_normal_FIFO+0, 0
-;Receptor_term2.c,868 :: 		}
+;Receptor_term2.c,867 :: 		}
 L_main74:
-;Receptor_term2.c,907 :: 		}
+;Receptor_term2.c,906 :: 		}
 	GOTO        L_main72
-;Receptor_term2.c,909 :: 		}
+;Receptor_term2.c,908 :: 		}
 	GOTO        $+0
 ; end of _main

@@ -94,16 +94,6 @@ main
 			write_ZIGBEE_short
 				SPI1_Write
 		pin_wake
-	Lcd_Out
-		Lcd_Cmd
-			Delay_1us
-			Delay_5500us
-			Delay_50us
-		Lcd_Chr_CP
-			Lcd_Cmd
-				Delay_1us
-				Delay_5500us
-				Delay_50us
 	Debounce_INT
 	read_ZIGBEE_short
 		SPI1_Write
@@ -122,25 +112,14 @@ main
 			Delay_1us
 			Delay_5500us
 			Delay_50us
-	write_TX_normal_FIFO
-		write_ZIGBEE_long
-			SPI1_Write
-		set_ACK
-			read_ZIGBEE_short
-				SPI1_Write
-				SPI1_Read
-			write_ZIGBEE_short
-				SPI1_Write
-		set_not_encrypt
-			read_ZIGBEE_short
-				SPI1_Write
-				SPI1_Read
-			write_ZIGBEE_short
-				SPI1_Write
-		start_transmit
-			read_ZIGBEE_short
-				SPI1_Write
-				SPI1_Read
-			write_ZIGBEE_short
-				SPI1_Write
+	Lcd_Out
+		Lcd_Cmd
+			Delay_1us
+			Delay_5500us
+			Delay_50us
+		Lcd_Chr_CP
+			Lcd_Cmd
+				Delay_1us
+				Delay_5500us
+				Delay_50us
 	__CC2DW
