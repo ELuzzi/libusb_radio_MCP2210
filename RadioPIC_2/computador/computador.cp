@@ -147,7 +147,22 @@ void set_not_ACK(void){
  temp = temp & (!0x04);
  write_ZIGBEE_short( 0x1B , temp);
 }
-#line 285 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+void Frame_ACK(void){
+ short int temp = 0;
+
+ temp = read_ZIGBEE_short( 0x12 );
+ temp = temp | 0x80;
+ write_ZIGBEE_short( 0x12 , temp);
+}
+
+void set_ACK_recipient(void){
+ short int temp = 0;
+
+ temp = read_ZIGBEE_short( 0x00 );
+ temp = temp & 0xDF;
+ write_ZIGBEE_short( 0x00 , temp);
+}
+#line 301 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_encrypt(void){
  short int temp = 0;
 
@@ -195,7 +210,7 @@ void write_TX_normal_FIFO() {
  set_not_encrypt();
  start_transmit();
 }
-#line 339 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 355 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void pin_reset() {
  RST = 0;
  Delay_ms(5);
@@ -228,11 +243,11 @@ void RF_reset() {
  write_ZIGBEE_short( 0x36 , temp);
  Delay_ms(1);
 }
-#line 375 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 391 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void enable_interrupt() {
  write_ZIGBEE_short( 0x32 , 0x00);
 }
-#line 382 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 398 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_channel(short int channel_number) {
  if((channel_number > 26) || (channel_number < 11)) channel_number = 11;
  switch(channel_number) {
@@ -287,7 +302,7 @@ void set_channel(short int channel_number) {
  }
  RF_reset();
 }
-#line 440 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 456 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_CCA_mode(short int CCA_mode) {
  short int temp = 0;
  switch(CCA_mode) {
@@ -328,7 +343,7 @@ void set_CCA_mode(short int CCA_mode) {
  break;
  }
  }
-#line 484 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 500 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_RSSI_mode(short int RSSI_mode) {
  short int temp = 0;
 
@@ -345,7 +360,7 @@ void set_RSSI_mode(short int RSSI_mode) {
  break;
  }
 }
-#line 504 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 520 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void nonbeacon_PAN_coordinator_device() {
  short int temp = 0;
 
@@ -385,7 +400,7 @@ void nonbeacon_device() {
  temp = temp & 0xDF;
  write_ZIGBEE_short( 0x11 , temp);
 }
-#line 551 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 567 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_IFS_recomended() {
  short int temp = 0;
 
@@ -421,7 +436,7 @@ void set_IFS_default() {
  temp = temp | 0x41;
  write_ZIGBEE_short( 0x27 , temp);
 }
-#line 590 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 606 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_reception_mode(short int r_mode) {
  short int temp = 0;
 
@@ -450,7 +465,7 @@ void set_reception_mode(short int r_mode) {
  break;
  }
 }
-#line 622 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 638 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_frame_format_filter(short int fff_mode) {
  short int temp = 0;
 
@@ -487,7 +502,7 @@ void set_frame_format_filter(short int fff_mode) {
  break;
  }
 }
-#line 662 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 678 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void flush_RX_FIFO_pointer() {
  short int temp;
 
@@ -495,7 +510,7 @@ void flush_RX_FIFO_pointer() {
  temp = temp | 0x01;
  write_ZIGBEE_short( 0x0D , temp);
 }
-#line 673 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 689 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_short_address(short int * address) {
  write_ZIGBEE_short( 0x03 , address[0]);
  write_ZIGBEE_short( 0x04 , address[1]);
@@ -513,7 +528,7 @@ void set_PAN_ID(short int * address) {
  write_ZIGBEE_short( 0x01 , address[0]);
  write_ZIGBEE_short( 0x02 , address[1]);
 }
-#line 694 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 710 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_wake_from_pin() {
  short int temp = 0;
 
@@ -531,7 +546,7 @@ void pin_wake() {
  WAKE = 1;
  Delay_ms(5);
 }
-#line 715 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 731 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void enable_PLL() {
  write_ZIGBEE_long( 0x202 , 0x80);
 }
@@ -539,7 +554,7 @@ void enable_PLL() {
 void disable_PLL() {
  write_ZIGBEE_long( 0x202 , 0x00);
 }
-#line 726 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 742 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_TX_power(unsigned short int power) {
  if((power < 0) || (power > 31))
  power = 31;
@@ -547,7 +562,7 @@ void set_TX_power(unsigned short int power) {
  power = ((power & 0b00011111) << 3) & 0b11111000;
  write_ZIGBEE_long( 0x203 , power);
 }
-#line 737 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 753 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void init_ZIGBEE_basic() {
  write_ZIGBEE_short( 0x18 , 0x98);
  write_ZIGBEE_short( 0x2E , 0x95);
@@ -662,7 +677,9 @@ void main() {
  while(1){
  if(Debounce_INT() == 0 ){
  temp1 = read_ZIGBEE_short( 0x31 );
+ set_ACK_recipient();
  read_RX_FIFO();
+
  dig1=DATA_RX[0];
  dig2=DATA_RX[1];
  dig3=DATA_RX[2];

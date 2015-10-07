@@ -155,7 +155,7 @@ void set_ACK(void){
 
 
 
- write_ZIGBEE_short( 0x1B , 0b00000001);
+ write_ZIGBEE_short( 0x1B , 0b00000101);
 }
 
 void set_not_ACK(void){
@@ -165,7 +165,15 @@ void set_not_ACK(void){
  temp = temp & (!0x04);
  write_ZIGBEE_short( 0x1B , temp);
 }
-#line 303 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+
+void Frame_ACK(void){
+ short int temp = 0;
+
+ temp = read_ZIGBEE_short( 0x12 );
+ temp = temp | 0x80;
+ write_ZIGBEE_short( 0x12 , temp);
+}
+#line 311 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void set_encrypt(void){
  short int temp = 0;
 
@@ -209,11 +217,12 @@ void write_TX_normal_FIFO() {
  write_ZIGBEE_long(address_TX_normal_FIFO + i, data_TX_normal_FIFO[i]);
  }
 
+ Frame_ACK();
  set_ACK();
 
 
 }
-#line 357 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+#line 366 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void pin_reset() {
  RST = 0;
  Delay_ms(5);
@@ -246,11 +255,11 @@ void RF_reset() {
  write_ZIGBEE_short( 0x36 , temp);
  Delay_ms(1);
 }
-#line 393 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+#line 402 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void enable_interrupt() {
  write_ZIGBEE_short( 0x32 , 0x00);
 }
-#line 400 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+#line 409 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void set_channel(short int channel_number) {
  if((channel_number > 26) || (channel_number < 11)) channel_number = 11;
  switch(channel_number) {
@@ -305,7 +314,7 @@ void set_channel(short int channel_number) {
  }
  RF_reset();
 }
-#line 458 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+#line 467 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void set_CCA_mode(short int CCA_mode) {
  short int temp = 0;
  switch(CCA_mode) {
@@ -346,7 +355,7 @@ void set_CCA_mode(short int CCA_mode) {
  break;
  }
  }
-#line 502 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+#line 511 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void set_RSSI_mode(short int RSSI_mode) {
  short int temp = 0;
 
@@ -363,7 +372,7 @@ void set_RSSI_mode(short int RSSI_mode) {
  break;
  }
 }
-#line 522 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+#line 531 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void nonbeacon_PAN_coordinator_device() {
  short int temp = 0;
 
@@ -403,7 +412,7 @@ void nonbeacon_device() {
  temp = temp & 0xDF;
  write_ZIGBEE_short( 0x11 , temp);
 }
-#line 569 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+#line 578 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void set_IFS_recomended() {
  short int temp = 0;
 
@@ -439,7 +448,7 @@ void set_IFS_default() {
  temp = temp | 0x41;
  write_ZIGBEE_short( 0x27 , temp);
 }
-#line 608 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+#line 617 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void set_reception_mode(short int r_mode) {
  short int temp = 0;
 
@@ -468,7 +477,7 @@ void set_reception_mode(short int r_mode) {
  break;
  }
 }
-#line 640 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+#line 649 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void set_frame_format_filter(short int fff_mode) {
  short int temp = 0;
 
@@ -505,7 +514,7 @@ void set_frame_format_filter(short int fff_mode) {
  break;
  }
 }
-#line 680 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+#line 689 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void flush_RX_FIFO_pointer() {
  short int temp;
 
@@ -513,7 +522,7 @@ void flush_RX_FIFO_pointer() {
  temp = temp | 0x01;
  write_ZIGBEE_short( 0x0D , temp);
 }
-#line 691 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+#line 700 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void set_short_address(short int * address) {
  write_ZIGBEE_short( 0x03 , address[0]);
  write_ZIGBEE_short( 0x04 , address[1]);
@@ -531,7 +540,7 @@ void set_PAN_ID(short int * address) {
  write_ZIGBEE_short( 0x01 , address[0]);
  write_ZIGBEE_short( 0x02 , address[1]);
 }
-#line 712 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+#line 721 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void set_wake_from_pin() {
  short int temp = 0;
 
@@ -549,7 +558,7 @@ void pin_wake() {
  WAKE = 1;
  Delay_ms(5);
 }
-#line 733 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+#line 742 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void enable_PLL() {
  write_ZIGBEE_long( 0x202 , 0x80);
 }
@@ -557,7 +566,7 @@ void enable_PLL() {
 void disable_PLL() {
  write_ZIGBEE_long( 0x202 , 0x00);
 }
-#line 744 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+#line 753 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void set_TX_power(unsigned short int power) {
  if((power < 0) || (power > 31))
  power = 31;
@@ -565,7 +574,7 @@ void set_TX_power(unsigned short int power) {
  power = ((power & 0b00011111) << 3) & 0b11111000;
  write_ZIGBEE_long( 0x203 , power);
 }
-#line 755 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+#line 764 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
 void init_ZIGBEE_basic() {
  write_ZIGBEE_short( 0x18 , 0x98);
  write_ZIGBEE_short( 0x2E , 0x95);
@@ -928,7 +937,7 @@ void main() {
  DATA_TX[3]=degrees;
  DATA_TX[4]=battery;
  write_TX_normal_FIFO();
- i = read_ZIGBEE_short( 0x24 );
+ i = read_ZIGBEE_short( 0x1B );
  IntToStr(i, texto);
  Lcd_Out(1,1,texto);
 
@@ -940,7 +949,7 @@ void main() {
  DATA_TX[3]=degrees;
  DATA_TX[4]=battery;
  write_TX_normal_FIFO();
- i = read_ZIGBEE_short( 0x24 );
+ i = read_ZIGBEE_short( 0x1B );
  IntToStr(i, texto);
  Lcd_Out(1,1,texto);
 

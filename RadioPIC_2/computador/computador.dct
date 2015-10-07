@@ -541,6 +541,7 @@ flts_bit
 flush_rx_fifo_pointer
 font5x7
 fontsystem5x7_v2
+frame_ack
 free
 free_bit
 frexp
@@ -1286,6 +1287,7 @@ sendb
 sendb_bit
 seq_number
 set_ack
+set_ack_recipient
 set_cca_mode
 set_channel
 set_encrypt

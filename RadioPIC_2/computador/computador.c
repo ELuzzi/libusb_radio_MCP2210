@@ -278,6 +278,22 @@ void set_not_ACK(void){
   temp = temp & (!0x04);                // 0x04 mask for set not ACK
   write_ZIGBEE_short(TXNCON, temp);
 }
+void Frame_ACK(void){
+  short int temp = 0;
+
+  temp = read_ZIGBEE_short(ACKTMOUT);
+  temp = temp | 0x80;
+  write_ZIGBEE_short(ACKTMOUT, temp);
+}
+
+void set_ACK_recipient(void){
+  short int temp = 0;
+
+  temp = read_ZIGBEE_short(RXMCR);
+  temp = temp & 0xDF;
+  write_ZIGBEE_short(RXMCR, temp);
+}
+
 
 /*
  *  Encrypt
@@ -848,7 +864,9 @@ void main() {
       while(1){
         if(Debounce_INT() == 0 ){
           temp1 = read_ZIGBEE_short(INTSTAT); // Read and flush register INTSTAT
+          set_ACK_recipient();
           read_RX_FIFO();                     // Read receive data
+          //Frame_ACK();
           dig1=DATA_RX[0];
           dig2=DATA_RX[1];
           dig3=DATA_RX[2];
