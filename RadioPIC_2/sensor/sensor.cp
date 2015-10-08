@@ -195,7 +195,7 @@ void write_TX_normal_FIFO() {
 
  data_TX_normal_FIFO[0] = HEADER_LENGHT;
  data_TX_normal_FIFO[1] = HEADER_LENGHT + DATA_LENGHT;
- data_TX_normal_FIFO[2] = 0x01;
+ data_TX_normal_FIFO[2] = 0x21;
  data_TX_normal_FIFO[3] = 0x88;
  data_TX_normal_FIFO[4] = SEQ_NUMBER;
  data_TX_normal_FIFO[5] = PAN_ID_2[1];
@@ -217,7 +217,7 @@ void write_TX_normal_FIFO() {
  write_ZIGBEE_long(address_TX_normal_FIFO + i, data_TX_normal_FIFO[i]);
  }
 
- Frame_ACK();
+
  set_ACK();
 
 
@@ -937,7 +937,7 @@ void main() {
  DATA_TX[3]=degrees;
  DATA_TX[4]=battery;
  write_TX_normal_FIFO();
- i = read_ZIGBEE_short( 0x1B );
+ i = read_ZIGBEE_short( 0x24 );
  IntToStr(i, texto);
  Lcd_Out(1,1,texto);
 
@@ -949,7 +949,7 @@ void main() {
  DATA_TX[3]=degrees;
  DATA_TX[4]=battery;
  write_TX_normal_FIFO();
- i = read_ZIGBEE_short( 0x1B );
+ i = read_ZIGBEE_short( 0x24 );
  IntToStr(i, texto);
  Lcd_Out(1,1,texto);
 

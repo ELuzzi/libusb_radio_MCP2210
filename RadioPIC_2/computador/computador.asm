@@ -440,8 +440,8 @@ _write_TX_normal_FIFO:
 ;computador.c,321 :: 		data_TX_normal_FIFO[1]  = HEADER_LENGHT + DATA_LENGHT;
 	MOVLW       16
 	MOVWF       _data_TX_normal_FIFO+1 
-;computador.c,322 :: 		data_TX_normal_FIFO[2]  = 0x01;                        // control frame
-	MOVLW       1
+;computador.c,322 :: 		data_TX_normal_FIFO[2]  = 0x41;                        // control frame
+	MOVLW       65
 	MOVWF       _data_TX_normal_FIFO+2 
 ;computador.c,323 :: 		data_TX_normal_FIFO[3]  = 0x88;
 	MOVLW       136
@@ -2115,8 +2115,6 @@ L_main72:
 	CALL        _read_ZIGBEE_short+0, 0
 	MOVF        R0, 0 
 	MOVWF       _temp1+0 
-;computador.c,867 :: 		set_ACK_recipient();
-	CALL        _set_ACK_recipient+0, 0
 ;computador.c,868 :: 		read_RX_FIFO();                     // Read receive data
 	CALL        _read_RX_FIFO+0, 0
 ;computador.c,871 :: 		dig2=DATA_RX[1];

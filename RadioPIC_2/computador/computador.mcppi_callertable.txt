@@ -98,12 +98,6 @@ main
 	read_ZIGBEE_short
 		SPI1_Write
 		SPI1_Read
-	set_ACK_recipient
-		read_ZIGBEE_short
-			SPI1_Write
-			SPI1_Read
-		write_ZIGBEE_short
-			SPI1_Write
 	read_RX_FIFO
 		read_ZIGBEE_short
 			SPI1_Write

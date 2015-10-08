@@ -329,7 +329,7 @@ void write_TX_normal_FIFO() {
 
   data_TX_normal_FIFO[0]  = HEADER_LENGHT;
   data_TX_normal_FIFO[1]  = HEADER_LENGHT + DATA_LENGHT;
-  data_TX_normal_FIFO[2]  = 0x01;                        // control frame
+  data_TX_normal_FIFO[2]  = 0x21;                        // control frame
   data_TX_normal_FIFO[3]  = 0x88;
   data_TX_normal_FIFO[4]  = SEQ_NUMBER;                  // sequence number
   data_TX_normal_FIFO[5]  = PAN_ID_2[1];                 // destinatoin pan
@@ -351,7 +351,7 @@ void write_TX_normal_FIFO() {
     write_ZIGBEE_long(address_TX_normal_FIFO + i, data_TX_normal_FIFO[i]); // write frame into normal FIFO
   }
 
-  Frame_ACK();
+  //Frame_ACK();
   set_ACK();
   //set_not_encrypt();
   //start_transmit();
@@ -1123,7 +1123,7 @@ void main() {
         DATA_TX[3]=degrees;
         DATA_TX[4]=battery;
         write_TX_normal_FIFO();
-        i = read_ZIGBEE_short(TXNCON);
+        i = read_ZIGBEE_short(TXSTAT);
         IntToStr(i, texto); //converte o valor em string
         Lcd_Out(1,1,texto); //envia para o lcd o valor string
         
@@ -1135,7 +1135,7 @@ void main() {
         DATA_TX[3]=degrees;
         DATA_TX[4]=battery;
         write_TX_normal_FIFO();
-        i = read_ZIGBEE_short(TXNCON);
+        i = read_ZIGBEE_short(TXSTAT);
         IntToStr(i, texto); //converte o valor em string
         Lcd_Out(1,1,texto); //envia para o lcd o valor string
         

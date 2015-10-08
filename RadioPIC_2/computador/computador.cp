@@ -184,7 +184,7 @@ void write_TX_normal_FIFO() {
 
  data_TX_normal_FIFO[0] = HEADER_LENGHT;
  data_TX_normal_FIFO[1] = HEADER_LENGHT + DATA_LENGHT;
- data_TX_normal_FIFO[2] = 0x01;
+ data_TX_normal_FIFO[2] = 0x41;
  data_TX_normal_FIFO[3] = 0x88;
  data_TX_normal_FIFO[4] = SEQ_NUMBER;
  data_TX_normal_FIFO[5] = PAN_ID_2[1];
@@ -677,7 +677,7 @@ void main() {
  while(1){
  if(Debounce_INT() == 0 ){
  temp1 = read_ZIGBEE_short( 0x31 );
- set_ACK_recipient();
+
  read_RX_FIFO();
 
  dig1=DATA_RX[0];

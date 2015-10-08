@@ -419,8 +419,8 @@ _write_TX_normal_FIFO:
 ;sensor.c,331 :: 		data_TX_normal_FIFO[1]  = HEADER_LENGHT + DATA_LENGHT;
 	MOVLW       16
 	MOVWF       _data_TX_normal_FIFO+1 
-;sensor.c,332 :: 		data_TX_normal_FIFO[2]  = 0x01;                        // control frame
-	MOVLW       1
+;sensor.c,332 :: 		data_TX_normal_FIFO[2]  = 0x21;                        // control frame
+	MOVLW       33
 	MOVWF       _data_TX_normal_FIFO+2 
 ;sensor.c,333 :: 		data_TX_normal_FIFO[3]  = 0x88;
 	MOVLW       136
@@ -505,8 +505,6 @@ L__write_TX_normal_FIFO216:
 ;sensor.c,352 :: 		}
 	GOTO        L_write_TX_normal_FIFO5
 L_write_TX_normal_FIFO6:
-;sensor.c,354 :: 		Frame_ACK();
-	CALL        _Frame_ACK+0, 0
 ;sensor.c,355 :: 		set_ACK();
 	CALL        _set_ACK+0, 0
 ;sensor.c,358 :: 		}
@@ -3114,8 +3112,8 @@ L_main186:
 	MOVWF       _DATA_TX+4 
 ;sensor.c,1125 :: 		write_TX_normal_FIFO();
 	CALL        _write_TX_normal_FIFO+0, 0
-;sensor.c,1126 :: 		i = read_ZIGBEE_short(TXNCON);
-	MOVLW       27
+;sensor.c,1126 :: 		i = read_ZIGBEE_short(TXSTAT);
+	MOVLW       36
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
 ;sensor.c,1127 :: 		IntToStr(i, texto); //converte o valor em string
@@ -3172,8 +3170,8 @@ L_main187:
 	MOVWF       _DATA_TX+4 
 ;sensor.c,1137 :: 		write_TX_normal_FIFO();
 	CALL        _write_TX_normal_FIFO+0, 0
-;sensor.c,1138 :: 		i = read_ZIGBEE_short(TXNCON);
-	MOVLW       27
+;sensor.c,1138 :: 		i = read_ZIGBEE_short(TXSTAT);
+	MOVLW       36
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
 ;sensor.c,1139 :: 		IntToStr(i, texto); //converte o valor em string

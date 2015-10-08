@@ -97,12 +97,6 @@ main
 	write_TX_normal_FIFO
 		write_ZIGBEE_long
 			SPI1_Write
-		Frame_ACK
-			read_ZIGBEE_short
-				SPI1_Write
-				SPI1_Read
-			write_ZIGBEE_short
-				SPI1_Write
 		set_ACK
 			write_ZIGBEE_short
 				SPI1_Write
