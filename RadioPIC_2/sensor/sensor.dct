@@ -549,7 +549,6 @@ flts_bit
 flush_rx_fifo_pointer
 font5x7
 fontsystem5x7_v2
-frame_ack
 free
 free_bit
 frexp

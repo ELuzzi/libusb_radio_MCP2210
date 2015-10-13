@@ -154,6 +154,8 @@ short int DATA_RX[DATA_LENGHT], DATA_TX[DATA_LENGHT], data_TX_normal_FIFO[DATA_L
 short int LQI, RSSI2, SEQ_NUMBER;
 short int temp1;
 
+int dig1 = '1', dig2 = '2', dig3 = '0', degrees = 0, battery = 0;
+
 /*
  * Functions for reading and writing registers in short address memory space
  */
@@ -221,11 +223,11 @@ short int read_ZIGBEE_long(int address) {
  * Transmit packet
  */
 void start_transmit() {
-  short int temp = 0;
+  /*short int temp = 0;
 
   temp = read_ZIGBEE_short(TXNCON);
-  temp = temp | 0x01;                 // mask for start transmit
-  write_ZIGBEE_short(TXNCON, temp);
+  temp = temp | 0x01;                 // mask for start transmit*/
+  write_ZIGBEE_short(TXNCON, 0b00000101);
 }
 
 /*
@@ -319,7 +321,7 @@ void write_TX_normal_FIFO() {
 
   data_TX_normal_FIFO[0]  = HEADER_LENGHT;
   data_TX_normal_FIFO[1]  = HEADER_LENGHT + DATA_LENGHT;
-  data_TX_normal_FIFO[2]  = 0x41;                        // control frame
+  data_TX_normal_FIFO[2]  = 0x21;                        // control frame
   data_TX_normal_FIFO[3]  = 0x88;
   data_TX_normal_FIFO[4]  = SEQ_NUMBER;                  // sequence number
   data_TX_normal_FIFO[5]  = PAN_ID_2[1];                 // destinatoin pan
@@ -340,9 +342,9 @@ void write_TX_normal_FIFO() {
   for(i = 0; i < (HEADER_LENGHT + DATA_LENGHT + 2); i++) {
     write_ZIGBEE_long(address_TX_normal_FIFO + i, data_TX_normal_FIFO[i]); // write frame into normal FIFO
   }
-
-  set_not_ACK();
-  set_not_encrypt();
+  //"Bit is cleared at the next triggering of TXN FIFO." Set ack é feito direto na função "start_transmit();"
+  //set_ACK();
+  //set_not_encrypt();
   start_transmit();
 }
 
@@ -856,48 +858,40 @@ void Initialize() {
 
 
 void main() {
-      char dig1=0, dig2=0, dig3=0, degrees=0, battery=0;
-
-
+      short int i;
+      char texto[16];
+      char trans = 1; //quando trans = 1 está operando no modo transmissor, se trans = 0 está no modo receptor
+     
       Initialize();                      // Initialize MCU and Bee click board
 
-      while(1){
-        if(Debounce_INT() == 0 ){
-          temp1 = read_ZIGBEE_short(INTSTAT); // Read and flush register INTSTAT
-          //set_ACK_recipient();
-          read_RX_FIFO();                     // Read receive data
-          //Frame_ACK();
-          dig1=DATA_RX[0];
-          dig2=DATA_RX[1];
-          dig3=DATA_RX[2];
-          degrees=DATA_RX[3];
-          battery=DATA_RX[4];
+      while(1) {
+        if(trans == 1){
+        
+            delay_ms(2000);
+            //Read_therm_serial();
+            DATA_TX[0]=dig1;
+            DATA_TX[1]=dig2;
+            DATA_TX[2]=dig3;
+            DATA_TX[3]=degrees;
+            DATA_TX[4]=battery;
+            write_TX_normal_FIFO();
+            i = read_ZIGBEE_short(TXSTAT);
+            IntToStr(i, texto); //converte o valor em string
+            Lcd_Out(1,1,texto); //envia para o lcd o valor string
 
-
-                  Lcd_Chr(1, 1, dig1);
-                          Lcd_Chr(1, 2, dig2);
-                          if ((dig3 == 'i')||(dig3 == 'o')){
-                              Lcd_Chr(1, 3, dig3);
-                              Lcd_Chr(1, 4, ' ');
-                           }else{
-                              Lcd_Chr(1, 3, '.');
-                              Lcd_Chr(1, 4, dig3);
-                          }
-
-                          if (battery == 'b'){
-                                   Lcd_Out(2, 0, "           ");
-                          }
-                          else {
-                            Lcd_Out(2, 0, "low battery");
-                          }
-
-                          if (degrees == 'C'){
-                                   Lcd_Chr(1, 5, 'C');
-                          }
-                          else {
-                            Lcd_Chr(1, 5, ' ');
-                          }
+            delay_ms(2000);
+            //Read_therm_serial();
+            DATA_TX[0]='3';
+            DATA_TX[1]='4';
+            DATA_TX[2]='5';
+            DATA_TX[3]=degrees;
+            DATA_TX[4]=battery;
+            write_TX_normal_FIFO();
+            i = read_ZIGBEE_short(TXSTAT);
+            IntToStr(i, texto); //converte o valor em string
+            Lcd_Out(1,1,texto); //envia para o lcd o valor string
         }
+
       }
 
 }

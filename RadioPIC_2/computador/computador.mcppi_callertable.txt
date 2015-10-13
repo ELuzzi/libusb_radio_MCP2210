@@ -94,24 +94,18 @@ main
 			write_ZIGBEE_short
 				SPI1_Write
 		pin_wake
-	Debounce_INT
+	write_TX_normal_FIFO
+		write_ZIGBEE_long
+			SPI1_Write
+		start_transmit
+			write_ZIGBEE_short
+				SPI1_Write
 	read_ZIGBEE_short
 		SPI1_Write
 		SPI1_Read
-	read_RX_FIFO
-		read_ZIGBEE_short
-			SPI1_Write
-			SPI1_Read
-		write_ZIGBEE_short
-			SPI1_Write
-		read_ZIGBEE_long
-			SPI1_Write
-			SPI1_Read
-	Lcd_Chr
-		Lcd_Cmd
-			Delay_1us
-			Delay_5500us
-			Delay_50us
+	IntToStr
+		WordToStr
+			Div_16x16_U
 	Lcd_Out
 		Lcd_Cmd
 			Delay_1us

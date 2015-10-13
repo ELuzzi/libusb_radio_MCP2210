@@ -39,7 +39,9 @@ short int PAN_ID_2[2];
 short int DATA_RX[DATA_LENGHT], DATA_TX[DATA_LENGHT], data_TX_normal_FIFO[DATA_LENGHT + HEADER_LENGHT + 2];
 short int LQI, RSSI2, SEQ_NUMBER;
 short int temp1;
-#line 161 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+
+int dig1 = '1', dig2 = '2', dig3 = '0', degrees = 0, battery = 0;
+#line 163 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void write_ZIGBEE_short(short int address, short int data_r) {
  CS2 = 0;
 
@@ -63,7 +65,7 @@ short int read_ZIGBEE_short(short int address) {
  CS2 = 1;
  return data_r;
 }
-#line 189 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 191 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void write_ZIGBEE_long(int address, short int data_r) {
  short int address_high = 0, address_low = 0;
 
@@ -94,15 +96,12 @@ short int read_ZIGBEE_long(int address) {
  CS2 = 1;
  return data_r;
 }
-#line 223 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 225 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void start_transmit() {
- short int temp = 0;
-
- temp = read_ZIGBEE_short( 0x1B );
- temp = temp | 0x01;
- write_ZIGBEE_short( 0x1B , temp);
+#line 230 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+ write_ZIGBEE_short( 0x1B , 0b00000101);
 }
-#line 234 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 236 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void read_RX_FIFO() {
  unsigned short int temp = 0;
  int i = 0;
@@ -131,7 +130,7 @@ void read_RX_FIFO() {
  temp = temp & (!0x04);
  write_ZIGBEE_short( 0x39 , temp);
 }
-#line 266 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 268 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_ACK(void){
  short int temp = 0;
 
@@ -162,7 +161,7 @@ void set_ACK_recipient(void){
  temp = temp & 0xDF;
  write_ZIGBEE_short( 0x00 , temp);
 }
-#line 301 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 303 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_encrypt(void){
  short int temp = 0;
 
@@ -184,7 +183,7 @@ void write_TX_normal_FIFO() {
 
  data_TX_normal_FIFO[0] = HEADER_LENGHT;
  data_TX_normal_FIFO[1] = HEADER_LENGHT + DATA_LENGHT;
- data_TX_normal_FIFO[2] = 0x41;
+ data_TX_normal_FIFO[2] = 0x21;
  data_TX_normal_FIFO[3] = 0x88;
  data_TX_normal_FIFO[4] = SEQ_NUMBER;
  data_TX_normal_FIFO[5] = PAN_ID_2[1];
@@ -206,11 +205,11 @@ void write_TX_normal_FIFO() {
  write_ZIGBEE_long(address_TX_normal_FIFO + i, data_TX_normal_FIFO[i]);
  }
 
- set_not_ACK();
- set_not_encrypt();
+
+
  start_transmit();
 }
-#line 355 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 357 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void pin_reset() {
  RST = 0;
  Delay_ms(5);
@@ -243,11 +242,11 @@ void RF_reset() {
  write_ZIGBEE_short( 0x36 , temp);
  Delay_ms(1);
 }
-#line 391 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 393 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void enable_interrupt() {
  write_ZIGBEE_short( 0x32 , 0x00);
 }
-#line 398 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 400 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_channel(short int channel_number) {
  if((channel_number > 26) || (channel_number < 11)) channel_number = 11;
  switch(channel_number) {
@@ -302,7 +301,7 @@ void set_channel(short int channel_number) {
  }
  RF_reset();
 }
-#line 456 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 458 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_CCA_mode(short int CCA_mode) {
  short int temp = 0;
  switch(CCA_mode) {
@@ -343,7 +342,7 @@ void set_CCA_mode(short int CCA_mode) {
  break;
  }
  }
-#line 500 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 502 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_RSSI_mode(short int RSSI_mode) {
  short int temp = 0;
 
@@ -360,7 +359,7 @@ void set_RSSI_mode(short int RSSI_mode) {
  break;
  }
 }
-#line 520 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 522 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void nonbeacon_PAN_coordinator_device() {
  short int temp = 0;
 
@@ -400,7 +399,7 @@ void nonbeacon_device() {
  temp = temp & 0xDF;
  write_ZIGBEE_short( 0x11 , temp);
 }
-#line 567 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 569 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_IFS_recomended() {
  short int temp = 0;
 
@@ -436,7 +435,7 @@ void set_IFS_default() {
  temp = temp | 0x41;
  write_ZIGBEE_short( 0x27 , temp);
 }
-#line 606 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 608 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_reception_mode(short int r_mode) {
  short int temp = 0;
 
@@ -465,7 +464,7 @@ void set_reception_mode(short int r_mode) {
  break;
  }
 }
-#line 638 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 640 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_frame_format_filter(short int fff_mode) {
  short int temp = 0;
 
@@ -502,7 +501,7 @@ void set_frame_format_filter(short int fff_mode) {
  break;
  }
 }
-#line 678 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 680 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void flush_RX_FIFO_pointer() {
  short int temp;
 
@@ -510,7 +509,7 @@ void flush_RX_FIFO_pointer() {
  temp = temp | 0x01;
  write_ZIGBEE_short( 0x0D , temp);
 }
-#line 689 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 691 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_short_address(short int * address) {
  write_ZIGBEE_short( 0x03 , address[0]);
  write_ZIGBEE_short( 0x04 , address[1]);
@@ -528,7 +527,7 @@ void set_PAN_ID(short int * address) {
  write_ZIGBEE_short( 0x01 , address[0]);
  write_ZIGBEE_short( 0x02 , address[1]);
 }
-#line 710 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 712 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_wake_from_pin() {
  short int temp = 0;
 
@@ -546,7 +545,7 @@ void pin_wake() {
  WAKE = 1;
  Delay_ms(5);
 }
-#line 731 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 733 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void enable_PLL() {
  write_ZIGBEE_long( 0x202 , 0x80);
 }
@@ -554,7 +553,7 @@ void enable_PLL() {
 void disable_PLL() {
  write_ZIGBEE_long( 0x202 , 0x00);
 }
-#line 742 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 744 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void set_TX_power(unsigned short int power) {
  if((power < 0) || (power > 31))
  power = 31;
@@ -562,7 +561,7 @@ void set_TX_power(unsigned short int power) {
  power = ((power & 0b00011111) << 3) & 0b11111000;
  write_ZIGBEE_long( 0x203 , power);
 }
-#line 753 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+#line 755 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
 void init_ZIGBEE_basic() {
  write_ZIGBEE_short( 0x18 , 0x98);
  write_ZIGBEE_short( 0x2E , 0x95);
@@ -669,48 +668,40 @@ void Initialize() {
 
 
 void main() {
- char dig1=0, dig2=0, dig3=0, degrees=0, battery=0;
-
+ short int i;
+ char texto[16];
+ char trans = 1;
 
  Initialize();
 
- while(1){
- if(Debounce_INT() == 0 ){
- temp1 = read_ZIGBEE_short( 0x31 );
+ while(1) {
+ if(trans == 1){
 
- read_RX_FIFO();
+ delay_ms(2000);
 
- dig1=DATA_RX[0];
- dig2=DATA_RX[1];
- dig3=DATA_RX[2];
- degrees=DATA_RX[3];
- battery=DATA_RX[4];
+ DATA_TX[0]=dig1;
+ DATA_TX[1]=dig2;
+ DATA_TX[2]=dig3;
+ DATA_TX[3]=degrees;
+ DATA_TX[4]=battery;
+ write_TX_normal_FIFO();
+ i = read_ZIGBEE_short( 0x24 );
+ IntToStr(i, texto);
+ Lcd_Out(1,1,texto);
 
+ delay_ms(2000);
 
- Lcd_Chr(1, 1, dig1);
- Lcd_Chr(1, 2, dig2);
- if ((dig3 == 'i')||(dig3 == 'o')){
- Lcd_Chr(1, 3, dig3);
- Lcd_Chr(1, 4, ' ');
- }else{
- Lcd_Chr(1, 3, '.');
- Lcd_Chr(1, 4, dig3);
+ DATA_TX[0]='3';
+ DATA_TX[1]='4';
+ DATA_TX[2]='5';
+ DATA_TX[3]=degrees;
+ DATA_TX[4]=battery;
+ write_TX_normal_FIFO();
+ i = read_ZIGBEE_short( 0x24 );
+ IntToStr(i, texto);
+ Lcd_Out(1,1,texto);
  }
 
- if (battery == 'b'){
- Lcd_Out(2, 0, "           ");
- }
- else {
- Lcd_Out(2, 0, "low battery");
- }
-
- if (degrees == 'C'){
- Lcd_Chr(1, 5, 'C');
- }
- else {
- Lcd_Chr(1, 5, ' ');
- }
- }
  }
 
 }
