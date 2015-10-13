@@ -665,19 +665,44 @@ void Initialize() {
  pin_wake();
 }
 
-
-
 void main() {
- short int i;
+ char d1=0, d2=0, d3=0, deg=0, bat=0;
+ short int i, cont = 0;
  char texto[16];
  char trans = 1;
 
  Initialize();
 
  while(1) {
+ if(trans == 0){
+ delay_ms(1000);
+ if(Debounce_INT() == 0 ){
+ temp1 = read_ZIGBEE_short( 0x31 );
+ read_RX_FIFO();
+ d1=DATA_RX[0];
+ d2=DATA_RX[1];
+ d3=DATA_RX[2];
+ deg=DATA_RX[3];
+ bat=DATA_RX[4];
+
+
+ Lcd_Chr(1, 1, d1);
+ Lcd_Chr(1, 2, d2);
+ Lcd_Chr(1, 3, '.');
+ Lcd_Chr(1, 4, d3);
+
+ cont++;
+
+ if(cont == 2){
+ cont = 0;
+ trans = 1;
+ }
+#line 911 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
+ }
+ }
  if(trans == 1){
 
- delay_ms(2000);
+ delay_ms(1000);
 
  DATA_TX[0]=dig1;
  DATA_TX[1]=dig2;
@@ -689,7 +714,7 @@ void main() {
  IntToStr(i, texto);
  Lcd_Out(1,1,texto);
 
- delay_ms(2000);
+ delay_ms(1000);
 
  DATA_TX[0]='3';
  DATA_TX[1]='4';
@@ -700,8 +725,11 @@ void main() {
  i = read_ZIGBEE_short( 0x24 );
  IntToStr(i, texto);
  Lcd_Out(1,1,texto);
+
+ if(i == 0){
+ trans = 0;
+ }
  }
 
  }
-
 }

@@ -855,43 +855,91 @@ void Initialize() {
   pin_wake();                               // Wake from pin
 }
 
-
-
 void main() {
-      short int i;
-      char texto[16];
-      char trans = 1; //quando trans = 1 está operando no modo transmissor, se trans = 0 está no modo receptor
-     
-      Initialize();                      // Initialize MCU and Bee click board
+     char d1=0, d2=0, d3=0, deg=0, bat=0;
+     short int i, cont = 0;
+     char texto[16];
+     char trans = 1; //quando trans = 1 está operando no modo transmissor, se trans = 0 está no modo receptor
 
-      while(1) {
-        if(trans == 1){
-        
-            delay_ms(2000);
-            //Read_therm_serial();
-            DATA_TX[0]=dig1;
-            DATA_TX[1]=dig2;
-            DATA_TX[2]=dig3;
-            DATA_TX[3]=degrees;
-            DATA_TX[4]=battery;
-            write_TX_normal_FIFO();
-            i = read_ZIGBEE_short(TXSTAT);
-            IntToStr(i, texto); //converte o valor em string
-            Lcd_Out(1,1,texto); //envia para o lcd o valor string
+     Initialize();                      // Initialize MCU and Bee click board
 
-            delay_ms(2000);
-            //Read_therm_serial();
-            DATA_TX[0]='3';
-            DATA_TX[1]='4';
-            DATA_TX[2]='5';
-            DATA_TX[3]=degrees;
-            DATA_TX[4]=battery;
-            write_TX_normal_FIFO();
-            i = read_ZIGBEE_short(TXSTAT);
-            IntToStr(i, texto); //converte o valor em string
-            Lcd_Out(1,1,texto); //envia para o lcd o valor string
-        }
+     while(1) {
+              if(trans == 0){
+                       delay_ms(1000);
+                      if(Debounce_INT() == 0 ){
+                              temp1 = read_ZIGBEE_short(INTSTAT); // Read and flush register INTSTAT
+                              read_RX_FIFO();                     // Read receive data
+                              d1=DATA_RX[0];
+                              d2=DATA_RX[1];
+                              d3=DATA_RX[2];
+                              deg=DATA_RX[3];
+                              bat=DATA_RX[4];
 
-      }
 
+                              Lcd_Chr(1, 1, d1);
+                              Lcd_Chr(1, 2, d2);
+                              Lcd_Chr(1, 3, '.');
+                              Lcd_Chr(1, 4, d3);
+                              
+                              cont++;
+                              
+                              if(cont == 2){
+                                      cont = 0;
+                                      trans = 1;
+                              }
+                              /*if ((d3 == 'i')||(d3 == 'o')){
+                                  Lcd_Chr(1, 3, d3);
+                                  Lcd_Chr(1, 4, ' ');
+                               }else{
+                                  Lcd_Chr(1, 3, '.');
+                                  Lcd_Chr(1, 4, d3);
+                              }
+
+                              if (bat == 'b'){
+                                       Lcd_Out(2, 0, "           ");
+                              }
+                              else {
+                                Lcd_Out(2, 0, "low battery");
+                              }
+
+                              if (deg == 'C'){
+                                       Lcd_Chr(1, 5, 'C');
+                              }
+                              else {
+                                Lcd_Chr(1, 5, ' ');
+                              }*/
+                      }
+              } //final trans = 0
+              if(trans == 1){
+
+                      delay_ms(1000);
+                      //Read_therm_serial();
+                      DATA_TX[0]=dig1;
+                      DATA_TX[1]=dig2;
+                      DATA_TX[2]=dig3;
+                      DATA_TX[3]=degrees;
+                      DATA_TX[4]=battery;
+                      write_TX_normal_FIFO();
+                      i = read_ZIGBEE_short(TXSTAT);
+                      IntToStr(i, texto);
+                      Lcd_Out(1,1,texto);
+
+                      delay_ms(1000);
+                      //Read_therm_serial();
+                      DATA_TX[0]='3';
+                      DATA_TX[1]='4';
+                      DATA_TX[2]='5';
+                      DATA_TX[3]=degrees;
+                      DATA_TX[4]=battery;
+                      write_TX_normal_FIFO();
+                      i = read_ZIGBEE_short(TXSTAT);
+                      IntToStr(i, texto);
+                      Lcd_Out(1,1,texto);
+                      
+                      if(i == 0){
+                           trans = 0;
+                      }
+              }   //final trans ==1
+
+      }//final while
 }
