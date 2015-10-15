@@ -151,7 +151,7 @@ short int ADDRESS_short_2[2], ADDRESS_long_2[8];        // Destination address
 short int PAN_ID_1[2];               // Source PAN ID
 short int PAN_ID_2[2];               // Destination PAN ID
 short int DATA_RX[DATA_LENGHT], DATA_TX[DATA_LENGHT], data_TX_normal_FIFO[DATA_LENGHT + HEADER_LENGHT + 2];
-short int LQI, RSSI2, SEQ_NUMBER;
+short int LQI, RSSI2, SEQ_NUMBER, SN;
 short int temp1;
 
 int dig1 = '1', dig2 = '2', dig3 = '0', degrees = 0, battery = 0;
@@ -247,6 +247,8 @@ void read_RX_FIFO() {
     if(i >= (1 + DATA_LENGHT + HEADER_LENGHT + 2 + 1 + 1))
       lost_data = read_ZIGBEE_long(address_RX_FIFO + i);        // reading invalid data from RX FIFO
   }
+  
+  SN =  data_RX_FIFO[3];      //ler o sequence number
 
   DATA_RX[0] = data_RX_FIFO[HEADER_LENGHT + 1];               // coping valid data
   DATA_RX[1] = data_RX_FIFO[HEADER_LENGHT + 2];               // coping valid data
@@ -856,10 +858,10 @@ void Initialize() {
 }
 
 void main() {
-     char d1=0, d2=0, d3=0, deg=0, bat=0;
+     char d1=0, d2=0, d3=0, deg=0, bat=0, seqN=0;
      short int i, cont = 0;
      char texto[16];
-     char trans = 1; //quando trans = 1 está operando no modo transmissor, se trans = 0 está no modo receptor
+     char trans = 0; //quando trans = 1 está operando no modo transmissor, se trans = 0 está no modo receptor
 
      Initialize();                      // Initialize MCU and Bee click board
 
@@ -869,45 +871,21 @@ void main() {
                       if(Debounce_INT() == 0 ){
                               temp1 = read_ZIGBEE_short(INTSTAT); // Read and flush register INTSTAT
                               read_RX_FIFO();                     // Read receive data
+                              seqN = SN;
                               d1=DATA_RX[0];
                               d2=DATA_RX[1];
                               d3=DATA_RX[2];
                               deg=DATA_RX[3];
                               bat=DATA_RX[4];
 
-
                               Lcd_Chr(1, 1, d1);
                               Lcd_Chr(1, 2, d2);
-                              Lcd_Chr(1, 3, '.');
-                              Lcd_Chr(1, 4, d3);
-                              
-                              cont++;
-                              
-                              if(cont == 2){
-                                      cont = 0;
-                                      trans = 1;
-                              }
-                              /*if ((d3 == 'i')||(d3 == 'o')){
-                                  Lcd_Chr(1, 3, d3);
-                                  Lcd_Chr(1, 4, ' ');
-                               }else{
-                                  Lcd_Chr(1, 3, '.');
-                                  Lcd_Chr(1, 4, d3);
-                              }
+                              //Lcd_Chr(1, 3, '.');
+                              //Lcd_Chr(1, 4, d3);
 
-                              if (bat == 'b'){
-                                       Lcd_Out(2, 0, "           ");
-                              }
-                              else {
-                                Lcd_Out(2, 0, "low battery");
-                              }
-
-                              if (deg == 'C'){
-                                       Lcd_Chr(1, 5, 'C');
-                              }
-                              else {
-                                Lcd_Chr(1, 5, ' ');
-                              }*/
+                              IntToStr(seqN, texto);
+                              Lcd_Out(2,1,texto);
+                              
                       }
               } //final trans = 0
               if(trans == 1){
@@ -921,8 +899,8 @@ void main() {
                       DATA_TX[4]=battery;
                       write_TX_normal_FIFO();
                       i = read_ZIGBEE_short(TXSTAT);
-                      IntToStr(i, texto);
-                      Lcd_Out(1,1,texto);
+                      /*IntToStr(i, texto);
+                      Lcd_Out(1,1,texto);*/
 
                       delay_ms(1000);
                       //Read_therm_serial();
@@ -935,7 +913,7 @@ void main() {
                       i = read_ZIGBEE_short(TXSTAT);
                       IntToStr(i, texto);
                       Lcd_Out(1,1,texto);
-                      
+
                       if(i == 0){
                            trans = 0;
                       }

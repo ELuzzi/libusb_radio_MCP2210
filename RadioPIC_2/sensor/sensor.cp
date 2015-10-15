@@ -834,7 +834,7 @@ void Initialize() {
 
  LQI = 0;
  RSSI2 = 0;
- SEQ_NUMBER = 0x23;
+ SEQ_NUMBER = 0x01;
  lost_data = 0;
  address_RX_FIFO = 0x300;
  address_TX_normal_FIFO = 0;
@@ -913,9 +913,11 @@ void main() {
  char d1=0, d2=0, d3=0, deg=0, bat=0;
  short int i, cont = 0;
  char texto[16];
- char trans = 0;
+ char trans = 1;
 
  Initialize();
+
+ write_TX_normal_FIFO();
 
  while(1) {
  if(trans == 0){
@@ -929,35 +931,14 @@ void main() {
  deg=DATA_RX[3];
  bat=DATA_RX[4];
 
-
  Lcd_Chr(1, 1, d1);
  Lcd_Chr(1, 2, d2);
- Lcd_Chr(1, 3, '.');
- Lcd_Chr(1, 4, d3);
 
- cont++;
 
- if(cont == 2){
- cont = 0;
- trans = 1;
- }
-#line 1154 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+
  }
  }
  if(trans == 1){
-
- delay_ms(1000);
-
- DATA_TX[0]=dig1;
- DATA_TX[1]=dig2;
- DATA_TX[2]=dig3;
- DATA_TX[3]=degrees;
- DATA_TX[4]=battery;
- write_TX_normal_FIFO();
- i = read_ZIGBEE_short( 0x24 );
- IntToStr(i, texto);
- Lcd_Out(1,1,texto);
-
  delay_ms(1000);
 
  DATA_TX[0]='3';
@@ -969,10 +950,7 @@ void main() {
  i = read_ZIGBEE_short( 0x24 );
  IntToStr(i, texto);
  Lcd_Out(1,1,texto);
-
- if(i == 0){
- trans = 0;
- }
+#line 1146 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
  }
 
  }

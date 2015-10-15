@@ -1023,7 +1023,7 @@ void Initialize() {
   //variable initialization
   LQI = 0;
   RSSI2 = 0;
-  SEQ_NUMBER = 0x23;
+  SEQ_NUMBER = 0x01;
   lost_data = 0;
   address_RX_FIFO = 0x300;
   address_TX_normal_FIFO = 0;
@@ -1102,9 +1102,11 @@ void main() {
      char d1=0, d2=0, d3=0, deg=0, bat=0;
      short int i, cont = 0;
      char texto[16];
-     char trans = 0; //quando trans = 1 está operando no modo transmissor, se trans = 0 está no modo receptor
+     char trans = 1; //quando trans = 1 está operando no modo transmissor, se trans = 0 está no modo receptor
      
      Initialize();                      // Initialize MCU and Bee click board
+     
+     write_TX_normal_FIFO();
 
      while(1) {
               if(trans == 0){
@@ -1118,56 +1120,14 @@ void main() {
                               deg=DATA_RX[3];
                               bat=DATA_RX[4];
 
-
                               Lcd_Chr(1, 1, d1);
                               Lcd_Chr(1, 2, d2);
-                              Lcd_Chr(1, 3, '.');
-                              Lcd_Chr(1, 4, d3);
+                              //Lcd_Chr(1, 3, '.');
+                              //Lcd_Chr(1, 4, d3);
                               
-                              cont++;
-
-                              if(cont == 2){
-                                      cont = 0;
-                                      trans = 1;
-                              }
-                              /*if ((d3 == 'i')||(d3 == 'o')){
-                                  Lcd_Chr(1, 3, d3);
-                                  Lcd_Chr(1, 4, ' ');
-                               }else{
-                                  Lcd_Chr(1, 3, '.');
-                                  Lcd_Chr(1, 4, d3);
-                              }
-
-                              if (bat == 'b'){
-                                       Lcd_Out(2, 0, "           ");
-                              }
-                              else {
-                                Lcd_Out(2, 0, "low battery");
-                              }
-
-                              if (deg == 'C'){
-                                       Lcd_Chr(1, 5, 'C');
-                              }
-                              else {
-                                Lcd_Chr(1, 5, ' ');
-                              }*/
                       }
               } //final trans = 0
               if(trans == 1){
-
-                      delay_ms(1000);
-                      //Read_therm_serial();
-                      DATA_TX[0]=dig1;
-                      DATA_TX[1]=dig2;
-                      DATA_TX[2]=dig3;
-                      DATA_TX[3]=degrees;
-                      DATA_TX[4]=battery;
-                      write_TX_normal_FIFO();
-                      i = read_ZIGBEE_short(TXSTAT);
-                      IntToStr(i, texto);
-                      Lcd_Out(1,1,texto);
-                      
-                      delay_ms(1000);
                       //Read_therm_serial();
                       DATA_TX[0]='3';
                       DATA_TX[1]='4';
@@ -1179,9 +1139,11 @@ void main() {
                       IntToStr(i, texto);
                       Lcd_Out(1,1,texto);
                       
-                      if(i == 0){
+                      delay_ms(500);
+                      
+                      /*if(i == 0){
                            trans = 0;
-                      }
+                      }*/
               }   //final trans ==1
 
       }//final while
