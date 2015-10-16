@@ -911,13 +911,12 @@ void Initialize() {
 
 void main() {
  char d1=0, d2=0, d3=0, deg=0, bat=0;
- short int i, cont = 0;
+ char lastD1=0, lastD2=0, lastD3=0, lastDeg=0, lastBat=0;
+ short int i, cont = 0, cond=0, repPack=0;
  char texto[16];
  char trans = 1;
 
  Initialize();
-
- write_TX_normal_FIFO();
 
  while(1) {
  if(trans == 0){
@@ -931,15 +930,41 @@ void main() {
  deg=DATA_RX[3];
  bat=DATA_RX[4];
 
- Lcd_Chr(1, 1, d1);
- Lcd_Chr(1, 2, d2);
+ if((lastD1 == d1)&&(lastD2 == d2)){
+ repPack++;
+ }
+ else if((cond==1)&&((lastD1 != d1)&&(lastD2 != d2))){
+ Lcd_Chr(1, 1, lastD1);
+ Lcd_Chr(1, 2, lastD2);
 
 
 
+ cond = 0;
+ }
+
+ cond = 1;
+ lastD1 = d1;
+ lastD2 = d2;
+ lastD3 = d3;
+ lastDeg = deg;
+ lastBat = bat;
+
+ Delay_us(912);
  }
  }
  if(trans == 1){
- delay_ms(1000);
+ Delay_ms(900);
+
+ DATA_TX[0]=0xFF;
+ DATA_TX[1]='4';
+ DATA_TX[2]='5';
+ DATA_TX[3]=degrees;
+ DATA_TX[4]=battery;
+ write_TX_normal_FIFO();
+
+ Delay_ms(100);
+ SEQ_NUMBER++;
+
 
  DATA_TX[0]='3';
  DATA_TX[1]='4';
@@ -950,7 +975,14 @@ void main() {
  i = read_ZIGBEE_short( 0x24 );
  IntToStr(i, texto);
  Lcd_Out(1,1,texto);
-#line 1146 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/sensor/sensor.c"
+
+ if((i & 0x01) == 0){
+ trans = 2;
+ }
+ }
+ if(trans == 2){
+ SEQ_NUMBER++;
+ trans = 1;
  }
 
  }

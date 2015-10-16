@@ -1100,13 +1100,12 @@ void Initialize() {
 
 void main() {
      char d1=0, d2=0, d3=0, deg=0, bat=0;
-     short int i, cont = 0;
+     char lastD1=0, lastD2=0, lastD3=0, lastDeg=0, lastBat=0;
+     short int i, cont = 0, cond=0, repPack=0;
      char texto[16];
      char trans = 1; //quando trans = 1 está operando no modo transmissor, se trans = 0 está no modo receptor
      
      Initialize();                      // Initialize MCU and Bee click board
-     
-     write_TX_normal_FIFO();
 
      while(1) {
               if(trans == 0){
@@ -1119,15 +1118,42 @@ void main() {
                               d3=DATA_RX[2];
                               deg=DATA_RX[3];
                               bat=DATA_RX[4];
-
-                              Lcd_Chr(1, 1, d1);
-                              Lcd_Chr(1, 2, d2);
-                              //Lcd_Chr(1, 3, '.');
-                              //Lcd_Chr(1, 4, d3);
                               
+                              if((lastD1 == d1)&&(lastD2 == d2)){
+                                    repPack++;
+                              }
+                              else if((cond==1)&&((lastD1 != d1)&&(lastD2 != d2))){
+                                    Lcd_Chr(1, 1, lastD1);
+                                    Lcd_Chr(1, 2, lastD2);
+                                    //Lcd_Chr(1, 3, '.');
+                                    //Lcd_Chr(1, 4, d3);
+                                    //trans = 1;
+                                    cond = 0;
+                              }
+
+                              cond = 1;
+                              lastD1 = d1;
+                              lastD2 = d2;
+                              lastD3 = d3;
+                              lastDeg = deg;
+                              lastBat = bat;
+                              
+                              Delay_us(912);
                       }
               } //final trans = 0
               if(trans == 1){
+                       Delay_ms(900);
+                      //Read_therm_serial();
+                      DATA_TX[0]=0xFF;
+                      DATA_TX[1]='4';
+                      DATA_TX[2]='5';
+                      DATA_TX[3]=degrees;
+                      DATA_TX[4]=battery;
+                      write_TX_normal_FIFO();
+                      
+                      Delay_ms(100);
+                      SEQ_NUMBER++;
+                      
                       //Read_therm_serial();
                       DATA_TX[0]='3';
                       DATA_TX[1]='4';
@@ -1139,12 +1165,14 @@ void main() {
                       IntToStr(i, texto);
                       Lcd_Out(1,1,texto);
                       
-                      delay_ms(500);
-                      
-                      /*if(i == 0){
-                           trans = 0;
-                      }*/
+                      if((i & 0x01) == 0){
+                           trans = 2;
+                      }
               }   //final trans ==1
+              if(trans == 2){
+                       SEQ_NUMBER++;
+                       trans = 1;
+              }
 
       }//final while
 }

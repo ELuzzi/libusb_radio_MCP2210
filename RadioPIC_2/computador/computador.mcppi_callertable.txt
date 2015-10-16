@@ -107,11 +107,12 @@ main
 		read_ZIGBEE_long
 			SPI1_Write
 			SPI1_Read
-	Lcd_Chr
-		Lcd_Cmd
-			Delay_1us
-			Delay_5500us
-			Delay_50us
+	write_TX_normal_FIFO
+		write_ZIGBEE_long
+			SPI1_Write
+		start_transmit
+			write_ZIGBEE_short
+				SPI1_Write
 	IntToStr
 		WordToStr
 			Div_16x16_U
@@ -125,10 +126,9 @@ main
 				Delay_1us
 				Delay_5500us
 				Delay_50us
-	write_TX_normal_FIFO
-		write_ZIGBEE_long
-			SPI1_Write
-		start_transmit
-			write_ZIGBEE_short
-				SPI1_Write
+	Lcd_Chr
+		Lcd_Cmd
+			Delay_1us
+			Delay_5500us
+			Delay_50us
 	__CC2DW
