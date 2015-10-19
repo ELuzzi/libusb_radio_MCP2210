@@ -69,16 +69,16 @@ _write_ZIGBEE_long:
 	MOVF        FARG_write_ZIGBEE_long_address+1, 0 
 	MOVWF       R1 
 	MOVF        R2, 0 
-L__write_ZIGBEE_long85:
-	BZ          L__write_ZIGBEE_long86
+L__write_ZIGBEE_long83:
+	BZ          L__write_ZIGBEE_long84
 	RRCF        R1, 1 
 	RRCF        R0, 1 
 	BCF         R1, 7 
 	BTFSC       R1, 6 
 	BSF         R1, 7 
 	ADDLW       255
-	GOTO        L__write_ZIGBEE_long85
-L__write_ZIGBEE_long86:
+	GOTO        L__write_ZIGBEE_long83
+L__write_ZIGBEE_long84:
 	MOVLW       127
 	ANDWF       R0, 0 
 	MOVWF       FARG_SPI1_Write_data_+0 
@@ -89,13 +89,13 @@ L__write_ZIGBEE_long86:
 	MOVF        FARG_write_ZIGBEE_long_address+0, 0 
 	MOVWF       write_ZIGBEE_long_address_low_L0+0 
 	MOVF        R0, 0 
-L__write_ZIGBEE_long87:
-	BZ          L__write_ZIGBEE_long88
+L__write_ZIGBEE_long85:
+	BZ          L__write_ZIGBEE_long86
 	RLCF        write_ZIGBEE_long_address_low_L0+0, 1 
 	BCF         write_ZIGBEE_long_address_low_L0+0, 0 
 	ADDLW       255
-	GOTO        L__write_ZIGBEE_long87
-L__write_ZIGBEE_long88:
+	GOTO        L__write_ZIGBEE_long85
+L__write_ZIGBEE_long86:
 	MOVLW       224
 	ANDWF       write_ZIGBEE_long_address_low_L0+0, 1 
 	BSF         write_ZIGBEE_long_address_low_L0+0, 4 
@@ -129,16 +129,16 @@ _read_ZIGBEE_long:
 	MOVF        FARG_read_ZIGBEE_long_address+1, 0 
 	MOVWF       R1 
 	MOVF        R2, 0 
-L__read_ZIGBEE_long89:
-	BZ          L__read_ZIGBEE_long90
+L__read_ZIGBEE_long87:
+	BZ          L__read_ZIGBEE_long88
 	RRCF        R1, 1 
 	RRCF        R0, 1 
 	BCF         R1, 7 
 	BTFSC       R1, 6 
 	BSF         R1, 7 
 	ADDLW       255
-	GOTO        L__read_ZIGBEE_long89
-L__read_ZIGBEE_long90:
+	GOTO        L__read_ZIGBEE_long87
+L__read_ZIGBEE_long88:
 	MOVLW       127
 	ANDWF       R0, 0 
 	MOVWF       FARG_SPI1_Write_data_+0 
@@ -149,13 +149,13 @@ L__read_ZIGBEE_long90:
 	MOVF        FARG_read_ZIGBEE_long_address+0, 0 
 	MOVWF       read_ZIGBEE_long_address_low_L0+0 
 	MOVF        R0, 0 
-L__read_ZIGBEE_long91:
-	BZ          L__read_ZIGBEE_long92
+L__read_ZIGBEE_long89:
+	BZ          L__read_ZIGBEE_long90
 	RLCF        read_ZIGBEE_long_address_low_L0+0, 1 
 	BCF         read_ZIGBEE_long_address_low_L0+0, 0 
 	ADDLW       255
-	GOTO        L__read_ZIGBEE_long91
-L__read_ZIGBEE_long92:
+	GOTO        L__read_ZIGBEE_long89
+L__read_ZIGBEE_long90:
 	MOVLW       224
 	ANDWF       read_ZIGBEE_long_address_low_L0+0, 1 
 ;computador.c,214 :: 		SPI1_Write(address_high);            // addressing register
@@ -213,10 +213,10 @@ L_read_RX_FIFO0:
 	MOVLW       128
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__read_RX_FIFO93
+	GOTO        L__read_RX_FIFO91
 	MOVLW       128
 	SUBWF       read_RX_FIFO_i_L0+0, 0 
-L__read_RX_FIFO93:
+L__read_RX_FIFO91:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_read_RX_FIFO1
 ;computador.c,245 :: 		if(i <  (1 + DATA_LENGHT + HEADER_LENGHT + 2 + 1 + 1))
@@ -226,10 +226,10 @@ L__read_RX_FIFO93:
 	MOVLW       128
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__read_RX_FIFO94
+	GOTO        L__read_RX_FIFO92
 	MOVLW       21
 	SUBWF       read_RX_FIFO_i_L0+0, 0 
-L__read_RX_FIFO94:
+L__read_RX_FIFO92:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_read_RX_FIFO3
 ;computador.c,246 :: 		data_RX_FIFO[i] = read_ZIGBEE_long(address_RX_FIFO + i);  // reading valid data from RX FIFO
@@ -258,10 +258,10 @@ L_read_RX_FIFO3:
 	MOVLW       128
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__read_RX_FIFO95
+	GOTO        L__read_RX_FIFO93
 	MOVLW       21
 	SUBWF       read_RX_FIFO_i_L0+0, 0 
-L__read_RX_FIFO95:
+L__read_RX_FIFO93:
 	BTFSS       STATUS+0, 0 
 	GOTO        L_read_RX_FIFO4
 ;computador.c,248 :: 		lost_data = read_ZIGBEE_long(address_RX_FIFO + i);        // reading invalid data from RX FIFO
@@ -495,10 +495,10 @@ L_write_TX_normal_FIFO5:
 	MOVLW       128
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
-	GOTO        L__write_TX_normal_FIFO96
+	GOTO        L__write_TX_normal_FIFO94
 	MOVLW       18
 	SUBWF       write_TX_normal_FIFO_i_L0+0, 0 
-L__write_TX_normal_FIFO96:
+L__write_TX_normal_FIFO94:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_write_TX_normal_FIFO6
 ;computador.c,345 :: 		write_ZIGBEE_long(address_TX_normal_FIFO + i, data_TX_normal_FIFO[i]); // write frame into normal FIFO
@@ -534,27 +534,29 @@ _pin_reset:
 ;computador.c,360 :: 		RST = 0;  // activate reset
 	BCF         LATC1_bit+0, 1 
 ;computador.c,361 :: 		Delay_ms(5);
-	MOVLW       15
+	MOVLW       17
 	MOVWF       R12, 0
-	MOVLW       155
+	MOVLW       58
 	MOVWF       R13, 0
 L_pin_reset8:
 	DECFSZ      R13, 1, 0
 	BRA         L_pin_reset8
 	DECFSZ      R12, 1, 0
 	BRA         L_pin_reset8
+	NOP
 ;computador.c,362 :: 		RST = 1;  // deactivate reset
 	BSF         LATC1_bit+0, 1 
 ;computador.c,363 :: 		Delay_ms(5);
-	MOVLW       15
+	MOVLW       17
 	MOVWF       R12, 0
-	MOVLW       155
+	MOVLW       58
 	MOVWF       R13, 0
 L_pin_reset9:
 	DECFSZ      R13, 1, 0
 	BRA         L_pin_reset9
 	DECFSZ      R12, 1, 0
 	BRA         L_pin_reset9
+	NOP
 ;computador.c,364 :: 		}
 	RETURN      0
 ; end of _pin_reset
@@ -639,15 +641,17 @@ _RF_reset:
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
 ;computador.c,389 :: 		Delay_ms(1);
-	MOVLW       3
+	MOVLW       4
 	MOVWF       R12, 0
-	MOVLW       235
+	MOVLW       61
 	MOVWF       R13, 0
 L_RF_reset10:
 	DECFSZ      R13, 1, 0
 	BRA         L_RF_reset10
 	DECFSZ      R12, 1, 0
 	BRA         L_RF_reset10
+	NOP
+	NOP
 ;computador.c,390 :: 		}
 	RETURN      0
 ; end of _RF_reset
@@ -673,7 +677,7 @@ _set_channel:
 	XORWF       FARG_set_channel_channel_number+0, 0 
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 0 
-	GOTO        L__set_channel83
+	GOTO        L__set_channel81
 	MOVLW       128
 	XORWF       FARG_set_channel_channel_number+0, 0 
 	MOVWF       R0 
@@ -681,9 +685,9 @@ _set_channel:
 	XORLW       11
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 0 
-	GOTO        L__set_channel83
+	GOTO        L__set_channel81
 	GOTO        L_set_channel13
-L__set_channel83:
+L__set_channel81:
 	MOVLW       11
 	MOVWF       FARG_set_channel_channel_number+0 
 L_set_channel13:
@@ -1619,15 +1623,16 @@ _pin_wake:
 ;computador.c,728 :: 		WAKE = 1;
 	BSF         LATC2_bit+0, 2 
 ;computador.c,729 :: 		Delay_ms(5);
-	MOVLW       15
+	MOVLW       17
 	MOVWF       R12, 0
-	MOVLW       155
+	MOVLW       58
 	MOVWF       R13, 0
 L_pin_wake55:
 	DECFSZ      R13, 1, 0
 	BRA         L_pin_wake55
 	DECFSZ      R12, 1, 0
 	BRA         L_pin_wake55
+	NOP
 ;computador.c,730 :: 		}
 	RETURN      0
 ; end of _pin_wake
@@ -1665,13 +1670,13 @@ _set_TX_power:
 	MOVLW       0
 	SUBWF       FARG_set_TX_power_power+0, 0 
 	BTFSS       STATUS+0, 0 
-	GOTO        L__set_TX_power84
+	GOTO        L__set_TX_power82
 	MOVF        FARG_set_TX_power_power+0, 0 
 	SUBLW       31
 	BTFSS       STATUS+0, 0 
-	GOTO        L__set_TX_power84
+	GOTO        L__set_TX_power82
 	GOTO        L_set_TX_power58
-L__set_TX_power84:
+L__set_TX_power82:
 ;computador.c,748 :: 		power = 31;
 	MOVLW       31
 	MOVWF       FARG_set_TX_power_power+0 
@@ -2006,16 +2011,15 @@ L_Initialize69:
 ;computador.c,832 :: 		LATD  = 0;             // Clear LATD register
 	CLRF        LATD+0 
 ;computador.c,834 :: 		Delay_ms(15);
-	MOVLW       44
+	MOVLW       49
 	MOVWF       R12, 0
-	MOVLW       211
+	MOVLW       178
 	MOVWF       R13, 0
 L_Initialize71:
 	DECFSZ      R13, 1, 0
 	BRA         L_Initialize71
 	DECFSZ      R12, 1, 0
 	BRA         L_Initialize71
-	NOP
 	NOP
 ;computador.c,836 :: 		Lcd_Init();                        // Initialize LCD
 	CALL        _Lcd_Init+0, 0
@@ -2084,10 +2088,16 @@ L_Initialize71:
 
 _main:
 	CLRF        main_trans_L0+0 
+	CLRF        main_repPack_L0+0 
 	CLRF        main_cond_L0+0 
 	CLRF        main_cont_L0+0 
 	CLRF        main_lastSN_L0+0 
-	CLRF        main_seqN_L0+0 
+	CLRF        main_lastBat_L0+0 
+	CLRF        main_lastDeg_L0+0 
+	CLRF        main_lastD3_L0+0 
+	CLRF        main_lastD2_L0+0 
+	MOVLW       255
+	MOVWF       main_lastD1_L0+0 
 	CLRF        main_d2_L0+0 
 	CLRF        main_d1_L0+0 
 ;computador.c,860 :: 		void main() {
@@ -2114,136 +2124,66 @@ L_main72:
 	MOVWF       _temp1+0 
 ;computador.c,873 :: 		read_RX_FIFO();                     // Read receive data
 	CALL        _read_RX_FIFO+0, 0
-;computador.c,874 :: 		seqN = SN;
-	MOVF        _SN+0, 0 
-	MOVWF       main_seqN_L0+0 
 ;computador.c,875 :: 		d1=DATA_RX[0];
 	MOVF        _DATA_RX+0, 0 
 	MOVWF       main_d1_L0+0 
 ;computador.c,876 :: 		d2=DATA_RX[1];
 	MOVF        _DATA_RX+1, 0 
 	MOVWF       main_d2_L0+0 
-;computador.c,881 :: 		if(lastSN == seqN){
-	MOVF        main_lastSN_L0+0, 0 
-	XORWF       _SN+0, 0 
-	BTFSS       STATUS+0, 2 
+;computador.c,881 :: 		cond = 1;
+	MOVLW       1
+	MOVWF       main_cond_L0+0 
+;computador.c,898 :: 		}
 	GOTO        L_main76
-;computador.c,883 :: 		}
-	GOTO        L_main77
-L_main76:
-;computador.c,884 :: 		else if(d1 != 0xFF){
-	MOVF        main_d1_L0+0, 0 
-	XORLW       255
-	BTFSC       STATUS+0, 2 
-	GOTO        L_main78
-;computador.c,886 :: 		trans = 2;
-	MOVLW       2
-	MOVWF       main_trans_L0+0 
-;computador.c,887 :: 		}
-L_main78:
-L_main77:
-;computador.c,894 :: 		lastSN = seqN;
-	MOVF        main_seqN_L0+0, 0 
-	MOVWF       main_lastSN_L0+0 
-;computador.c,895 :: 		}
 L_main75:
-;computador.c,896 :: 		} //final trans = 0
-L_main74:
-;computador.c,897 :: 		if(trans == 1){
-	MOVF        main_trans_L0+0, 0 
-	XORLW       1
+;computador.c,899 :: 		else if(cond > 0){
+	MOVLW       128
+	MOVWF       R0 
+	MOVLW       128
+	BTFSC       main_cond_L0+0, 7 
+	MOVLW       127
+	SUBWF       R0, 0 
+	BTFSS       STATUS+0, 2 
+	GOTO        L__main95
+	MOVF        main_cond_L0+0, 0 
+	SUBLW       0
+L__main95:
+	BTFSC       STATUS+0, 0 
+	GOTO        L_main77
+;computador.c,900 :: 		Delay_us(910);
+	MOVLW       3
+	MOVWF       R12, 0
+	MOVLW       243
+	MOVWF       R13, 0
+L_main78:
+	DECFSZ      R13, 1, 0
+	BRA         L_main78
+	DECFSZ      R12, 1, 0
+	BRA         L_main78
+	NOP
+;computador.c,901 :: 		cond ++;
+	INCF        main_cond_L0+0, 1 
+;computador.c,902 :: 		if(cond == 100){
+	MOVF        main_cond_L0+0, 0 
+	XORLW       100
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main79
-;computador.c,898 :: 		Delay_ms(1000);
-	MOVLW       12
-	MOVWF       R11, 0
-	MOVLW       107
-	MOVWF       R12, 0
-	MOVLW       9
-	MOVWF       R13, 0
-L_main80:
-	DECFSZ      R13, 1, 0
-	BRA         L_main80
-	DECFSZ      R12, 1, 0
-	BRA         L_main80
-	DECFSZ      R11, 1, 0
-	BRA         L_main80
-	NOP
-	NOP
-;computador.c,900 :: 		DATA_TX[0]=dig1;
-	MOVF        _dig1+0, 0 
-	MOVWF       _DATA_TX+0 
-;computador.c,901 :: 		DATA_TX[1]=dig2;
-	MOVF        _dig2+0, 0 
-	MOVWF       _DATA_TX+1 
-;computador.c,902 :: 		DATA_TX[2]=dig3;
-	MOVF        _dig3+0, 0 
-	MOVWF       _DATA_TX+2 
-;computador.c,903 :: 		DATA_TX[3]=degrees;
-	MOVF        _degrees+0, 0 
-	MOVWF       _DATA_TX+3 
-;computador.c,904 :: 		DATA_TX[4]=battery;
-	MOVF        _battery+0, 0 
-	MOVWF       _DATA_TX+4 
-;computador.c,905 :: 		write_TX_normal_FIFO();
-	CALL        _write_TX_normal_FIFO+0, 0
-;computador.c,906 :: 		i = read_ZIGBEE_short(TXSTAT);
-	MOVLW       36
-	MOVWF       FARG_read_ZIGBEE_short_address+0 
-	CALL        _read_ZIGBEE_short+0, 0
-	MOVF        R0, 0 
-	MOVWF       main_i_L0+0 
-;computador.c,908 :: 		if((i & 0x01) == 0){
-	MOVLW       1
-	ANDWF       R0, 0 
-	MOVWF       R1 
-	MOVLW       0
-	BTFSC       R1, 7 
-	MOVLW       255
-	MOVWF       R0 
-	MOVLW       0
-	XORWF       R0, 0 
-	BTFSS       STATUS+0, 2 
-	GOTO        L__main97
-	MOVLW       0
-	XORWF       R1, 0 
-L__main97:
-	BTFSS       STATUS+0, 2 
-	GOTO        L_main81
-;computador.c,909 :: 		IntToStr(i, texto);
-	MOVF        main_i_L0+0, 0 
-	MOVWF       FARG_IntToStr_input+0 
-	MOVLW       0
-	BTFSC       main_i_L0+0, 7 
-	MOVLW       255
-	MOVWF       FARG_IntToStr_input+1 
-	MOVLW       main_texto_L0+0
-	MOVWF       FARG_IntToStr_output+0 
-	MOVLW       hi_addr(main_texto_L0+0
-	MOVWF       FARG_IntToStr_output+1 
-	CALL        _IntToStr+0, 0
-;computador.c,910 :: 		Lcd_Out(1,1,texto);
-	MOVLW       1
-	MOVWF       FARG_Lcd_Out_row+0 
-	MOVLW       1
-	MOVWF       FARG_Lcd_Out_column+0 
-	MOVLW       main_texto_L0+0
-	MOVWF       FARG_Lcd_Out_text+0 
-	MOVLW       hi_addr(main_texto_L0+0
-	MOVWF       FARG_Lcd_Out_text+1 
-	CALL        _Lcd_Out+0, 0
-;computador.c,911 :: 		trans = 0;
-	CLRF        main_trans_L0+0 
-;computador.c,912 :: 		}
-L_main81:
-;computador.c,913 :: 		}   //final trans ==1
+;computador.c,903 :: 		trans = 2;
+	MOVLW       2
+	MOVWF       main_trans_L0+0 
+;computador.c,904 :: 		}
 L_main79:
-;computador.c,914 :: 		if(trans == 2){
+;computador.c,905 :: 		}
+L_main77:
+L_main76:
+;computador.c,906 :: 		} //final trans = 0
+L_main74:
+;computador.c,934 :: 		if(trans == 2){
 	MOVF        main_trans_L0+0, 0 
 	XORLW       2
 	BTFSS       STATUS+0, 2 
-	GOTO        L_main82
-;computador.c,915 :: 		Lcd_Chr(1, 1, d1);
+	GOTO        L_main80
+;computador.c,935 :: 		Lcd_Chr(1, 1, d1);
 	MOVLW       1
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       1
@@ -2251,7 +2191,7 @@ L_main79:
 	MOVF        main_d1_L0+0, 0 
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;computador.c,916 :: 		Lcd_Chr(1, 2, d2);
+;computador.c,936 :: 		Lcd_Chr(1, 2, d2);
 	MOVLW       1
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       2
@@ -2259,32 +2199,10 @@ L_main79:
 	MOVF        main_d2_L0+0, 0 
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;computador.c,917 :: 		IntToStr(seqN, texto);
-	MOVF        main_seqN_L0+0, 0 
-	MOVWF       FARG_IntToStr_input+0 
-	MOVLW       0
-	MOVWF       FARG_IntToStr_input+1 
-	MOVLW       main_texto_L0+0
-	MOVWF       FARG_IntToStr_output+0 
-	MOVLW       hi_addr(main_texto_L0+0
-	MOVWF       FARG_IntToStr_output+1 
-	CALL        _IntToStr+0, 0
-;computador.c,918 :: 		Lcd_Out(2,1,texto);
-	MOVLW       2
-	MOVWF       FARG_Lcd_Out_row+0 
-	MOVLW       1
-	MOVWF       FARG_Lcd_Out_column+0 
-	MOVLW       main_texto_L0+0
-	MOVWF       FARG_Lcd_Out_text+0 
-	MOVLW       hi_addr(main_texto_L0+0
-	MOVWF       FARG_Lcd_Out_text+1 
-	CALL        _Lcd_Out+0, 0
-;computador.c,919 :: 		trans = 0;
-	CLRF        main_trans_L0+0 
-;computador.c,920 :: 		}
-L_main82:
-;computador.c,921 :: 		}//final while
+;computador.c,938 :: 		}
+L_main80:
+;computador.c,939 :: 		}//final while
 	GOTO        L_main72
-;computador.c,922 :: 		}
+;computador.c,940 :: 		}
 	GOTO        $+0
 ; end of _main

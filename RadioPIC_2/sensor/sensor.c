@@ -166,7 +166,7 @@ short int ADDRESS_short_2[2], ADDRESS_long_2[8];        // Destination address
 short int PAN_ID_1[2];               // Source PAN ID
 short int PAN_ID_2[2];               // Destination PAN ID
 short int DATA_RX[DATA_LENGHT], DATA_TX[DATA_LENGHT], data_TX_normal_FIFO[DATA_LENGHT + HEADER_LENGHT + 2];
-short int LQI, RSSI2, SEQ_NUMBER;
+short int LQI, RSSI2, SEQ_NUMBER, SN;
 short int temp1;
 
 
@@ -263,6 +263,8 @@ void read_RX_FIFO() {
     if(i >= (1 + DATA_LENGHT + HEADER_LENGHT + 2 + 1 + 1))
       lost_data = read_ZIGBEE_long(address_RX_FIFO + i);        // reading invalid data from RX FIFO
   }
+  
+  SN =  data_RX_FIFO[3];      //ler o sequence number
 
   DATA_RX[0] = data_RX_FIFO[HEADER_LENGHT + 1];               // coping valid data
   DATA_RX[1] = data_RX_FIFO[HEADER_LENGHT + 2];               // coping valid data
@@ -1096,11 +1098,9 @@ void Initialize() {
   pin_wake();                               // Wake from pin
 }
 
-
-
 void main() {
      char d1=0, d2=0, d3=0, deg=0, bat=0;
-     char lastD1=0, lastD2=0, lastD3=0, lastDeg=0, lastBat=0;
+     char lastD1=0, lastD2=0, lastD3=0, lastDeg=0, lastBat=0, lastSN=0;
      short int i, cont = 0, cond=0, repPack=0;
      char texto[16];
      char trans = 1; //quando trans = 1 está operando no modo transmissor, se trans = 0 está no modo receptor
@@ -1109,7 +1109,6 @@ void main() {
 
      while(1) {
               if(trans == 0){
-                      delay_ms(1000);
                       if(Debounce_INT() == 0 ){
                               temp1 = read_ZIGBEE_short(INTSTAT); // Read and flush register INTSTAT
                               read_RX_FIFO();                     // Read receive data
@@ -1119,6 +1118,14 @@ void main() {
                               deg=DATA_RX[3];
                               bat=DATA_RX[4];
                               
+                              if(lastSN == SN){
+                                    repPack++;
+                              }
+                              else if(d1 == 0xFF){
+                                    //trans = 1;
+                                    trans = 2;
+                              }
+
                               if((lastD1 == d1)&&(lastD2 == d2)){
                                     repPack++;
                               }
@@ -1137,42 +1144,29 @@ void main() {
                               lastD3 = d3;
                               lastDeg = deg;
                               lastBat = bat;
-                              
+
                               Delay_us(912);
                       }
               } //final trans = 0
               if(trans == 1){
-                       Delay_ms(900);
                       //Read_therm_serial();
-                      DATA_TX[0]=0xFF;
-                      DATA_TX[1]='4';
-                      DATA_TX[2]='5';
-                      DATA_TX[3]=degrees;
-                      DATA_TX[4]=battery;
-                      write_TX_normal_FIFO();
-                      
-                      Delay_ms(100);
-                      SEQ_NUMBER++;
-                      
-                      //Read_therm_serial();
-                      DATA_TX[0]='3';
-                      DATA_TX[1]='4';
-                      DATA_TX[2]='5';
+                      DATA_TX[0]=dig1;
+                      DATA_TX[1]=dig2;
+                      DATA_TX[2]=dig3;
                       DATA_TX[3]=degrees;
                       DATA_TX[4]=battery;
                       write_TX_normal_FIFO();
                       i = read_ZIGBEE_short(TXSTAT);
-                      IntToStr(i, texto);
-                      Lcd_Out(1,1,texto);
-                      
-                      if((i & 0x01) == 0){
-                           trans = 2;
-                      }
+
+                      /*if((i & 1) == 0){
+                             trans = 2;
+                      }*/
               }   //final trans ==1
-              if(trans == 2){
+              /*if(trans == 2){
+                       IntToStr(i, texto);
+                       Lcd_Out(1,1,texto);
                        SEQ_NUMBER++;
                        trans = 1;
-              }
-
+              }*/
       }//final while
 }

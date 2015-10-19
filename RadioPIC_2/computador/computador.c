@@ -878,23 +878,33 @@ void main() {
                               deg=DATA_RX[3];
                               bat=DATA_RX[4];
                               
-                              if(lastSN == seqN){
+                              cond = 1;
+                              
+                              /*if(lastSN == seqN){
                                     repPack++;
                               }
-                              else if(d1 != 0xFF){
+                              else if(d1 == 0xFF){
                                     //trans = 1;
                                     trans = 2;
                               }
-                              
+
                               lastD1 = d1;
                               lastD2 = d2;
                               lastD3 = d3;
                               lastDeg = deg;
                               lastBat = bat;
-                              lastSN = seqN;
+                              lastSN = seqN;*/
+                              //IntToStr(seqN, texto);
+                      }
+                      else if(cond > 0){
+                           Delay_us(910);
+                           cond ++;
+                           if(cond == 100){
+                                   trans = 2;
+                           }
                       }
               } //final trans = 0
-              if(trans == 1){
+              /*if(trans == 1){
                       Delay_ms(1000);
                       //Read_therm_serial();
                       DATA_TX[0]=dig1;
@@ -906,17 +916,25 @@ void main() {
                       i = read_ZIGBEE_short(TXSTAT);
 
                       if((i & 0x01) == 0){
-                            IntToStr(i, texto);
-                            Lcd_Out(1,1,texto);
-                            trans = 0;
+                             DATA_TX[0]=0xFF;
+                             DATA_TX[1]='0';
+                             DATA_TX[2]='0';
+                             DATA_TX[3]=degrees;
+                             DATA_TX[4]=battery;
+                             write_TX_normal_FIFO();
+                             i = read_ZIGBEE_short(TXSTAT);
+
+                             if((i & 0x01) == 0){
+                             IntToStr(i, texto);
+                             Lcd_Out(1,1,texto);
+                             trans = 0;
+                             }
                       }
-              }   //final trans ==1
+              }   //final trans ==1*/
               if(trans == 2){
                        Lcd_Chr(1, 1, d1);
                        Lcd_Chr(1, 2, d2);
-                       IntToStr(seqN, texto);
-                       Lcd_Out(2,1,texto);
-                       trans = 0;
+                       //trans = 0;
               }
       }//final while
 }
