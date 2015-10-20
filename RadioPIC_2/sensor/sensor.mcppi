@@ -25,12 +25,12 @@ File0=sensor.c
 Count=0
 [SEARCH_PATH]
 Count=6
-Path0=C:\Program Files (x86)\Mikroelektronika\mikroC PRO for PIC\defs\
-Path1=C:\Program Files (x86)\Mikroelektronika\mikroC PRO for PIC\uses\P18\
-Path2=C:\Users\Eduardo\Documents\GitHub\libusb_radio_MCP2210\RadioPIC_2\sensor\
-Path3=C:\Users\User\Documents\Mikroelektronika\mikroC PRO for PIC\defs\
-Path4=C:\Users\User\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\
-Path5=C:\Users\User\Documents\libusb_radio_MCP2210\RadioPIC_2\sensor\
+Path0=C:\Users\User\Documents\Mikroelektronika\mikroC PRO for PIC\defs\
+Path1=C:\Users\User\Documents\Mikroelektronika\mikroC PRO for PIC\uses\P18\
+Path2=C:\Users\User\Documents\libusb_radio_MCP2210\RadioPIC_2\sensor\
+Path3=C:\Program Files (x86)\Mikroelektronika\mikroC PRO for PIC\defs\
+Path4=C:\Program Files (x86)\Mikroelektronika\mikroC PRO for PIC\uses\P18\
+Path5=C:\Users\Eduardo\Documents\GitHub\libusb_radio_MCP2210\RadioPIC_2\sensor\
 [HEADER_PATH]
 Count=0
 [HEADERS]

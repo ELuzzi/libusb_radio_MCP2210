@@ -860,81 +860,80 @@ void Initialize() {
 void main() {
      char d1=0, d2=0, d3=0, deg=0, bat=0, seqN=0;
      char lastD1=0xFF, lastD2=0, lastD3=0, lastDeg=0, lastBat=0, lastSN=0;
-     short int i, cont = 0,cond = 0, repPack = 0;
+     short int i = 1, cont = 0,cond = 0, repPack = 0;
+     int cond2;
      char texto[16];
-     char trans = 0; //quando trans = 1 está operando no modo transmissor, se trans = 0 está no modo receptor
+     char trans = 1; //quando trans = 1 está operando no modo transmissor, se trans = 0 está no modo receptor
 
      Initialize();                      // Initialize MCU and Bee click board
+     write_TX_normal_FIFO();
+
+     /*temp1 = read_ZIGBEE_short(INTSTAT); // Read and flush register INTSTAT
+     read_RX_FIFO();*/
 
      while(1) {
               if(trans == 0){
+                      Lcd_Chr(2,5,'b');
                       if(Debounce_INT() == 0 ){
                               temp1 = read_ZIGBEE_short(INTSTAT); // Read and flush register INTSTAT
                               read_RX_FIFO();                     // Read receive data
-                              seqN = SN;
                               d1=DATA_RX[0];
                               d2=DATA_RX[1];
                               d3=DATA_RX[2];
                               deg=DATA_RX[3];
                               bat=DATA_RX[4];
-                              
                               cond = 1;
                               
-                              /*if(lastSN == seqN){
-                                    repPack++;
-                              }
-                              else if(d1 == 0xFF){
-                                    //trans = 1;
-                                    trans = 2;
-                              }
-
-                              lastD1 = d1;
-                              lastD2 = d2;
-                              lastD3 = d3;
-                              lastDeg = deg;
-                              lastBat = bat;
-                              lastSN = seqN;*/
-                              //IntToStr(seqN, texto);
                       }
                       else if(cond > 0){
                            Delay_us(910);
                            cond ++;
                            if(cond == 100){
-                                   trans = 2;
+                                   trans = 1;
+                                   Initialize();                      // Initialize MCU and Bee click board
+                                   write_TX_normal_FIFO();
+                                   Lcd_Chr(2,1,'b');
+                                   write_TX_normal_FIFO();
                            }
                       }
+                      else{
+                           Delay_us(910);
+                           cond2++;
+                           Lcd_Chr(1,5,'C');
+                           if(cond2 == 1500){
+                                    write_TX_normal_FIFO();
+                                    Delay_ms(1000);
+                                    trans = 1;
+                           }
+                      }
+
               } //final trans = 0
-              /*if(trans == 1){
-                      Delay_ms(1000);
+              if(trans == 1){
+                      Delay_ms(3000);
                       //Read_therm_serial();
-                      DATA_TX[0]=dig1;
+                      DATA_TX[0]='3';
                       DATA_TX[1]=dig2;
                       DATA_TX[2]=dig3;
                       DATA_TX[3]=degrees;
                       DATA_TX[4]=battery;
                       write_TX_normal_FIFO();
                       i = read_ZIGBEE_short(TXSTAT);
+                      
+                      SEQ_NUMBER++;
 
-                      if((i & 0x01) == 0){
-                             DATA_TX[0]=0xFF;
-                             DATA_TX[1]='0';
-                             DATA_TX[2]='0';
-                             DATA_TX[3]=degrees;
-                             DATA_TX[4]=battery;
-                             write_TX_normal_FIFO();
-                             i = read_ZIGBEE_short(TXSTAT);
-
-                             if((i & 0x01) == 0){
-                             IntToStr(i, texto);
-                             Lcd_Out(1,1,texto);
+                      if((i & 1) == 0){
                              trans = 0;
-                             }
+                             cond = 0;
+                             cond2 = 0;
+                             Initialize();
+                             Lcd_Chr(1,1,'a');
+                             Delay_ms(900);
                       }
-              }   //final trans ==1*/
-              if(trans == 2){
-                       Lcd_Chr(1, 1, d1);
-                       Lcd_Chr(1, 2, d2);
-                       //trans = 0;
-              }
+                      else if((i & 1) == 1){
+                           Lcd_Cmd(_LCD_CLEAR);
+                           Lcd_Chr(1,1,d1);
+                           Lcd_Chr(1,2,d2);
+                      }
+              }   //final trans ==1
       }//final while
 }

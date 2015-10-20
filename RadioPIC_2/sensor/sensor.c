@@ -1103,13 +1103,15 @@ void main() {
      char lastD1=0, lastD2=0, lastD3=0, lastDeg=0, lastBat=0, lastSN=0;
      short int i, cont = 0, cond=0, repPack=0;
      char texto[16];
-     char trans = 1; //quando trans = 1 está operando no modo transmissor, se trans = 0 está no modo receptor
+     char trans = 0; //quando trans = 1 está operando no modo transmissor, se trans = 0 está no modo receptor
      
      Initialize();                      // Initialize MCU and Bee click board
-
+     
      while(1) {
               if(trans == 0){
+                      Lcd_Chr(2,5,'b');
                       if(Debounce_INT() == 0 ){
+
                               temp1 = read_ZIGBEE_short(INTSTAT); // Read and flush register INTSTAT
                               read_RX_FIFO();                     // Read receive data
                               d1=DATA_RX[0];
@@ -1117,40 +1119,25 @@ void main() {
                               d3=DATA_RX[2];
                               deg=DATA_RX[3];
                               bat=DATA_RX[4];
-                              
-                              if(lastSN == SN){
-                                    repPack++;
-                              }
-                              else if(d1 == 0xFF){
-                                    //trans = 1;
-                                    trans = 2;
-                              }
-
-                              if((lastD1 == d1)&&(lastD2 == d2)){
-                                    repPack++;
-                              }
-                              else if((cond==1)&&((lastD1 != d1)&&(lastD2 != d2))){
-                                    Lcd_Chr(1, 1, lastD1);
-                                    Lcd_Chr(1, 2, lastD2);
-                                    //Lcd_Chr(1, 3, '.');
-                                    //Lcd_Chr(1, 4, d3);
-                                    //trans = 1;
-                                    cond = 0;
-                              }
 
                               cond = 1;
-                              lastD1 = d1;
-                              lastD2 = d2;
-                              lastD3 = d3;
-                              lastDeg = deg;
-                              lastBat = bat;
 
-                              Delay_us(912);
+                      }
+                      else if(cond > 0){
+                           Delay_us(910);
+                           cond ++;
+                           if(cond == 100){
+                                   Initialize();
+                                   write_TX_normal_FIFO();
+                                   Lcd_Chr(1,1,'b');
+                                   trans = 1;
+                           }
                       }
               } //final trans = 0
               if(trans == 1){
+                      Delay_ms(3000);
                       //Read_therm_serial();
-                      DATA_TX[0]=dig1;
+                      DATA_TX[0]='3';
                       DATA_TX[1]=dig2;
                       DATA_TX[2]=dig3;
                       DATA_TX[3]=degrees;
@@ -1158,15 +1145,18 @@ void main() {
                       write_TX_normal_FIFO();
                       i = read_ZIGBEE_short(TXSTAT);
 
-                      /*if((i & 1) == 0){
+                      SEQ_NUMBER++;
+
+                      if((i & 1) == 0){
                              trans = 2;
-                      }*/
+                             cond = 0;
+                             Initialize();
+                             Lcd_Chr(1,1,'a');
+                             Delay_ms(900);
+                      }
+                      else if((i & 1) == 1){
+                           Lcd_Chr(1,1,'r');
+                      }
               }   //final trans ==1
-              /*if(trans == 2){
-                       IntToStr(i, texto);
-                       Lcd_Out(1,1,texto);
-                       SEQ_NUMBER++;
-                       trans = 1;
-              }*/
       }//final while
 }

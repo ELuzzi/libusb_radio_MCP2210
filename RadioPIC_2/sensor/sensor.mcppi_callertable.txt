@@ -94,6 +94,11 @@ main
 			write_ZIGBEE_short
 				SPI1_Write
 		pin_wake
+	Lcd_Chr
+		Lcd_Cmd
+			Delay_1us
+			Delay_5500us
+			Delay_50us
 	Debounce_INT
 	read_ZIGBEE_short
 		SPI1_Write
@@ -107,11 +112,6 @@ main
 		read_ZIGBEE_long
 			SPI1_Write
 			SPI1_Read
-	Lcd_Chr
-		Lcd_Cmd
-			Delay_1us
-			Delay_5500us
-			Delay_50us
 	write_TX_normal_FIFO
 		write_ZIGBEE_long
 			SPI1_Write
