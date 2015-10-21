@@ -1101,13 +1101,27 @@ void Initialize() {
 void main() {
      char d1=0, d2=0, d3=0, deg=0, bat=0;
      char lastD1=0, lastD2=0, lastD3=0, lastDeg=0, lastBat=0, lastSN=0;
-     short int i, cont = 0, cond=0, repPack=0;
+     short int i, cont = 0, cond=0;
+     int sleep = 20;
      char texto[16];
      char trans = 0; //quando trans = 1 está operando no modo transmissor, se trans = 0 está no modo receptor
      
      Initialize();                      // Initialize MCU and Bee click board
      
      while(1) {
+              if(sleep == 20){
+                      PWR_reset();
+                      write_ZIGBEE_short(SLPACK, 0x80);
+                      sleep = 0;
+                      trans = 0;
+                      Lcd_Chr(1,5,'s');
+                      Delay_ms(200);
+                      
+                      Initialize();
+              }
+              
+
+              
               if(trans == 0){
                       Lcd_Chr(2,5,'b');
                       if(Debounce_INT() == 0 ){
@@ -1119,15 +1133,15 @@ void main() {
                               d3=DATA_RX[2];
                               deg=DATA_RX[3];
                               bat=DATA_RX[4];
-
+                              
                               cond = 1;
-
+                              
                       }
                       else if(cond > 0){
                            Delay_us(910);
                            cond ++;
                            if(cond == 100){
-                                   Initialize();
+                                   Initialize();                      // Initialize MCU and Bee click board
                                    write_TX_normal_FIFO();
                                    Lcd_Chr(1,1,'b');
                                    trans = 1;
@@ -1158,5 +1172,9 @@ void main() {
                            Lcd_Chr(1,1,'r');
                       }
               }   //final trans ==1
+              
+              sleep++;
+              Delay_us(910);
+              
       }//final while
 }

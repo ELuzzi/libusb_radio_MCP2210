@@ -912,13 +912,27 @@ void Initialize() {
 void main() {
  char d1=0, d2=0, d3=0, deg=0, bat=0;
  char lastD1=0, lastD2=0, lastD3=0, lastDeg=0, lastBat=0, lastSN=0;
- short int i, cont = 0, cond=0, repPack=0;
+ short int i, cont = 0, cond=0;
+ int sleep = 20;
  char texto[16];
  char trans = 0;
 
  Initialize();
 
  while(1) {
+ if(sleep == 20){
+ PWR_reset();
+ write_ZIGBEE_short( 0x35 , 0x80);
+ sleep = 0;
+ trans = 0;
+ Lcd_Chr(1,5,'s');
+ Delay_ms(200);
+
+ Initialize();
+ }
+
+
+
  if(trans == 0){
  Lcd_Chr(2,5,'b');
  if(Debounce_INT() == 0 ){
@@ -969,5 +983,9 @@ void main() {
  Lcd_Chr(1,1,'r');
  }
  }
+
+ sleep++;
+ Delay_us(910);
+
  }
 }

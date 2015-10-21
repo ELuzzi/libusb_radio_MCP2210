@@ -94,6 +94,11 @@ main
 			write_ZIGBEE_short
 				SPI1_Write
 		pin_wake
+	PWR_reset
+		write_ZIGBEE_short
+			SPI1_Write
+	write_ZIGBEE_short
+		SPI1_Write
 	Lcd_Chr
 		Lcd_Cmd
 			Delay_1us
