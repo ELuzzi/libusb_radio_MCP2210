@@ -716,9 +716,9 @@ void main() {
 
  }
  else if(cond > 0){
- Delay_us(910);
+ Delay_us(912);
  cond ++;
- if(cond == 100){
+ if(cond == 7){
  trans = 1;
  Initialize();
  write_TX_normal_FIFO();
@@ -727,19 +727,19 @@ void main() {
  }
  }
  else{
- Delay_us(910);
+ Delay_us(912);
  cond2++;
  Lcd_Chr(1,5,'C');
- if(cond2 == 1500){
+ if(cond2 == 12){
  write_TX_normal_FIFO();
- Delay_ms(1000);
+ Delay_ms(1);
  trans = 1;
  }
  }
 
  }
  if(trans == 1){
- Delay_ms(3000);
+ Delay_ms(9);
 
  DATA_TX[0]='3';
  DATA_TX[1]=dig2;
@@ -751,13 +751,13 @@ void main() {
 
  SEQ_NUMBER++;
 
- if((i & 1) == 0){
+ if((i & 0b00000001) == 0){
  trans = 0;
  cond = 0;
  cond2 = 0;
  Initialize();
  Lcd_Chr(1,1,'a');
- Delay_ms(900);
+
  }
  else if((i & 1) == 1){
  Lcd_Cmd(_LCD_CLEAR);

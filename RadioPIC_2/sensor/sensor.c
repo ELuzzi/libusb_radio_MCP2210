@@ -1124,20 +1124,21 @@ void main() {
      char d1=0, d2=0, d3=0, deg=0, bat=0;
      char lastD1=0, lastD2=0, lastD3=0, lastDeg=0, lastBat=0, lastSN=0;
      short int i, cont = 0, cond=0;
-     int sleep = 20;
+     int sleep = 4;
      char texto[16];
      char trans = 0; //quando trans = 1 está operando no modo transmissor, se trans = 0 está no modo receptor
      
      Initialize();                      // Initialize MCU and Bee click board
      
      while(1) {
-              if(sleep == 20){
+              if(sleep == 13){
                       PWR_reset();
                       write_ZIGBEE_short(SLPACK, 0x80);
                       sleep = 0;
+                      cond = 0;
                       trans = 0;
                       Lcd_Chr(1,5,'s');
-                      Delay_ms(200);
+                      Delay_ms(125);
                       
                       Initialize();
               }
@@ -1160,9 +1161,9 @@ void main() {
                               
                       }
                       else if(cond > 0){
-                           Delay_us(910);
+                           //Delay_us(910);
                            cond ++;
-                           if(cond == 100){
+                           if(cond == 7){
                                    Initialize();                      // Initialize MCU and Bee click board
                                    write_TX_normal_FIFO();
                                    Lcd_Chr(1,1,'b');
@@ -1171,10 +1172,10 @@ void main() {
                       }
               } //final trans = 0
               if(trans == 1){
-                      Delay_ms(3000);
+                      Delay_ms(9);
                       //Read_therm_serial();
                       DATA_TX[15]='3';
-                      DATA_TX[1]=dig2;
+                      DATA_TX[1]='4';
                       DATA_TX[2]=dig3;
                       DATA_TX[3]=degrees;
                       DATA_TX[4]=battery;
@@ -1188,7 +1189,7 @@ void main() {
                              cond = 0;
                              Initialize();
                              Lcd_Chr(1,1,'a');
-                             Delay_ms(900);
+                             //Delay_ms(800);
                       }
                       else if((i & 1) == 1){
                            Lcd_Chr(1,1,'r');

@@ -3,14 +3,14 @@ Line	MessageNo	File Name
 warning: 0	1501	Specified search path does not exist: 'C:\Program Files (x86)\Mikroelektronika\mikroC PRO for PIC\defs'	 
 warning: 0	1501	Specified search path does not exist: 'C:\Program Files (x86)\Mikroelektronika\mikroC PRO for PIC\uses\P18'	 
 warning: 0	1501	Specified search path does not exist: 'C:\Users\Eduardo\Documents\GitHub\libusb_radio_MCP2210\RadioPIC_2\sensor'	 
-diagnostics: 0	125	All files Preprocessed in 109 ms	 
+diagnostics: 0	125	All files Preprocessed in 94 ms	 
 diagnostics: 0	121	Compilation Started	sensor.c
 hint: 1128	1158	Variable 'texto' has been declared, but not used	sensor.c
-diagnostics: 1202	122	Compiled Successfully	sensor.c
-diagnostics: 0	126	All files Compiled in 1404 ms	 
-hint: 0	1140	Used RAM (bytes): 170 (11%)  Free RAM (bytes): 1345 (89%)	Used RAM (bytes): 170 (11%)  Free RAM (bytes): 1345 (89%)
-hint: 0	1140	Used ROM (bytes): 3738 (11%)  Free ROM (bytes): 29030 (89%)	Used ROM (bytes): 3738 (11%)  Free ROM (bytes): 29030 (89%)
+diagnostics: 1203	122	Compiled Successfully	sensor.c
+diagnostics: 0	126	All files Compiled in 1482 ms	 
+hint: 0	1140	Used RAM (bytes): 168 (11%)  Free RAM (bytes): 1347 (89%)	Used RAM (bytes): 168 (11%)  Free RAM (bytes): 1347 (89%)
+hint: 0	1140	Used ROM (bytes): 3674 (11%)  Free ROM (bytes): 29094 (89%)	Used ROM (bytes): 3674 (11%)  Free ROM (bytes): 29094 (89%)
 diagnostics: 0	124	Project Linked Successfully	sensor.mcppi
-diagnostics: 0	127	Linked in 1233 ms	 
-diagnostics: 0	128	Project 'sensor.mcppi' completed: 3385 ms	 
-diagnostics: 0	103	Finished successfully: 27 out 2015, 14:16:10	sensor.mcppi
+diagnostics: 0	127	Linked in 1404 ms	 
+diagnostics: 0	128	Project 'sensor.mcppi' completed: 3666 ms	 
+diagnostics: 0	103	Finished successfully: 27 out 2015, 16:15:19	sensor.mcppi
