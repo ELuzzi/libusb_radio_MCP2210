@@ -155,7 +155,7 @@ sbit LCD_D5_Direction at TRISD5_bit;
 sbit LCD_D6_Direction at TRISD6_bit;
 sbit LCD_D7_Direction at TRISD7_bit;
 
-const unsigned short int DATA_LENGHT = 5;
+const unsigned short int DATA_LENGHT = 16;
 const unsigned short int HEADER_LENGHT = 11;
 
 int address_RX_FIFO, address_TX_normal_FIFO;
@@ -271,6 +271,17 @@ void read_RX_FIFO() {
   DATA_RX[2] = data_RX_FIFO[HEADER_LENGHT + 3];               // coping valid data
   DATA_RX[3] = data_RX_FIFO[HEADER_LENGHT + 4];               // coping valid data
   DATA_RX[4] = data_RX_FIFO[HEADER_LENGHT + 5];               // coping valid data
+  DATA_RX[5] = data_RX_FIFO[HEADER_LENGHT + 6];               // coping valid data
+  DATA_RX[6] = data_RX_FIFO[HEADER_LENGHT + 7];               // coping valid data
+  DATA_RX[7] = data_RX_FIFO[HEADER_LENGHT + 8];               // coping valid data
+  DATA_RX[8] = data_RX_FIFO[HEADER_LENGHT + 9];               // coping valid data
+  DATA_RX[9] = data_RX_FIFO[HEADER_LENGHT + 10];               // coping valid data
+  DATA_RX[10] = data_RX_FIFO[HEADER_LENGHT + 11];               // coping valid data
+  DATA_RX[11] = data_RX_FIFO[HEADER_LENGHT + 12];               // coping valid data
+  DATA_RX[12] = data_RX_FIFO[HEADER_LENGHT + 13];               // coping valid data
+  DATA_RX[13] = data_RX_FIFO[HEADER_LENGHT + 14];               // coping valid data
+  DATA_RX[14] = data_RX_FIFO[HEADER_LENGHT + 15];               // coping valid data
+  DATA_RX[15] = data_RX_FIFO[HEADER_LENGHT + 16];               // coping valid data
 
   LQI   = data_RX_FIFO[1 + HEADER_LENGHT + DATA_LENGHT + 2];  // coping valid data
   RSSI2 = data_RX_FIFO[1 + HEADER_LENGHT + DATA_LENGHT + 3];  // coping valid data
@@ -340,6 +351,17 @@ void write_TX_normal_FIFO() {
   data_TX_normal_FIFO[15] = DATA_TX[2];                  // data
   data_TX_normal_FIFO[16] = DATA_TX[3];                  // data
   data_TX_normal_FIFO[17] = DATA_TX[4];                  // data
+  data_TX_normal_FIFO[18] = DATA_TX[5];                  // data
+  data_TX_normal_FIFO[19] = DATA_TX[6];                  // data
+  data_TX_normal_FIFO[20] = DATA_TX[7];                  // data
+  data_TX_normal_FIFO[21] = DATA_TX[8];                  // data
+  data_TX_normal_FIFO[22] = DATA_TX[9];                  // data
+  data_TX_normal_FIFO[23] = DATA_TX[10];                  // data
+  data_TX_normal_FIFO[24] = DATA_TX[11];                  // data
+  data_TX_normal_FIFO[25] = DATA_TX[12];                  // data
+  data_TX_normal_FIFO[26] = DATA_TX[13];                  // data
+  data_TX_normal_FIFO[27] = DATA_TX[14];                  // data
+  data_TX_normal_FIFO[28] = DATA_TX[15];                  // data
 
   for(i = 0; i < (HEADER_LENGHT + DATA_LENGHT + 2); i++) {
     write_ZIGBEE_long(address_TX_normal_FIFO + i, data_TX_normal_FIFO[i]); // write frame into normal FIFO
@@ -1151,7 +1173,7 @@ void main() {
               if(trans == 1){
                       Delay_ms(3000);
                       //Read_therm_serial();
-                      DATA_TX[0]='3';
+                      DATA_TX[15]='3';
                       DATA_TX[1]=dig2;
                       DATA_TX[2]=dig3;
                       DATA_TX[3]=degrees;

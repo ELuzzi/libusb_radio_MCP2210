@@ -3,14 +3,14 @@ Line	MessageNo	File Name
 warning: 0	1501	Specified search path does not exist: 'C:\Program Files (x86)\Mikroelektronika\mikroC PRO for PIC\defs'	 
 warning: 0	1501	Specified search path does not exist: 'C:\Program Files (x86)\Mikroelektronika\mikroC PRO for PIC\uses\P18'	 
 warning: 0	1501	Specified search path does not exist: 'C:\Users\Eduardo\Documents\GitHub\libusb_radio_MCP2210\RadioPIC_2\computador'	 
-diagnostics: 0	125	All files Preprocessed in 110 ms	 
+diagnostics: 0	125	All files Preprocessed in 78 ms	 
 diagnostics: 0	121	Compilation Started	computador.c
-hint: 865	1158	Variable 'texto' has been declared, but not used	computador.c
-diagnostics: 939	122	Compiled Successfully	computador.c
-diagnostics: 0	126	All files Compiled in 1310 ms	 
-hint: 0	1140	Used RAM (bytes): 130 (9%)  Free RAM (bytes): 1385 (91%)	Used RAM (bytes): 130 (9%)  Free RAM (bytes): 1385 (91%)
-hint: 0	1140	Used ROM (bytes): 3634 (11%)  Free ROM (bytes): 29134 (89%)	Used ROM (bytes): 3634 (11%)  Free ROM (bytes): 29134 (89%)
+hint: 888	1158	Variable 'texto' has been declared, but not used	computador.c
+diagnostics: 962	122	Compiled Successfully	computador.c
+diagnostics: 0	126	All files Compiled in 1092 ms	 
+hint: 0	1140	Used RAM (bytes): 174 (11%)  Free RAM (bytes): 1341 (89%)	Used RAM (bytes): 174 (11%)  Free RAM (bytes): 1341 (89%)
+hint: 0	1140	Used ROM (bytes): 3730 (11%)  Free ROM (bytes): 29038 (89%)	Used ROM (bytes): 3730 (11%)  Free ROM (bytes): 29038 (89%)
 diagnostics: 0	124	Project Linked Successfully	computador.mcppi
-diagnostics: 0	127	Linked in 1248 ms	 
-diagnostics: 0	128	Project 'computador.mcppi' completed: 3276 ms	 
-diagnostics: 0	103	Finished successfully: 21 out 2015, 10:32:16	computador.mcppi
+diagnostics: 0	127	Linked in 1155 ms	 
+diagnostics: 0	128	Project 'computador.mcppi' completed: 2933 ms	 
+diagnostics: 0	103	Finished successfully: 27 out 2015, 14:17:32	computador.mcppi

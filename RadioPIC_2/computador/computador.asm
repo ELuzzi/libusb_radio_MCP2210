@@ -227,7 +227,7 @@ L__read_RX_FIFO100:
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
 	GOTO        L__read_RX_FIFO101
-	MOVLW       21
+	MOVLW       32
 	SUBWF       read_RX_FIFO_i_L0+0, 0 
 L__read_RX_FIFO101:
 	BTFSC       STATUS+0, 0 
@@ -259,7 +259,7 @@ L_read_RX_FIFO3:
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
 	GOTO        L__read_RX_FIFO102
-	MOVLW       21
+	MOVLW       32
 	SUBWF       read_RX_FIFO_i_L0+0, 0 
 L__read_RX_FIFO102:
 	BTFSS       STATUS+0, 0 
@@ -299,193 +299,259 @@ L_read_RX_FIFO1:
 ;computador.c,257 :: 		DATA_RX[4] = data_RX_FIFO[HEADER_LENGHT + 5];               // coping valid data
 	MOVF        _data_RX_FIFO+16, 0 
 	MOVWF       _DATA_RX+4 
-;computador.c,259 :: 		LQI   = data_RX_FIFO[1 + HEADER_LENGHT + DATA_LENGHT + 2];  // coping valid data
+;computador.c,258 :: 		DATA_RX[5] = data_RX_FIFO[HEADER_LENGHT + 6];               // coping valid data
+	MOVF        _data_RX_FIFO+17, 0 
+	MOVWF       _DATA_RX+5 
+;computador.c,259 :: 		DATA_RX[6] = data_RX_FIFO[HEADER_LENGHT + 7];               // coping valid data
+	MOVF        _data_RX_FIFO+18, 0 
+	MOVWF       _DATA_RX+6 
+;computador.c,260 :: 		DATA_RX[7] = data_RX_FIFO[HEADER_LENGHT + 8];               // coping valid data
 	MOVF        _data_RX_FIFO+19, 0 
-	MOVWF       _LQI+0 
-;computador.c,260 :: 		RSSI2 = data_RX_FIFO[1 + HEADER_LENGHT + DATA_LENGHT + 3];  // coping valid data
+	MOVWF       _DATA_RX+7 
+;computador.c,261 :: 		DATA_RX[8] = data_RX_FIFO[HEADER_LENGHT + 9];               // coping valid data
 	MOVF        _data_RX_FIFO+20, 0 
+	MOVWF       _DATA_RX+8 
+;computador.c,262 :: 		DATA_RX[9] = data_RX_FIFO[HEADER_LENGHT + 10];               // coping valid data
+	MOVF        _data_RX_FIFO+21, 0 
+	MOVWF       _DATA_RX+9 
+;computador.c,263 :: 		DATA_RX[10] = data_RX_FIFO[HEADER_LENGHT + 11];               // coping valid data
+	MOVF        _data_RX_FIFO+22, 0 
+	MOVWF       _DATA_RX+10 
+;computador.c,264 :: 		DATA_RX[11] = data_RX_FIFO[HEADER_LENGHT + 12];               // coping valid data
+	MOVF        _data_RX_FIFO+23, 0 
+	MOVWF       _DATA_RX+11 
+;computador.c,265 :: 		DATA_RX[12] = data_RX_FIFO[HEADER_LENGHT + 13];               // coping valid data
+	MOVF        _data_RX_FIFO+24, 0 
+	MOVWF       _DATA_RX+12 
+;computador.c,266 :: 		DATA_RX[13] = data_RX_FIFO[HEADER_LENGHT + 14];               // coping valid data
+	MOVF        _data_RX_FIFO+25, 0 
+	MOVWF       _DATA_RX+13 
+;computador.c,267 :: 		DATA_RX[14] = data_RX_FIFO[HEADER_LENGHT + 15];               // coping valid data
+	MOVF        _data_RX_FIFO+26, 0 
+	MOVWF       _DATA_RX+14 
+;computador.c,268 :: 		DATA_RX[15] = data_RX_FIFO[HEADER_LENGHT + 16];               // coping valid data
+	MOVF        _data_RX_FIFO+27, 0 
+	MOVWF       _DATA_RX+15 
+;computador.c,270 :: 		LQI   = data_RX_FIFO[1 + HEADER_LENGHT + DATA_LENGHT + 2];  // coping valid data
+	MOVF        _data_RX_FIFO+30, 0 
+	MOVWF       _LQI+0 
+;computador.c,271 :: 		RSSI2 = data_RX_FIFO[1 + HEADER_LENGHT + DATA_LENGHT + 3];  // coping valid data
+	MOVF        _data_RX_FIFO+31, 0 
 	MOVWF       _RSSI2+0 
-;computador.c,262 :: 		temp = read_ZIGBEE_short(BBREG1);      // enable receiving packets off air.
+;computador.c,273 :: 		temp = read_ZIGBEE_short(BBREG1);      // enable receiving packets off air.
 	MOVLW       57
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,263 :: 		temp = temp & (!0x04);                 // mask for enable receiving
+;computador.c,274 :: 		temp = temp & (!0x04);                 // mask for enable receiving
 	MOVLW       0
 	ANDWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,264 :: 		write_ZIGBEE_short(BBREG1, temp);
+;computador.c,275 :: 		write_ZIGBEE_short(BBREG1, temp);
 	MOVLW       57
-	MOVWF       FARG_write_ZIGBEE_short_address+0 
-	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,265 :: 		}
-	RETURN      0
-; end of _read_RX_FIFO
-
-_set_ACK:
-;computador.c,270 :: 		void set_ACK(void){
-;computador.c,273 :: 		temp = read_ZIGBEE_short(TXNCON);
-	MOVLW       27
-	MOVWF       FARG_read_ZIGBEE_short_address+0 
-	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,274 :: 		temp = temp | 0x04;                   // 0x04 mask for set ACK
-	MOVLW       4
-	IORWF       R0, 0 
-	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,275 :: 		write_ZIGBEE_short(TXNCON, temp);
-	MOVLW       27
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
 ;computador.c,276 :: 		}
 	RETURN      0
-; end of _set_ACK
+; end of _read_RX_FIFO
 
-_set_not_ACK:
-;computador.c,278 :: 		void set_not_ACK(void){
-;computador.c,281 :: 		temp = read_ZIGBEE_short(TXNCON);
+_set_ACK:
+;computador.c,281 :: 		void set_ACK(void){
+;computador.c,284 :: 		temp = read_ZIGBEE_short(TXNCON);
 	MOVLW       27
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,282 :: 		temp = temp & (!0x04);                // 0x04 mask for set not ACK
-	MOVLW       0
-	ANDWF       R0, 0 
+;computador.c,285 :: 		temp = temp | 0x04;                   // 0x04 mask for set ACK
+	MOVLW       4
+	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,283 :: 		write_ZIGBEE_short(TXNCON, temp);
+;computador.c,286 :: 		write_ZIGBEE_short(TXNCON, temp);
 	MOVLW       27
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,284 :: 		}
+;computador.c,287 :: 		}
+	RETURN      0
+; end of _set_ACK
+
+_set_not_ACK:
+;computador.c,289 :: 		void set_not_ACK(void){
+;computador.c,292 :: 		temp = read_ZIGBEE_short(TXNCON);
+	MOVLW       27
+	MOVWF       FARG_read_ZIGBEE_short_address+0 
+	CALL        _read_ZIGBEE_short+0, 0
+;computador.c,293 :: 		temp = temp & (!0x04);                // 0x04 mask for set not ACK
+	MOVLW       0
+	ANDWF       R0, 0 
+	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
+;computador.c,294 :: 		write_ZIGBEE_short(TXNCON, temp);
+	MOVLW       27
+	MOVWF       FARG_write_ZIGBEE_short_address+0 
+	CALL        _write_ZIGBEE_short+0, 0
+;computador.c,295 :: 		}
 	RETURN      0
 ; end of _set_not_ACK
 
 _Frame_ACK:
-;computador.c,285 :: 		void Frame_ACK(void){
-;computador.c,288 :: 		temp = read_ZIGBEE_short(ACKTMOUT);
+;computador.c,296 :: 		void Frame_ACK(void){
+;computador.c,299 :: 		temp = read_ZIGBEE_short(ACKTMOUT);
 	MOVLW       18
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,289 :: 		temp = temp | 0x80;
+;computador.c,300 :: 		temp = temp | 0x80;
 	MOVLW       128
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,290 :: 		write_ZIGBEE_short(ACKTMOUT, temp);
+;computador.c,301 :: 		write_ZIGBEE_short(ACKTMOUT, temp);
 	MOVLW       18
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,291 :: 		}
+;computador.c,302 :: 		}
 	RETURN      0
 ; end of _Frame_ACK
 
 _set_ACK_recipient:
-;computador.c,293 :: 		void set_ACK_recipient(void){
-;computador.c,296 :: 		temp = read_ZIGBEE_short(RXMCR);
+;computador.c,304 :: 		void set_ACK_recipient(void){
+;computador.c,307 :: 		temp = read_ZIGBEE_short(RXMCR);
 	CLRF        FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,297 :: 		temp = temp & 0xDF;
+;computador.c,308 :: 		temp = temp & 0xDF;
 	MOVLW       223
 	ANDWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,298 :: 		write_ZIGBEE_short(RXMCR, temp);
+;computador.c,309 :: 		write_ZIGBEE_short(RXMCR, temp);
 	CLRF        FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,299 :: 		}
+;computador.c,310 :: 		}
 	RETURN      0
 ; end of _set_ACK_recipient
 
 _set_encrypt:
-;computador.c,305 :: 		void set_encrypt(void){
-;computador.c,308 :: 		temp = read_ZIGBEE_short(TXNCON);
+;computador.c,316 :: 		void set_encrypt(void){
+;computador.c,319 :: 		temp = read_ZIGBEE_short(TXNCON);
 	MOVLW       27
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,309 :: 		temp = temp | 0x02;                   // mask for set encrypt
+;computador.c,320 :: 		temp = temp | 0x02;                   // mask for set encrypt
 	MOVLW       2
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,310 :: 		write_ZIGBEE_short(TXNCON, temp);
+;computador.c,321 :: 		write_ZIGBEE_short(TXNCON, temp);
 	MOVLW       27
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,311 :: 		}
+;computador.c,322 :: 		}
 	RETURN      0
 ; end of _set_encrypt
 
 _set_not_encrypt:
-;computador.c,313 :: 		void set_not_encrypt(void){
-;computador.c,316 :: 		temp = read_ZIGBEE_short(TXNCON);
+;computador.c,324 :: 		void set_not_encrypt(void){
+;computador.c,327 :: 		temp = read_ZIGBEE_short(TXNCON);
 	MOVLW       27
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,317 :: 		temp = temp & (!0x02);                // mask for set not encrypt
+;computador.c,328 :: 		temp = temp & (!0x02);                // mask for set not encrypt
 	MOVLW       0
 	ANDWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,318 :: 		write_ZIGBEE_short(TXNCON, temp);
+;computador.c,329 :: 		write_ZIGBEE_short(TXNCON, temp);
 	MOVLW       27
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,319 :: 		}
+;computador.c,330 :: 		}
 	RETURN      0
 ; end of _set_not_encrypt
 
 _write_TX_normal_FIFO:
 	CLRF        write_TX_normal_FIFO_i_L0+0 
 	CLRF        write_TX_normal_FIFO_i_L0+1 
-;computador.c,321 :: 		void write_TX_normal_FIFO() {
-;computador.c,324 :: 		data_TX_normal_FIFO[0]  = HEADER_LENGHT;
+;computador.c,332 :: 		void write_TX_normal_FIFO() {
+;computador.c,335 :: 		data_TX_normal_FIFO[0]  = HEADER_LENGHT;
 	MOVLW       11
 	MOVWF       _data_TX_normal_FIFO+0 
-;computador.c,325 :: 		data_TX_normal_FIFO[1]  = HEADER_LENGHT + DATA_LENGHT;
-	MOVLW       16
+;computador.c,336 :: 		data_TX_normal_FIFO[1]  = HEADER_LENGHT + DATA_LENGHT;
+	MOVLW       27
 	MOVWF       _data_TX_normal_FIFO+1 
-;computador.c,326 :: 		data_TX_normal_FIFO[2]  = 0x21;                        // control frame
+;computador.c,337 :: 		data_TX_normal_FIFO[2]  = 0x21;                        // control frame
 	MOVLW       33
 	MOVWF       _data_TX_normal_FIFO+2 
-;computador.c,327 :: 		data_TX_normal_FIFO[3]  = 0x88;
+;computador.c,338 :: 		data_TX_normal_FIFO[3]  = 0x88;
 	MOVLW       136
 	MOVWF       _data_TX_normal_FIFO+3 
-;computador.c,328 :: 		data_TX_normal_FIFO[4]  = SEQ_NUMBER;                  // sequence number
+;computador.c,339 :: 		data_TX_normal_FIFO[4]  = SEQ_NUMBER;                  // sequence number
 	MOVF        _SEQ_NUMBER+0, 0 
 	MOVWF       _data_TX_normal_FIFO+4 
-;computador.c,329 :: 		data_TX_normal_FIFO[5]  = PAN_ID_2[1];                 // destinatoin pan
+;computador.c,340 :: 		data_TX_normal_FIFO[5]  = PAN_ID_2[1];                 // destinatoin pan
 	MOVF        _PAN_ID_2+1, 0 
 	MOVWF       _data_TX_normal_FIFO+5 
-;computador.c,330 :: 		data_TX_normal_FIFO[6]  = PAN_ID_2[0];
+;computador.c,341 :: 		data_TX_normal_FIFO[6]  = PAN_ID_2[0];
 	MOVF        _PAN_ID_2+0, 0 
 	MOVWF       _data_TX_normal_FIFO+6 
-;computador.c,331 :: 		data_TX_normal_FIFO[7]  = ADDRESS_short_2[0];          // destination address
+;computador.c,342 :: 		data_TX_normal_FIFO[7]  = ADDRESS_short_2[0];          // destination address
 	MOVF        _ADDRESS_short_2+0, 0 
 	MOVWF       _data_TX_normal_FIFO+7 
-;computador.c,332 :: 		data_TX_normal_FIFO[8]  = ADDRESS_short_2[1];
+;computador.c,343 :: 		data_TX_normal_FIFO[8]  = ADDRESS_short_2[1];
 	MOVF        _ADDRESS_short_2+1, 0 
 	MOVWF       _data_TX_normal_FIFO+8 
-;computador.c,333 :: 		data_TX_normal_FIFO[9]  = PAN_ID_1[0];                 // source pan
+;computador.c,344 :: 		data_TX_normal_FIFO[9]  = PAN_ID_1[0];                 // source pan
 	MOVF        _PAN_ID_1+0, 0 
 	MOVWF       _data_TX_normal_FIFO+9 
-;computador.c,334 :: 		data_TX_normal_FIFO[10] = PAN_ID_1[1];
+;computador.c,345 :: 		data_TX_normal_FIFO[10] = PAN_ID_1[1];
 	MOVF        _PAN_ID_1+1, 0 
 	MOVWF       _data_TX_normal_FIFO+10 
-;computador.c,335 :: 		data_TX_normal_FIFO[11] = ADDRESS_short_1[0];          // source address
+;computador.c,346 :: 		data_TX_normal_FIFO[11] = ADDRESS_short_1[0];          // source address
 	MOVF        _ADDRESS_short_1+0, 0 
 	MOVWF       _data_TX_normal_FIFO+11 
-;computador.c,336 :: 		data_TX_normal_FIFO[12] = ADDRESS_short_1[1];
+;computador.c,347 :: 		data_TX_normal_FIFO[12] = ADDRESS_short_1[1];
 	MOVF        _ADDRESS_short_1+1, 0 
 	MOVWF       _data_TX_normal_FIFO+12 
-;computador.c,338 :: 		data_TX_normal_FIFO[13] = DATA_TX[0];                  // data
+;computador.c,349 :: 		data_TX_normal_FIFO[13] = DATA_TX[0];                  // data
 	MOVF        _DATA_TX+0, 0 
 	MOVWF       _data_TX_normal_FIFO+13 
-;computador.c,339 :: 		data_TX_normal_FIFO[14] = DATA_TX[1];                  // data
+;computador.c,350 :: 		data_TX_normal_FIFO[14] = DATA_TX[1];                  // data
 	MOVF        _DATA_TX+1, 0 
 	MOVWF       _data_TX_normal_FIFO+14 
-;computador.c,340 :: 		data_TX_normal_FIFO[15] = DATA_TX[2];                  // data
+;computador.c,351 :: 		data_TX_normal_FIFO[15] = DATA_TX[2];                  // data
 	MOVF        _DATA_TX+2, 0 
 	MOVWF       _data_TX_normal_FIFO+15 
-;computador.c,341 :: 		data_TX_normal_FIFO[16] = DATA_TX[3];                  // data
+;computador.c,352 :: 		data_TX_normal_FIFO[16] = DATA_TX[3];                  // data
 	MOVF        _DATA_TX+3, 0 
 	MOVWF       _data_TX_normal_FIFO+16 
-;computador.c,342 :: 		data_TX_normal_FIFO[17] = DATA_TX[4];                  // data
+;computador.c,353 :: 		data_TX_normal_FIFO[17] = DATA_TX[4];                  // data
 	MOVF        _DATA_TX+4, 0 
 	MOVWF       _data_TX_normal_FIFO+17 
-;computador.c,344 :: 		for(i = 0; i < (HEADER_LENGHT + DATA_LENGHT + 2); i++) {
+;computador.c,354 :: 		data_TX_normal_FIFO[18] = DATA_TX[5];                  // data
+	MOVF        _DATA_TX+5, 0 
+	MOVWF       _data_TX_normal_FIFO+18 
+;computador.c,355 :: 		data_TX_normal_FIFO[19] = DATA_TX[6];                  // data
+	MOVF        _DATA_TX+6, 0 
+	MOVWF       _data_TX_normal_FIFO+19 
+;computador.c,356 :: 		data_TX_normal_FIFO[20] = DATA_TX[7];                  // data
+	MOVF        _DATA_TX+7, 0 
+	MOVWF       _data_TX_normal_FIFO+20 
+;computador.c,357 :: 		data_TX_normal_FIFO[21] = DATA_TX[8];                  // data
+	MOVF        _DATA_TX+8, 0 
+	MOVWF       _data_TX_normal_FIFO+21 
+;computador.c,358 :: 		data_TX_normal_FIFO[22] = DATA_TX[9];                  // data
+	MOVF        _DATA_TX+9, 0 
+	MOVWF       _data_TX_normal_FIFO+22 
+;computador.c,359 :: 		data_TX_normal_FIFO[23] = DATA_TX[10];                  // data
+	MOVF        _DATA_TX+10, 0 
+	MOVWF       _data_TX_normal_FIFO+23 
+;computador.c,360 :: 		data_TX_normal_FIFO[24] = DATA_TX[11];                  // data
+	MOVF        _DATA_TX+11, 0 
+	MOVWF       _data_TX_normal_FIFO+24 
+;computador.c,361 :: 		data_TX_normal_FIFO[25] = DATA_TX[12];                  // data
+	MOVF        _DATA_TX+12, 0 
+	MOVWF       _data_TX_normal_FIFO+25 
+;computador.c,362 :: 		data_TX_normal_FIFO[26] = DATA_TX[13];                  // data
+	MOVF        _DATA_TX+13, 0 
+	MOVWF       _data_TX_normal_FIFO+26 
+;computador.c,363 :: 		data_TX_normal_FIFO[27] = DATA_TX[14];                  // data
+	MOVF        _DATA_TX+14, 0 
+	MOVWF       _data_TX_normal_FIFO+27 
+;computador.c,364 :: 		data_TX_normal_FIFO[28] = DATA_TX[15];                  // data
+	MOVF        _DATA_TX+15, 0 
+	MOVWF       _data_TX_normal_FIFO+28 
+;computador.c,367 :: 		for(i = 0; i < (HEADER_LENGHT + DATA_LENGHT + 2); i++) {
 	CLRF        write_TX_normal_FIFO_i_L0+0 
 	CLRF        write_TX_normal_FIFO_i_L0+1 
 L_write_TX_normal_FIFO5:
@@ -496,12 +562,12 @@ L_write_TX_normal_FIFO5:
 	SUBWF       R0, 0 
 	BTFSS       STATUS+0, 2 
 	GOTO        L__write_TX_normal_FIFO103
-	MOVLW       18
+	MOVLW       29
 	SUBWF       write_TX_normal_FIFO_i_L0+0, 0 
 L__write_TX_normal_FIFO103:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_write_TX_normal_FIFO6
-;computador.c,345 :: 		write_ZIGBEE_long(address_TX_normal_FIFO + i, data_TX_normal_FIFO[i]); // write frame into normal FIFO
+;computador.c,368 :: 		write_ZIGBEE_long(address_TX_normal_FIFO + i, data_TX_normal_FIFO[i]); // write frame into normal FIFO
 	MOVF        write_TX_normal_FIFO_i_L0+0, 0 
 	ADDWF       _address_TX_normal_FIFO+0, 0 
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
@@ -517,23 +583,23 @@ L__write_TX_normal_FIFO103:
 	MOVF        POSTINC0+0, 0 
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,344 :: 		for(i = 0; i < (HEADER_LENGHT + DATA_LENGHT + 2); i++) {
+;computador.c,367 :: 		for(i = 0; i < (HEADER_LENGHT + DATA_LENGHT + 2); i++) {
 	INFSNZ      write_TX_normal_FIFO_i_L0+0, 1 
 	INCF        write_TX_normal_FIFO_i_L0+1, 1 
-;computador.c,346 :: 		}
+;computador.c,369 :: 		}
 	GOTO        L_write_TX_normal_FIFO5
 L_write_TX_normal_FIFO6:
-;computador.c,350 :: 		start_transmit();
+;computador.c,373 :: 		start_transmit();
 	CALL        _start_transmit+0, 0
-;computador.c,351 :: 		}
+;computador.c,374 :: 		}
 	RETURN      0
 ; end of _write_TX_normal_FIFO
 
 _pin_reset:
-;computador.c,359 :: 		void pin_reset() {
-;computador.c,360 :: 		RST = 0;  // activate reset
+;computador.c,382 :: 		void pin_reset() {
+;computador.c,383 :: 		RST = 0;  // activate reset
 	BCF         LATC1_bit+0, 1 
-;computador.c,361 :: 		Delay_ms(5);
+;computador.c,384 :: 		Delay_ms(5);
 	MOVLW       17
 	MOVWF       R12, 0
 	MOVLW       58
@@ -544,9 +610,9 @@ L_pin_reset8:
 	DECFSZ      R12, 1, 0
 	BRA         L_pin_reset8
 	NOP
-;computador.c,362 :: 		RST = 1;  // deactivate reset
+;computador.c,385 :: 		RST = 1;  // deactivate reset
 	BSF         LATC1_bit+0, 1 
-;computador.c,363 :: 		Delay_ms(5);
+;computador.c,386 :: 		Delay_ms(5);
 	MOVLW       17
 	MOVWF       R12, 0
 	MOVLW       58
@@ -557,90 +623,90 @@ L_pin_reset9:
 	DECFSZ      R12, 1, 0
 	BRA         L_pin_reset9
 	NOP
-;computador.c,364 :: 		}
+;computador.c,387 :: 		}
 	RETURN      0
 ; end of _pin_reset
 
 _PWR_reset:
-;computador.c,366 :: 		void PWR_reset() {
-;computador.c,367 :: 		write_ZIGBEE_short(SOFTRST, 0x04);   // 0x04  mask for RSTPWR bit
+;computador.c,389 :: 		void PWR_reset() {
+;computador.c,390 :: 		write_ZIGBEE_short(SOFTRST, 0x04);   // 0x04  mask for RSTPWR bit
 	MOVLW       42
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVLW       4
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,368 :: 		}
+;computador.c,391 :: 		}
 	RETURN      0
 ; end of _PWR_reset
 
 _BB_reset:
-;computador.c,370 :: 		void BB_reset() {
-;computador.c,371 :: 		write_ZIGBEE_short(SOFTRST, 0x02);   // 0x02 mask for RSTBB bit
+;computador.c,393 :: 		void BB_reset() {
+;computador.c,394 :: 		write_ZIGBEE_short(SOFTRST, 0x02);   // 0x02 mask for RSTBB bit
 	MOVLW       42
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVLW       2
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,372 :: 		}
+;computador.c,395 :: 		}
 	RETURN      0
 ; end of _BB_reset
 
 _MAC_reset:
-;computador.c,374 :: 		void MAC_reset() {
-;computador.c,375 :: 		write_ZIGBEE_short(SOFTRST, 0x01);   // 0x01 mask for RSTMAC bit
+;computador.c,397 :: 		void MAC_reset() {
+;computador.c,398 :: 		write_ZIGBEE_short(SOFTRST, 0x01);   // 0x01 mask for RSTMAC bit
 	MOVLW       42
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVLW       1
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,376 :: 		}
+;computador.c,399 :: 		}
 	RETURN      0
 ; end of _MAC_reset
 
 _software_reset:
-;computador.c,378 :: 		void software_reset() {                // PWR_reset,BB_reset and MAC_reset at once
-;computador.c,379 :: 		write_ZIGBEE_short(SOFTRST, 0x07);
+;computador.c,401 :: 		void software_reset() {                // PWR_reset,BB_reset and MAC_reset at once
+;computador.c,402 :: 		write_ZIGBEE_short(SOFTRST, 0x07);
 	MOVLW       42
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVLW       7
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,380 :: 		}
+;computador.c,403 :: 		}
 	RETURN      0
 ; end of _software_reset
 
 _RF_reset:
 	CLRF        RF_reset_temp_L0+0 
-;computador.c,382 :: 		void RF_reset() {
-;computador.c,384 :: 		temp = read_ZIGBEE_short(RFCTL);
+;computador.c,405 :: 		void RF_reset() {
+;computador.c,407 :: 		temp = read_ZIGBEE_short(RFCTL);
 	MOVLW       54
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
 	MOVF        R0, 0 
 	MOVWF       RF_reset_temp_L0+0 
-;computador.c,385 :: 		temp = temp | 0x04;                  // mask for RFRST bit
+;computador.c,408 :: 		temp = temp | 0x04;                  // mask for RFRST bit
 	BSF         R0, 2 
 	MOVF        R0, 0 
 	MOVWF       RF_reset_temp_L0+0 
-;computador.c,386 :: 		write_ZIGBEE_short(RFCTL, temp);
+;computador.c,409 :: 		write_ZIGBEE_short(RFCTL, temp);
 	MOVLW       54
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVF        R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,387 :: 		temp = temp & (!0x04);               // mask for RFRST bit
+;computador.c,410 :: 		temp = temp & (!0x04);               // mask for RFRST bit
 	MOVLW       0
 	ANDWF       RF_reset_temp_L0+0, 0 
 	MOVWF       R0 
 	MOVF        R0, 0 
 	MOVWF       RF_reset_temp_L0+0 
-;computador.c,388 :: 		write_ZIGBEE_short(RFCTL, temp);
+;computador.c,411 :: 		write_ZIGBEE_short(RFCTL, temp);
 	MOVLW       54
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVF        R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,389 :: 		Delay_ms(1);
+;computador.c,412 :: 		Delay_ms(1);
 	MOVLW       4
 	MOVWF       R12, 0
 	MOVLW       61
@@ -652,24 +718,24 @@ L_RF_reset10:
 	BRA         L_RF_reset10
 	NOP
 	NOP
-;computador.c,390 :: 		}
+;computador.c,413 :: 		}
 	RETURN      0
 ; end of _RF_reset
 
 _enable_interrupt:
-;computador.c,395 :: 		void enable_interrupt() {
-;computador.c,396 :: 		write_ZIGBEE_short(INTCON_M, 0x00);   // 0x00  all interrupts are enable
+;computador.c,418 :: 		void enable_interrupt() {
+;computador.c,419 :: 		write_ZIGBEE_short(INTCON_M, 0x00);   // 0x00  all interrupts are enable
 	MOVLW       50
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CLRF        FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,397 :: 		}
+;computador.c,420 :: 		}
 	RETURN      0
 ; end of _enable_interrupt
 
 _set_channel:
-;computador.c,402 :: 		void set_channel(short int channel_number) {               // 11-26 possible channels
-;computador.c,403 :: 		if((channel_number > 26) || (channel_number < 11)) channel_number = 11;
+;computador.c,425 :: 		void set_channel(short int channel_number) {               // 11-26 possible channels
+;computador.c,426 :: 		if((channel_number > 26) || (channel_number < 11)) channel_number = 11;
 	MOVLW       128
 	XORLW       26
 	MOVWF       R0 
@@ -691,11 +757,11 @@ L__set_channel90:
 	MOVLW       11
 	MOVWF       FARG_set_channel_channel_number+0 
 L_set_channel13:
-;computador.c,404 :: 		switch(channel_number) {
+;computador.c,427 :: 		switch(channel_number) {
 	GOTO        L_set_channel14
-;computador.c,405 :: 		case 11:
+;computador.c,428 :: 		case 11:
 L_set_channel16:
-;computador.c,406 :: 		write_ZIGBEE_long(RFCON0, 0x02);  // 0x02 for 11. channel
+;computador.c,429 :: 		write_ZIGBEE_long(RFCON0, 0x02);  // 0x02 for 11. channel
 	MOVLW       0
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -703,11 +769,11 @@ L_set_channel16:
 	MOVLW       2
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,407 :: 		break;
+;computador.c,430 :: 		break;
 	GOTO        L_set_channel15
-;computador.c,408 :: 		case 12:
+;computador.c,431 :: 		case 12:
 L_set_channel17:
-;computador.c,409 :: 		write_ZIGBEE_long(RFCON0, 0x12);  // 0x12 for 12. channel
+;computador.c,432 :: 		write_ZIGBEE_long(RFCON0, 0x12);  // 0x12 for 12. channel
 	MOVLW       0
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -715,11 +781,11 @@ L_set_channel17:
 	MOVLW       18
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,410 :: 		break;
+;computador.c,433 :: 		break;
 	GOTO        L_set_channel15
-;computador.c,411 :: 		case 13:
+;computador.c,434 :: 		case 13:
 L_set_channel18:
-;computador.c,412 :: 		write_ZIGBEE_long(RFCON0, 0x22);  // 0x22 for 13. channel
+;computador.c,435 :: 		write_ZIGBEE_long(RFCON0, 0x22);  // 0x22 for 13. channel
 	MOVLW       0
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -727,11 +793,11 @@ L_set_channel18:
 	MOVLW       34
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,413 :: 		break;
+;computador.c,436 :: 		break;
 	GOTO        L_set_channel15
-;computador.c,414 :: 		case 14:
+;computador.c,437 :: 		case 14:
 L_set_channel19:
-;computador.c,415 :: 		write_ZIGBEE_long(RFCON0, 0x32);  // 0x32 for 14. channel
+;computador.c,438 :: 		write_ZIGBEE_long(RFCON0, 0x32);  // 0x32 for 14. channel
 	MOVLW       0
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -739,11 +805,11 @@ L_set_channel19:
 	MOVLW       50
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,416 :: 		break;
+;computador.c,439 :: 		break;
 	GOTO        L_set_channel15
-;computador.c,417 :: 		case 15:
+;computador.c,440 :: 		case 15:
 L_set_channel20:
-;computador.c,418 :: 		write_ZIGBEE_long(RFCON0, 0x42);  // 0x42 for 15. channel
+;computador.c,441 :: 		write_ZIGBEE_long(RFCON0, 0x42);  // 0x42 for 15. channel
 	MOVLW       0
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -751,11 +817,11 @@ L_set_channel20:
 	MOVLW       66
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,419 :: 		break;
+;computador.c,442 :: 		break;
 	GOTO        L_set_channel15
-;computador.c,420 :: 		case 16:
+;computador.c,443 :: 		case 16:
 L_set_channel21:
-;computador.c,421 :: 		write_ZIGBEE_long(RFCON0, 0x52);  // 0x52 for 16. channel
+;computador.c,444 :: 		write_ZIGBEE_long(RFCON0, 0x52);  // 0x52 for 16. channel
 	MOVLW       0
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -763,11 +829,11 @@ L_set_channel21:
 	MOVLW       82
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,422 :: 		break;
+;computador.c,445 :: 		break;
 	GOTO        L_set_channel15
-;computador.c,423 :: 		case 17:
+;computador.c,446 :: 		case 17:
 L_set_channel22:
-;computador.c,424 :: 		write_ZIGBEE_long(RFCON0, 0x62);  // 0x62 for 17. channel
+;computador.c,447 :: 		write_ZIGBEE_long(RFCON0, 0x62);  // 0x62 for 17. channel
 	MOVLW       0
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -775,11 +841,11 @@ L_set_channel22:
 	MOVLW       98
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,425 :: 		break;
+;computador.c,448 :: 		break;
 	GOTO        L_set_channel15
-;computador.c,426 :: 		case 18:
+;computador.c,449 :: 		case 18:
 L_set_channel23:
-;computador.c,427 :: 		write_ZIGBEE_long(RFCON0, 0x72);  // 0x72 for 18. channel
+;computador.c,450 :: 		write_ZIGBEE_long(RFCON0, 0x72);  // 0x72 for 18. channel
 	MOVLW       0
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -787,11 +853,11 @@ L_set_channel23:
 	MOVLW       114
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,428 :: 		break;
+;computador.c,451 :: 		break;
 	GOTO        L_set_channel15
-;computador.c,429 :: 		case 19:
+;computador.c,452 :: 		case 19:
 L_set_channel24:
-;computador.c,430 :: 		write_ZIGBEE_long(RFCON0, 0x82);  // 0x82 for 19. channel
+;computador.c,453 :: 		write_ZIGBEE_long(RFCON0, 0x82);  // 0x82 for 19. channel
 	MOVLW       0
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -799,11 +865,11 @@ L_set_channel24:
 	MOVLW       130
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,431 :: 		break;
+;computador.c,454 :: 		break;
 	GOTO        L_set_channel15
-;computador.c,432 :: 		case 20:
+;computador.c,455 :: 		case 20:
 L_set_channel25:
-;computador.c,433 :: 		write_ZIGBEE_long(RFCON0, 0x92);  // 0x92 for 20. channel
+;computador.c,456 :: 		write_ZIGBEE_long(RFCON0, 0x92);  // 0x92 for 20. channel
 	MOVLW       0
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -811,11 +877,11 @@ L_set_channel25:
 	MOVLW       146
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,434 :: 		break;
+;computador.c,457 :: 		break;
 	GOTO        L_set_channel15
-;computador.c,435 :: 		case 21:
+;computador.c,458 :: 		case 21:
 L_set_channel26:
-;computador.c,436 :: 		write_ZIGBEE_long(RFCON0, 0xA2);  // 0xA2 for 21. channel
+;computador.c,459 :: 		write_ZIGBEE_long(RFCON0, 0xA2);  // 0xA2 for 21. channel
 	MOVLW       0
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -823,11 +889,11 @@ L_set_channel26:
 	MOVLW       162
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,437 :: 		break;
+;computador.c,460 :: 		break;
 	GOTO        L_set_channel15
-;computador.c,438 :: 		case 22:
+;computador.c,461 :: 		case 22:
 L_set_channel27:
-;computador.c,439 :: 		write_ZIGBEE_long(RFCON0, 0xB2);  // 0xB2 for 22. channel
+;computador.c,462 :: 		write_ZIGBEE_long(RFCON0, 0xB2);  // 0xB2 for 22. channel
 	MOVLW       0
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -835,11 +901,11 @@ L_set_channel27:
 	MOVLW       178
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,440 :: 		break;
+;computador.c,463 :: 		break;
 	GOTO        L_set_channel15
-;computador.c,441 :: 		case 23:
+;computador.c,464 :: 		case 23:
 L_set_channel28:
-;computador.c,442 :: 		write_ZIGBEE_long(RFCON0, 0xC2);  // 0xC2 for 23. channel
+;computador.c,465 :: 		write_ZIGBEE_long(RFCON0, 0xC2);  // 0xC2 for 23. channel
 	MOVLW       0
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -847,11 +913,11 @@ L_set_channel28:
 	MOVLW       194
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,443 :: 		break;
+;computador.c,466 :: 		break;
 	GOTO        L_set_channel15
-;computador.c,444 :: 		case 24:
+;computador.c,467 :: 		case 24:
 L_set_channel29:
-;computador.c,445 :: 		write_ZIGBEE_long(RFCON0, 0xD2);  // 0xD2 for 24. channel
+;computador.c,468 :: 		write_ZIGBEE_long(RFCON0, 0xD2);  // 0xD2 for 24. channel
 	MOVLW       0
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -859,11 +925,11 @@ L_set_channel29:
 	MOVLW       210
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,446 :: 		break;
+;computador.c,469 :: 		break;
 	GOTO        L_set_channel15
-;computador.c,447 :: 		case 25:
+;computador.c,470 :: 		case 25:
 L_set_channel30:
-;computador.c,448 :: 		write_ZIGBEE_long(RFCON0, 0xE2);  // 0xE2 for 25. channel
+;computador.c,471 :: 		write_ZIGBEE_long(RFCON0, 0xE2);  // 0xE2 for 25. channel
 	MOVLW       0
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -871,11 +937,11 @@ L_set_channel30:
 	MOVLW       226
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,449 :: 		break;
+;computador.c,472 :: 		break;
 	GOTO        L_set_channel15
-;computador.c,450 :: 		case 26:
+;computador.c,473 :: 		case 26:
 L_set_channel31:
-;computador.c,451 :: 		write_ZIGBEE_long(RFCON0, 0xF2);  // 0xF2 for 26. channel
+;computador.c,474 :: 		write_ZIGBEE_long(RFCON0, 0xF2);  // 0xF2 for 26. channel
 	MOVLW       0
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -883,9 +949,9 @@ L_set_channel31:
 	MOVLW       242
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,452 :: 		break;
+;computador.c,475 :: 		break;
 	GOTO        L_set_channel15
-;computador.c,453 :: 		}
+;computador.c,476 :: 		}
 L_set_channel14:
 	MOVF        FARG_set_channel_channel_number+0, 0 
 	XORLW       11
@@ -952,113 +1018,113 @@ L_set_channel14:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_set_channel31
 L_set_channel15:
-;computador.c,454 :: 		RF_reset();
+;computador.c,477 :: 		RF_reset();
 	CALL        _RF_reset+0, 0
-;computador.c,455 :: 		}
+;computador.c,478 :: 		}
 	RETURN      0
 ; end of _set_channel
 
 _set_CCA_mode:
-;computador.c,460 :: 		void set_CCA_mode(short int CCA_mode) {
-;computador.c,462 :: 		switch(CCA_mode) {
+;computador.c,483 :: 		void set_CCA_mode(short int CCA_mode) {
+;computador.c,485 :: 		switch(CCA_mode) {
 	GOTO        L_set_CCA_mode32
-;computador.c,463 :: 		case 1: {                               // ENERGY ABOVE THRESHOLD
+;computador.c,486 :: 		case 1: {                               // ENERGY ABOVE THRESHOLD
 L_set_CCA_mode34:
-;computador.c,464 :: 		temp = read_ZIGBEE_short(BBREG2);
+;computador.c,487 :: 		temp = read_ZIGBEE_short(BBREG2);
 	MOVLW       58
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,465 :: 		temp = temp | 0x80;                   // 0x80 mask
+;computador.c,488 :: 		temp = temp | 0x80;                   // 0x80 mask
 	MOVLW       128
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,466 :: 		temp = temp & 0xDF;                   // 0xDF mask
+;computador.c,489 :: 		temp = temp & 0xDF;                   // 0xDF mask
 	MOVLW       223
 	ANDWF       FARG_write_ZIGBEE_short_data_r+0, 1 
-;computador.c,467 :: 		write_ZIGBEE_short(BBREG2, temp);
+;computador.c,490 :: 		write_ZIGBEE_short(BBREG2, temp);
 	MOVLW       58
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,468 :: 		write_ZIGBEE_short(CCAEDTH, 0x60);    // Set CCA ED threshold to -69 dBm
+;computador.c,491 :: 		write_ZIGBEE_short(CCAEDTH, 0x60);    // Set CCA ED threshold to -69 dBm
 	MOVLW       63
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVLW       96
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,470 :: 		break;
+;computador.c,493 :: 		break;
 	GOTO        L_set_CCA_mode33
-;computador.c,472 :: 		case 2: {                               // CARRIER SENSE ONLY
+;computador.c,495 :: 		case 2: {                               // CARRIER SENSE ONLY
 L_set_CCA_mode35:
-;computador.c,473 :: 		temp = read_ZIGBEE_short(BBREG2);
+;computador.c,496 :: 		temp = read_ZIGBEE_short(BBREG2);
 	MOVLW       58
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,474 :: 		temp = temp | 0x40;                   // 0x40 mask
+;computador.c,497 :: 		temp = temp | 0x40;                   // 0x40 mask
 	MOVLW       64
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,475 :: 		temp = temp & 0x7F;                   // 0x7F mask
+;computador.c,498 :: 		temp = temp & 0x7F;                   // 0x7F mask
 	MOVLW       127
 	ANDWF       FARG_write_ZIGBEE_short_data_r+0, 1 
-;computador.c,476 :: 		write_ZIGBEE_short(BBREG2, temp);
+;computador.c,499 :: 		write_ZIGBEE_short(BBREG2, temp);
 	MOVLW       58
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,478 :: 		temp = read_ZIGBEE_short(BBREG2);     // carrier sense threshold
+;computador.c,501 :: 		temp = read_ZIGBEE_short(BBREG2);     // carrier sense threshold
 	MOVLW       58
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,479 :: 		temp = temp | 0x38;
+;computador.c,502 :: 		temp = temp | 0x38;
 	MOVLW       56
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,480 :: 		temp = temp & 0xFB;
+;computador.c,503 :: 		temp = temp & 0xFB;
 	MOVLW       251
 	ANDWF       FARG_write_ZIGBEE_short_data_r+0, 1 
-;computador.c,481 :: 		write_ZIGBEE_short(BBREG2, temp);
+;computador.c,504 :: 		write_ZIGBEE_short(BBREG2, temp);
 	MOVLW       58
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,483 :: 		break;
+;computador.c,506 :: 		break;
 	GOTO        L_set_CCA_mode33
-;computador.c,485 :: 		case 3: {                               // CARRIER SENSE AND ENERGY ABOVE THRESHOLD
+;computador.c,508 :: 		case 3: {                               // CARRIER SENSE AND ENERGY ABOVE THRESHOLD
 L_set_CCA_mode36:
-;computador.c,486 :: 		temp = read_ZIGBEE_short(BBREG2);
+;computador.c,509 :: 		temp = read_ZIGBEE_short(BBREG2);
 	MOVLW       58
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,487 :: 		temp = temp | 0xC0;                   // 0xC0 mask
+;computador.c,510 :: 		temp = temp | 0xC0;                   // 0xC0 mask
 	MOVLW       192
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,488 :: 		write_ZIGBEE_short(BBREG2, temp);
+;computador.c,511 :: 		write_ZIGBEE_short(BBREG2, temp);
 	MOVLW       58
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,490 :: 		temp = read_ZIGBEE_short(BBREG2);     // carrier sense threshold
+;computador.c,513 :: 		temp = read_ZIGBEE_short(BBREG2);     // carrier sense threshold
 	MOVLW       58
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,491 :: 		temp = temp | 0x38;                   // 0x38 mask
+;computador.c,514 :: 		temp = temp | 0x38;                   // 0x38 mask
 	MOVLW       56
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,492 :: 		temp = temp & 0xFB;                   // 0xFB mask
+;computador.c,515 :: 		temp = temp & 0xFB;                   // 0xFB mask
 	MOVLW       251
 	ANDWF       FARG_write_ZIGBEE_short_data_r+0, 1 
-;computador.c,493 :: 		write_ZIGBEE_short(BBREG2, temp);
+;computador.c,516 :: 		write_ZIGBEE_short(BBREG2, temp);
 	MOVLW       58
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,495 :: 		write_ZIGBEE_short(CCAEDTH, 0x60);    // Set CCA ED threshold to -69 dBm
+;computador.c,518 :: 		write_ZIGBEE_short(CCAEDTH, 0x60);    // Set CCA ED threshold to -69 dBm
 	MOVLW       63
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVLW       96
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,497 :: 		break;
+;computador.c,520 :: 		break;
 	GOTO        L_set_CCA_mode33
-;computador.c,498 :: 		}
+;computador.c,521 :: 		}
 L_set_CCA_mode32:
 	MOVF        FARG_set_CCA_mode_CCA_mode+0, 0 
 	XORLW       1
@@ -1073,41 +1139,41 @@ L_set_CCA_mode32:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_set_CCA_mode36
 L_set_CCA_mode33:
-;computador.c,499 :: 		}
+;computador.c,522 :: 		}
 	RETURN      0
 ; end of _set_CCA_mode
 
 _set_RSSI_mode:
-;computador.c,504 :: 		void set_RSSI_mode(short int RSSI_mode) {       // 1 for RSSI1, 2 for RSSI2 mode
-;computador.c,507 :: 		switch(RSSI_mode) {
+;computador.c,527 :: 		void set_RSSI_mode(short int RSSI_mode) {       // 1 for RSSI1, 2 for RSSI2 mode
+;computador.c,530 :: 		switch(RSSI_mode) {
 	GOTO        L_set_RSSI_mode37
-;computador.c,508 :: 		case 1: {
+;computador.c,531 :: 		case 1: {
 L_set_RSSI_mode39:
-;computador.c,509 :: 		temp = read_ZIGBEE_short(BBREG6);
+;computador.c,532 :: 		temp = read_ZIGBEE_short(BBREG6);
 	MOVLW       62
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,510 :: 		temp = temp | 0x80;                       // 0x80 mask for RSSI1 mode
+;computador.c,533 :: 		temp = temp | 0x80;                       // 0x80 mask for RSSI1 mode
 	MOVLW       128
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,511 :: 		write_ZIGBEE_short(BBREG6, temp);
+;computador.c,534 :: 		write_ZIGBEE_short(BBREG6, temp);
 	MOVLW       62
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,513 :: 		break;
+;computador.c,536 :: 		break;
 	GOTO        L_set_RSSI_mode38
-;computador.c,515 :: 		case 2:
+;computador.c,538 :: 		case 2:
 L_set_RSSI_mode40:
-;computador.c,516 :: 		write_ZIGBEE_short(BBREG6, 0x40);         // 0x40 data for RSSI2 mode
+;computador.c,539 :: 		write_ZIGBEE_short(BBREG6, 0x40);         // 0x40 data for RSSI2 mode
 	MOVLW       62
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVLW       64
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,517 :: 		break;
+;computador.c,540 :: 		break;
 	GOTO        L_set_RSSI_mode38
-;computador.c,518 :: 		}
+;computador.c,541 :: 		}
 L_set_RSSI_mode37:
 	MOVF        FARG_set_RSSI_mode_RSSI_mode+0, 0 
 	XORLW       1
@@ -1118,251 +1184,251 @@ L_set_RSSI_mode37:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_set_RSSI_mode40
 L_set_RSSI_mode38:
-;computador.c,519 :: 		}
+;computador.c,542 :: 		}
 	RETURN      0
 ; end of _set_RSSI_mode
 
 _nonbeacon_PAN_coordinator_device:
-;computador.c,524 :: 		void nonbeacon_PAN_coordinator_device() {
-;computador.c,527 :: 		temp = read_ZIGBEE_short(RXMCR);
+;computador.c,547 :: 		void nonbeacon_PAN_coordinator_device() {
+;computador.c,550 :: 		temp = read_ZIGBEE_short(RXMCR);
 	CLRF        FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,528 :: 		temp = temp | 0x08;                 // 0x08 mask for PAN coordinator
+;computador.c,551 :: 		temp = temp | 0x08;                 // 0x08 mask for PAN coordinator
 	MOVLW       8
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,529 :: 		write_ZIGBEE_short(RXMCR, temp);
+;computador.c,552 :: 		write_ZIGBEE_short(RXMCR, temp);
 	CLRF        FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,531 :: 		temp = read_ZIGBEE_short(TXMCR);
+;computador.c,554 :: 		temp = read_ZIGBEE_short(TXMCR);
 	MOVLW       17
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,532 :: 		temp = temp & 0xDF;                 // 0xDF mask for CSMA-CA mode
+;computador.c,555 :: 		temp = temp & 0xDF;                 // 0xDF mask for CSMA-CA mode
 	MOVLW       223
 	ANDWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,533 :: 		write_ZIGBEE_short(TXMCR, temp);
+;computador.c,556 :: 		write_ZIGBEE_short(TXMCR, temp);
 	MOVLW       17
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,535 :: 		write_ZIGBEE_short(ORDER, 0xFF);    // BO, SO are 15
+;computador.c,558 :: 		write_ZIGBEE_short(ORDER, 0xFF);    // BO, SO are 15
 	MOVLW       16
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVLW       255
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,536 :: 		}
+;computador.c,559 :: 		}
 	RETURN      0
 ; end of _nonbeacon_PAN_coordinator_device
 
 _nonbeacon_coordinator_device:
-;computador.c,538 :: 		void nonbeacon_coordinator_device() {
-;computador.c,541 :: 		temp = read_ZIGBEE_short(RXMCR);
+;computador.c,561 :: 		void nonbeacon_coordinator_device() {
+;computador.c,564 :: 		temp = read_ZIGBEE_short(RXMCR);
 	CLRF        FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,542 :: 		temp = temp | 0x04;                 // 0x04 mask for coordinator
+;computador.c,565 :: 		temp = temp | 0x04;                 // 0x04 mask for coordinator
 	MOVLW       4
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,543 :: 		write_ZIGBEE_short(RXMCR, temp);
+;computador.c,566 :: 		write_ZIGBEE_short(RXMCR, temp);
 	CLRF        FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,545 :: 		temp = read_ZIGBEE_short(TXMCR);
+;computador.c,568 :: 		temp = read_ZIGBEE_short(TXMCR);
 	MOVLW       17
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,546 :: 		temp = temp & 0xDF;                 // 0xDF mask for CSMA-CA mode
+;computador.c,569 :: 		temp = temp & 0xDF;                 // 0xDF mask for CSMA-CA mode
 	MOVLW       223
 	ANDWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,547 :: 		write_ZIGBEE_short(TXMCR, temp);
+;computador.c,570 :: 		write_ZIGBEE_short(TXMCR, temp);
 	MOVLW       17
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,549 :: 		write_ZIGBEE_short(ORDER, 0xFF);    // BO, SO  are 15
+;computador.c,572 :: 		write_ZIGBEE_short(ORDER, 0xFF);    // BO, SO  are 15
 	MOVLW       16
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVLW       255
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,550 :: 		}
+;computador.c,573 :: 		}
 	RETURN      0
 ; end of _nonbeacon_coordinator_device
 
 _nonbeacon_device:
-;computador.c,552 :: 		void nonbeacon_device() {
-;computador.c,555 :: 		temp = read_ZIGBEE_short(RXMCR);
+;computador.c,575 :: 		void nonbeacon_device() {
+;computador.c,578 :: 		temp = read_ZIGBEE_short(RXMCR);
 	CLRF        FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,556 :: 		temp = temp & 0xF3;                 // 0xF3 mask for PAN coordinator and coordinator
+;computador.c,579 :: 		temp = temp & 0xF3;                 // 0xF3 mask for PAN coordinator and coordinator
 	MOVLW       243
 	ANDWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,557 :: 		write_ZIGBEE_short(RXMCR, temp);
+;computador.c,580 :: 		write_ZIGBEE_short(RXMCR, temp);
 	CLRF        FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,559 :: 		temp = read_ZIGBEE_short(TXMCR);
+;computador.c,582 :: 		temp = read_ZIGBEE_short(TXMCR);
 	MOVLW       17
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,560 :: 		temp = temp & 0xDF;                 // 0xDF mask for CSMA-CA mode
+;computador.c,583 :: 		temp = temp & 0xDF;                 // 0xDF mask for CSMA-CA mode
 	MOVLW       223
 	ANDWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,561 :: 		write_ZIGBEE_short(TXMCR, temp);
+;computador.c,584 :: 		write_ZIGBEE_short(TXMCR, temp);
 	MOVLW       17
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,562 :: 		}
+;computador.c,585 :: 		}
 	RETURN      0
 ; end of _nonbeacon_device
 
 _set_IFS_recomended:
-;computador.c,571 :: 		void set_IFS_recomended() {
-;computador.c,574 :: 		write_ZIGBEE_short(RXMCR, 0x93);    // Min SIFS Period
+;computador.c,594 :: 		void set_IFS_recomended() {
+;computador.c,597 :: 		write_ZIGBEE_short(RXMCR, 0x93);    // Min SIFS Period
 	CLRF        FARG_write_ZIGBEE_short_address+0 
 	MOVLW       147
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,576 :: 		temp = read_ZIGBEE_short(TXPEND);
+;computador.c,599 :: 		temp = read_ZIGBEE_short(TXPEND);
 	MOVLW       33
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,577 :: 		temp = temp | 0x7C;                 // MinLIFSPeriod
+;computador.c,600 :: 		temp = temp | 0x7C;                 // MinLIFSPeriod
 	MOVLW       124
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,578 :: 		write_ZIGBEE_short(TXPEND, temp);
+;computador.c,601 :: 		write_ZIGBEE_short(TXPEND, temp);
 	MOVLW       33
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,580 :: 		temp = read_ZIGBEE_short(TXSTBL);
+;computador.c,603 :: 		temp = read_ZIGBEE_short(TXSTBL);
 	MOVLW       46
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,581 :: 		temp = temp | 0x90;                 // MinLIFSPeriod
+;computador.c,604 :: 		temp = temp | 0x90;                 // MinLIFSPeriod
 	MOVLW       144
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,582 :: 		write_ZIGBEE_short(TXSTBL, temp);
+;computador.c,605 :: 		write_ZIGBEE_short(TXSTBL, temp);
 	MOVLW       46
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,584 :: 		temp = read_ZIGBEE_short(TXTIME);
+;computador.c,607 :: 		temp = read_ZIGBEE_short(TXTIME);
 	MOVLW       39
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,585 :: 		temp = temp | 0x31;                 // TurnaroundTime
+;computador.c,608 :: 		temp = temp | 0x31;                 // TurnaroundTime
 	MOVLW       49
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,586 :: 		write_ZIGBEE_short(TXTIME, temp);
+;computador.c,609 :: 		write_ZIGBEE_short(TXTIME, temp);
 	MOVLW       39
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,587 :: 		}
+;computador.c,610 :: 		}
 	RETURN      0
 ; end of _set_IFS_recomended
 
 _set_IFS_default:
-;computador.c,589 :: 		void set_IFS_default() {
-;computador.c,592 :: 		write_ZIGBEE_short(RXMCR, 0x75);    // Min SIFS Period
+;computador.c,612 :: 		void set_IFS_default() {
+;computador.c,615 :: 		write_ZIGBEE_short(RXMCR, 0x75);    // Min SIFS Period
 	CLRF        FARG_write_ZIGBEE_short_address+0 
 	MOVLW       117
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,594 :: 		temp = read_ZIGBEE_short(TXPEND);
+;computador.c,617 :: 		temp = read_ZIGBEE_short(TXPEND);
 	MOVLW       33
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,595 :: 		temp = temp | 0x84;                 // Min LIFS Period
+;computador.c,618 :: 		temp = temp | 0x84;                 // Min LIFS Period
 	MOVLW       132
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,596 :: 		write_ZIGBEE_short(TXPEND, temp);
+;computador.c,619 :: 		write_ZIGBEE_short(TXPEND, temp);
 	MOVLW       33
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,598 :: 		temp = read_ZIGBEE_short(TXSTBL);
+;computador.c,621 :: 		temp = read_ZIGBEE_short(TXSTBL);
 	MOVLW       46
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,599 :: 		temp = temp | 0x50;                 // Min LIFS Period
+;computador.c,622 :: 		temp = temp | 0x50;                 // Min LIFS Period
 	MOVLW       80
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,600 :: 		write_ZIGBEE_short(TXSTBL, temp);
+;computador.c,623 :: 		write_ZIGBEE_short(TXSTBL, temp);
 	MOVLW       46
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,602 :: 		temp = read_ZIGBEE_short(TXTIME);
+;computador.c,625 :: 		temp = read_ZIGBEE_short(TXTIME);
 	MOVLW       39
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,603 :: 		temp = temp | 0x41;                 // Turnaround Time
+;computador.c,626 :: 		temp = temp | 0x41;                 // Turnaround Time
 	MOVLW       65
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,604 :: 		write_ZIGBEE_short(TXTIME, temp);
+;computador.c,627 :: 		write_ZIGBEE_short(TXTIME, temp);
 	MOVLW       39
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,605 :: 		}
+;computador.c,628 :: 		}
 	RETURN      0
 ; end of _set_IFS_default
 
 _set_reception_mode:
-;computador.c,610 :: 		void set_reception_mode(short int r_mode) { // 1 normal, 2 error, 3 promiscuous mode
-;computador.c,613 :: 		switch(r_mode) {
+;computador.c,633 :: 		void set_reception_mode(short int r_mode) { // 1 normal, 2 error, 3 promiscuous mode
+;computador.c,636 :: 		switch(r_mode) {
 	GOTO        L_set_reception_mode41
-;computador.c,614 :: 		case 1: {
+;computador.c,637 :: 		case 1: {
 L_set_reception_mode43:
-;computador.c,615 :: 		temp = read_ZIGBEE_short(RXMCR);      // normal mode
+;computador.c,638 :: 		temp = read_ZIGBEE_short(RXMCR);      // normal mode
 	CLRF        FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,616 :: 		temp = temp & (!0x03);                // mask for normal mode
+;computador.c,639 :: 		temp = temp & (!0x03);                // mask for normal mode
 	MOVLW       0
 	ANDWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,617 :: 		write_ZIGBEE_short(RXMCR, temp);
+;computador.c,640 :: 		write_ZIGBEE_short(RXMCR, temp);
 	CLRF        FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,619 :: 		break;
+;computador.c,642 :: 		break;
 	GOTO        L_set_reception_mode42
-;computador.c,621 :: 		case 2: {
+;computador.c,644 :: 		case 2: {
 L_set_reception_mode44:
-;computador.c,622 :: 		temp = read_ZIGBEE_short(RXMCR);      // error mode
+;computador.c,645 :: 		temp = read_ZIGBEE_short(RXMCR);      // error mode
 	CLRF        FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,623 :: 		temp = temp & (!0x01);                // mask for error mode
+;computador.c,646 :: 		temp = temp & (!0x01);                // mask for error mode
 	MOVLW       0
 	ANDWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,624 :: 		temp = temp | 0x02;                   // mask for error mode
+;computador.c,647 :: 		temp = temp | 0x02;                   // mask for error mode
 	BSF         FARG_write_ZIGBEE_short_data_r+0, 1 
-;computador.c,625 :: 		write_ZIGBEE_short(RXMCR, temp);
+;computador.c,648 :: 		write_ZIGBEE_short(RXMCR, temp);
 	CLRF        FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,627 :: 		break;
+;computador.c,650 :: 		break;
 	GOTO        L_set_reception_mode42
-;computador.c,629 :: 		case 3: {
+;computador.c,652 :: 		case 3: {
 L_set_reception_mode45:
-;computador.c,630 :: 		temp = read_ZIGBEE_short(RXMCR);      // promiscuous mode
+;computador.c,653 :: 		temp = read_ZIGBEE_short(RXMCR);      // promiscuous mode
 	CLRF        FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,631 :: 		temp = temp & (!0x02);                // mask for promiscuous mode
+;computador.c,654 :: 		temp = temp & (!0x02);                // mask for promiscuous mode
 	MOVLW       0
 	ANDWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,632 :: 		temp = temp | 0x01;                   // mask for promiscuous mode
+;computador.c,655 :: 		temp = temp | 0x01;                   // mask for promiscuous mode
 	BSF         FARG_write_ZIGBEE_short_data_r+0, 0 
-;computador.c,633 :: 		write_ZIGBEE_short(RXMCR, temp);
+;computador.c,656 :: 		write_ZIGBEE_short(RXMCR, temp);
 	CLRF        FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,635 :: 		break;
+;computador.c,658 :: 		break;
 	GOTO        L_set_reception_mode42
-;computador.c,636 :: 		}
+;computador.c,659 :: 		}
 L_set_reception_mode41:
 	MOVF        FARG_set_reception_mode_r_mode+0, 0 
 	XORLW       1
@@ -1377,85 +1443,85 @@ L_set_reception_mode41:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_set_reception_mode45
 L_set_reception_mode42:
-;computador.c,637 :: 		}
+;computador.c,660 :: 		}
 	RETURN      0
 ; end of _set_reception_mode
 
 _set_frame_format_filter:
-;computador.c,642 :: 		void set_frame_format_filter(short int fff_mode) {   // 1 all frames, 2 command only, 3 data only, 4 beacon only
-;computador.c,645 :: 		switch(fff_mode) {
+;computador.c,665 :: 		void set_frame_format_filter(short int fff_mode) {   // 1 all frames, 2 command only, 3 data only, 4 beacon only
+;computador.c,668 :: 		switch(fff_mode) {
 	GOTO        L_set_frame_format_filter46
-;computador.c,646 :: 		case 1: {
+;computador.c,669 :: 		case 1: {
 L_set_frame_format_filter48:
-;computador.c,647 :: 		temp = read_ZIGBEE_short(RXFLUSH);      // all frames
+;computador.c,670 :: 		temp = read_ZIGBEE_short(RXFLUSH);      // all frames
 	MOVLW       13
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,648 :: 		temp = temp & (!0x0E);                  // mask for all frames
+;computador.c,671 :: 		temp = temp & (!0x0E);                  // mask for all frames
 	MOVLW       0
 	ANDWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,649 :: 		write_ZIGBEE_short(RXFLUSH, temp);
+;computador.c,672 :: 		write_ZIGBEE_short(RXFLUSH, temp);
 	MOVLW       13
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,651 :: 		break;
+;computador.c,674 :: 		break;
 	GOTO        L_set_frame_format_filter47
-;computador.c,653 :: 		case 2: {
+;computador.c,676 :: 		case 2: {
 L_set_frame_format_filter49:
-;computador.c,654 :: 		temp = read_ZIGBEE_short(RXFLUSH);      // command only
+;computador.c,677 :: 		temp = read_ZIGBEE_short(RXFLUSH);      // command only
 	MOVLW       13
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,655 :: 		temp = temp & (!0x06);                  // mask for command only
+;computador.c,678 :: 		temp = temp & (!0x06);                  // mask for command only
 	MOVLW       0
 	ANDWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,656 :: 		temp = temp | 0x08;                     // mask for command only
+;computador.c,679 :: 		temp = temp | 0x08;                     // mask for command only
 	BSF         FARG_write_ZIGBEE_short_data_r+0, 3 
-;computador.c,657 :: 		write_ZIGBEE_short(RXFLUSH, temp);
+;computador.c,680 :: 		write_ZIGBEE_short(RXFLUSH, temp);
 	MOVLW       13
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,659 :: 		break;
+;computador.c,682 :: 		break;
 	GOTO        L_set_frame_format_filter47
-;computador.c,661 :: 		case 3: {
+;computador.c,684 :: 		case 3: {
 L_set_frame_format_filter50:
-;computador.c,662 :: 		temp = read_ZIGBEE_short(RXFLUSH);      // data only
+;computador.c,685 :: 		temp = read_ZIGBEE_short(RXFLUSH);      // data only
 	MOVLW       13
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,663 :: 		temp = temp & (!0x0A);                  // mask for data only
+;computador.c,686 :: 		temp = temp & (!0x0A);                  // mask for data only
 	MOVLW       0
 	ANDWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,664 :: 		temp = temp | 0x04;                     // mask for data only
+;computador.c,687 :: 		temp = temp | 0x04;                     // mask for data only
 	BSF         FARG_write_ZIGBEE_short_data_r+0, 2 
-;computador.c,665 :: 		write_ZIGBEE_short(RXFLUSH, temp);
+;computador.c,688 :: 		write_ZIGBEE_short(RXFLUSH, temp);
 	MOVLW       13
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,667 :: 		break;
+;computador.c,690 :: 		break;
 	GOTO        L_set_frame_format_filter47
-;computador.c,669 :: 		case 4: {
+;computador.c,692 :: 		case 4: {
 L_set_frame_format_filter51:
-;computador.c,670 :: 		temp = read_ZIGBEE_short(RXFLUSH);      // beacon only
+;computador.c,693 :: 		temp = read_ZIGBEE_short(RXFLUSH);      // beacon only
 	MOVLW       13
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,671 :: 		temp = temp & (!0x0C);                  // mask for beacon only
+;computador.c,694 :: 		temp = temp & (!0x0C);                  // mask for beacon only
 	MOVLW       0
 	ANDWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,672 :: 		temp = temp | 0x02;                     // mask for beacon only
+;computador.c,695 :: 		temp = temp | 0x02;                     // mask for beacon only
 	BSF         FARG_write_ZIGBEE_short_data_r+0, 1 
-;computador.c,673 :: 		write_ZIGBEE_short(RXFLUSH, temp);
+;computador.c,696 :: 		write_ZIGBEE_short(RXFLUSH, temp);
 	MOVLW       13
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,675 :: 		break;
+;computador.c,698 :: 		break;
 	GOTO        L_set_frame_format_filter47
-;computador.c,676 :: 		}
+;computador.c,699 :: 		}
 L_set_frame_format_filter46:
 	MOVF        FARG_set_frame_format_filter_fff_mode+0, 0 
 	XORLW       1
@@ -1474,31 +1540,31 @@ L_set_frame_format_filter46:
 	BTFSC       STATUS+0, 2 
 	GOTO        L_set_frame_format_filter51
 L_set_frame_format_filter47:
-;computador.c,677 :: 		}
+;computador.c,700 :: 		}
 	RETURN      0
 ; end of _set_frame_format_filter
 
 _flush_RX_FIFO_pointer:
-;computador.c,682 :: 		void flush_RX_FIFO_pointer() {
-;computador.c,685 :: 		temp = read_ZIGBEE_short(RXFLUSH);
+;computador.c,705 :: 		void flush_RX_FIFO_pointer() {
+;computador.c,708 :: 		temp = read_ZIGBEE_short(RXFLUSH);
 	MOVLW       13
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,686 :: 		temp = temp | 0x01;                        // mask for flush RX FIFO
+;computador.c,709 :: 		temp = temp | 0x01;                        // mask for flush RX FIFO
 	MOVLW       1
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,687 :: 		write_ZIGBEE_short(RXFLUSH, temp);
+;computador.c,710 :: 		write_ZIGBEE_short(RXFLUSH, temp);
 	MOVLW       13
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,688 :: 		}
+;computador.c,711 :: 		}
 	RETURN      0
 ; end of _flush_RX_FIFO_pointer
 
 _set_short_address:
-;computador.c,693 :: 		void set_short_address(short int * address) {
-;computador.c,694 :: 		write_ZIGBEE_short(SADRL, address[0]);
+;computador.c,716 :: 		void set_short_address(short int * address) {
+;computador.c,717 :: 		write_ZIGBEE_short(SADRL, address[0]);
 	MOVLW       3
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVFF       FARG_set_short_address_address+0, FSR0L
@@ -1506,7 +1572,7 @@ _set_short_address:
 	MOVF        POSTINC0+0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,695 :: 		write_ZIGBEE_short(SADRH, address[1]);
+;computador.c,718 :: 		write_ZIGBEE_short(SADRH, address[1]);
 	MOVLW       4
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVLW       1
@@ -1518,14 +1584,14 @@ _set_short_address:
 	MOVF        POSTINC0+0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,696 :: 		}
+;computador.c,719 :: 		}
 	RETURN      0
 ; end of _set_short_address
 
 _set_long_address:
 	CLRF        set_long_address_i_L0+0 
-;computador.c,698 :: 		void set_long_address(short int * address) {
-;computador.c,701 :: 		for(i = 0; i < 8; i++) {
+;computador.c,721 :: 		void set_long_address(short int * address) {
+;computador.c,724 :: 		for(i = 0; i < 8; i++) {
 	CLRF        set_long_address_i_L0+0 
 L_set_long_address52:
 	MOVLW       128
@@ -1536,7 +1602,7 @@ L_set_long_address52:
 	SUBWF       R0, 0 
 	BTFSC       STATUS+0, 0 
 	GOTO        L_set_long_address53
-;computador.c,702 :: 		write_ZIGBEE_short(EADR0 + i, address[i]);   // 0x05 address of EADR0
+;computador.c,725 :: 		write_ZIGBEE_short(EADR0 + i, address[i]);   // 0x05 address of EADR0
 	MOVF        set_long_address_i_L0+0, 0 
 	ADDLW       5
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
@@ -1551,18 +1617,18 @@ L_set_long_address52:
 	MOVF        POSTINC0+0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,701 :: 		for(i = 0; i < 8; i++) {
+;computador.c,724 :: 		for(i = 0; i < 8; i++) {
 	INCF        set_long_address_i_L0+0, 1 
-;computador.c,703 :: 		}
+;computador.c,726 :: 		}
 	GOTO        L_set_long_address52
 L_set_long_address53:
-;computador.c,704 :: 		}
+;computador.c,727 :: 		}
 	RETURN      0
 ; end of _set_long_address
 
 _set_PAN_ID:
-;computador.c,706 :: 		void set_PAN_ID(short int * address) {
-;computador.c,707 :: 		write_ZIGBEE_short(PANIDL, address[0]);
+;computador.c,729 :: 		void set_PAN_ID(short int * address) {
+;computador.c,730 :: 		write_ZIGBEE_short(PANIDL, address[0]);
 	MOVLW       1
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVFF       FARG_set_PAN_ID_address+0, FSR0L
@@ -1570,7 +1636,7 @@ _set_PAN_ID:
 	MOVF        POSTINC0+0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,708 :: 		write_ZIGBEE_short(PANIDH, address[1]);
+;computador.c,731 :: 		write_ZIGBEE_short(PANIDH, address[1]);
 	MOVLW       2
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVLW       1
@@ -1582,47 +1648,47 @@ _set_PAN_ID:
 	MOVF        POSTINC0+0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,709 :: 		}
+;computador.c,732 :: 		}
 	RETURN      0
 ; end of _set_PAN_ID
 
 _set_wake_from_pin:
-;computador.c,714 :: 		void set_wake_from_pin() {
-;computador.c,717 :: 		WAKE = 0;
+;computador.c,737 :: 		void set_wake_from_pin() {
+;computador.c,740 :: 		WAKE = 0;
 	BCF         LATC2_bit+0, 2 
-;computador.c,718 :: 		temp = read_ZIGBEE_short(RXFLUSH);
+;computador.c,741 :: 		temp = read_ZIGBEE_short(RXFLUSH);
 	MOVLW       13
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,719 :: 		temp = temp | 0x60;                     // mask
+;computador.c,742 :: 		temp = temp | 0x60;                     // mask
 	MOVLW       96
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,720 :: 		write_ZIGBEE_short(RXFLUSH, temp);
+;computador.c,743 :: 		write_ZIGBEE_short(RXFLUSH, temp);
 	MOVLW       13
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,722 :: 		temp = read_ZIGBEE_short(WAKECON);
+;computador.c,745 :: 		temp = read_ZIGBEE_short(WAKECON);
 	MOVLW       34
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
-;computador.c,723 :: 		temp = temp | 0x80;
+;computador.c,746 :: 		temp = temp | 0x80;
 	MOVLW       128
 	IORWF       R0, 0 
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
-;computador.c,724 :: 		write_ZIGBEE_short(WAKECON, temp);
+;computador.c,747 :: 		write_ZIGBEE_short(WAKECON, temp);
 	MOVLW       34
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,725 :: 		}
+;computador.c,748 :: 		}
 	RETURN      0
 ; end of _set_wake_from_pin
 
 _pin_wake:
-;computador.c,727 :: 		void pin_wake() {
-;computador.c,728 :: 		WAKE = 1;
+;computador.c,750 :: 		void pin_wake() {
+;computador.c,751 :: 		WAKE = 1;
 	BSF         LATC2_bit+0, 2 
-;computador.c,729 :: 		Delay_ms(5);
+;computador.c,752 :: 		Delay_ms(5);
 	MOVLW       17
 	MOVWF       R12, 0
 	MOVLW       58
@@ -1633,13 +1699,13 @@ L_pin_wake55:
 	DECFSZ      R12, 1, 0
 	BRA         L_pin_wake55
 	NOP
-;computador.c,730 :: 		}
+;computador.c,753 :: 		}
 	RETURN      0
 ; end of _pin_wake
 
 _enable_PLL:
-;computador.c,735 :: 		void enable_PLL() {
-;computador.c,736 :: 		write_ZIGBEE_long(RFCON2, 0x80);       // mask for PLL enable
+;computador.c,758 :: 		void enable_PLL() {
+;computador.c,759 :: 		write_ZIGBEE_long(RFCON2, 0x80);       // mask for PLL enable
 	MOVLW       2
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -1647,26 +1713,26 @@ _enable_PLL:
 	MOVLW       128
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,737 :: 		}
+;computador.c,760 :: 		}
 	RETURN      0
 ; end of _enable_PLL
 
 _disable_PLL:
-;computador.c,739 :: 		void disable_PLL() {
-;computador.c,740 :: 		write_ZIGBEE_long(RFCON2, 0x00);       // mask for PLL disable
+;computador.c,762 :: 		void disable_PLL() {
+;computador.c,763 :: 		write_ZIGBEE_long(RFCON2, 0x00);       // mask for PLL disable
 	MOVLW       2
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
 	MOVWF       FARG_write_ZIGBEE_long_address+1 
 	CLRF        FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,741 :: 		}
+;computador.c,764 :: 		}
 	RETURN      0
 ; end of _disable_PLL
 
 _set_TX_power:
-;computador.c,746 :: 		void set_TX_power(unsigned short int power) {             // 0-31 possible variants
-;computador.c,747 :: 		if((power < 0) || (power > 31))
+;computador.c,769 :: 		void set_TX_power(unsigned short int power) {             // 0-31 possible variants
+;computador.c,770 :: 		if((power < 0) || (power > 31))
 	MOVLW       0
 	SUBWF       FARG_set_TX_power_power+0, 0 
 	BTFSS       STATUS+0, 0 
@@ -1677,17 +1743,17 @@ _set_TX_power:
 	GOTO        L__set_TX_power91
 	GOTO        L_set_TX_power58
 L__set_TX_power91:
-;computador.c,748 :: 		power = 31;
+;computador.c,771 :: 		power = 31;
 	MOVLW       31
 	MOVWF       FARG_set_TX_power_power+0 
 L_set_TX_power58:
-;computador.c,749 :: 		power = 31 - power;                                     // 0 max, 31 min -> 31 max, 0 min
+;computador.c,772 :: 		power = 31 - power;                                     // 0 max, 31 min -> 31 max, 0 min
 	MOVF        FARG_set_TX_power_power+0, 0 
 	SUBLW       31
 	MOVWF       R0 
 	MOVF        R0, 0 
 	MOVWF       FARG_set_TX_power_power+0 
-;computador.c,750 :: 		power = ((power & 0b00011111) << 3) & 0b11111000;       // calculating power
+;computador.c,773 :: 		power = ((power & 0b00011111) << 3) & 0b11111000;       // calculating power
 	MOVLW       31
 	ANDWF       R0, 0 
 	MOVWF       R2 
@@ -1703,7 +1769,7 @@ L_set_TX_power58:
 	ANDWF       R0, 1 
 	MOVF        R0, 0 
 	MOVWF       FARG_set_TX_power_power+0 
-;computador.c,751 :: 		write_ZIGBEE_long(RFCON3, power);
+;computador.c,774 :: 		write_ZIGBEE_long(RFCON3, power);
 	MOVLW       3
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -1711,25 +1777,25 @@ L_set_TX_power58:
 	MOVF        R0, 0 
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,752 :: 		}
+;computador.c,775 :: 		}
 	RETURN      0
 ; end of _set_TX_power
 
 _init_ZIGBEE_basic:
-;computador.c,757 :: 		void init_ZIGBEE_basic() {
-;computador.c,758 :: 		write_ZIGBEE_short(PACON2, 0x98);   // Initialize FIFOEN = 1 and TXONTS = 0x6
+;computador.c,780 :: 		void init_ZIGBEE_basic() {
+;computador.c,781 :: 		write_ZIGBEE_short(PACON2, 0x98);   // Initialize FIFOEN = 1 and TXONTS = 0x6
 	MOVLW       24
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVLW       152
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,759 :: 		write_ZIGBEE_short(TXSTBL, 0x95);   // Initialize RFSTBL = 0x9
+;computador.c,782 :: 		write_ZIGBEE_short(TXSTBL, 0x95);   // Initialize RFSTBL = 0x9
 	MOVLW       46
 	MOVWF       FARG_write_ZIGBEE_short_address+0 
 	MOVLW       149
 	MOVWF       FARG_write_ZIGBEE_short_data_r+0 
 	CALL        _write_ZIGBEE_short+0, 0
-;computador.c,760 :: 		write_ZIGBEE_long(RFCON1, 0x01);    // Initialize VCOOPT = 0x01
+;computador.c,783 :: 		write_ZIGBEE_long(RFCON1, 0x01);    // Initialize VCOOPT = 0x01
 	MOVLW       1
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -1737,9 +1803,9 @@ _init_ZIGBEE_basic:
 	MOVLW       1
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,761 :: 		enable_PLL();                       // Enable PLL (PLLEN = 1)
+;computador.c,784 :: 		enable_PLL();                       // Enable PLL (PLLEN = 1)
 	CALL        _enable_PLL+0, 0
-;computador.c,762 :: 		write_ZIGBEE_long(RFCON6, 0x90);    // Initialize TXFIL = 1 and 20MRECVR = 1
+;computador.c,785 :: 		write_ZIGBEE_long(RFCON6, 0x90);    // Initialize TXFIL = 1 and 20MRECVR = 1
 	MOVLW       6
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -1747,7 +1813,7 @@ _init_ZIGBEE_basic:
 	MOVLW       144
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,763 :: 		write_ZIGBEE_long(RFCON7, 0x80);    // Initialize SLPCLKSEL = 0x2 (100 kHz Internal oscillator)
+;computador.c,786 :: 		write_ZIGBEE_long(RFCON7, 0x80);    // Initialize SLPCLKSEL = 0x2 (100 kHz Internal oscillator)
 	MOVLW       7
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -1755,7 +1821,7 @@ _init_ZIGBEE_basic:
 	MOVLW       128
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,764 :: 		write_ZIGBEE_long(RFCON8, 0x10);    // Initialize RFVCO = 1
+;computador.c,787 :: 		write_ZIGBEE_long(RFCON8, 0x10);    // Initialize RFVCO = 1
 	MOVLW       8
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -1763,7 +1829,7 @@ _init_ZIGBEE_basic:
 	MOVLW       16
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,765 :: 		write_ZIGBEE_long(SLPCON1, 0x21);   // Initialize CLKOUTEN = 1 and SLPCLKDIV = 0x01
+;computador.c,788 :: 		write_ZIGBEE_long(SLPCON1, 0x21);   // Initialize CLKOUTEN = 1 and SLPCLKDIV = 0x01
 	MOVLW       32
 	MOVWF       FARG_write_ZIGBEE_long_address+0 
 	MOVLW       2
@@ -1771,31 +1837,31 @@ _init_ZIGBEE_basic:
 	MOVLW       33
 	MOVWF       FARG_write_ZIGBEE_long_data_r+0 
 	CALL        _write_ZIGBEE_long+0, 0
-;computador.c,766 :: 		}
+;computador.c,789 :: 		}
 	RETURN      0
 ; end of _init_ZIGBEE_basic
 
 _init_ZIGBEE_nonbeacon:
-;computador.c,768 :: 		void init_ZIGBEE_nonbeacon() {
-;computador.c,769 :: 		init_ZIGBEE_basic();
+;computador.c,791 :: 		void init_ZIGBEE_nonbeacon() {
+;computador.c,792 :: 		init_ZIGBEE_basic();
 	CALL        _init_ZIGBEE_basic+0, 0
-;computador.c,770 :: 		set_CCA_mode(1);     // Set CCA mode to ED and set threshold
+;computador.c,793 :: 		set_CCA_mode(1);     // Set CCA mode to ED and set threshold
 	MOVLW       1
 	MOVWF       FARG_set_CCA_mode_CCA_mode+0 
 	CALL        _set_CCA_mode+0, 0
-;computador.c,771 :: 		set_RSSI_mode(2);    // RSSI2 mode
+;computador.c,794 :: 		set_RSSI_mode(2);    // RSSI2 mode
 	MOVLW       2
 	MOVWF       FARG_set_RSSI_mode_RSSI_mode+0 
 	CALL        _set_RSSI_mode+0, 0
-;computador.c,772 :: 		enable_interrupt();  // Enables all interrupts
+;computador.c,795 :: 		enable_interrupt();  // Enables all interrupts
 	CALL        _enable_interrupt+0, 0
-;computador.c,773 :: 		set_channel(11);     // Channel 11
+;computador.c,796 :: 		set_channel(11);     // Channel 11
 	MOVLW       11
 	MOVWF       FARG_set_channel_channel_number+0 
 	CALL        _set_channel+0, 0
-;computador.c,774 :: 		RF_reset();
+;computador.c,797 :: 		RF_reset();
 	CALL        _RF_reset+0, 0
-;computador.c,775 :: 		}
+;computador.c,798 :: 		}
 	RETURN      0
 ; end of _init_ZIGBEE_nonbeacon
 
@@ -1803,69 +1869,69 @@ _Debounce_INT:
 	CLRF        Debounce_INT_intn_d_L0+0 
 	CLRF        Debounce_INT_j_L0+0 
 	CLRF        Debounce_INT_i_L0+0 
-;computador.c,777 :: 		char Debounce_INT() {
-;computador.c,779 :: 		for(i = 0; i < 5; i++) {
+;computador.c,800 :: 		char Debounce_INT() {
+;computador.c,802 :: 		for(i = 0; i < 5; i++) {
 	CLRF        Debounce_INT_i_L0+0 
 L_Debounce_INT59:
 	MOVLW       5
 	SUBWF       Debounce_INT_i_L0+0, 0 
 	BTFSC       STATUS+0, 0 
 	GOTO        L_Debounce_INT60
-;computador.c,780 :: 		intn_d = INT;
+;computador.c,803 :: 		intn_d = INT;
 	MOVLW       0
 	BTFSC       RC6_bit+0, 6 
 	MOVLW       1
 	MOVWF       Debounce_INT_intn_d_L0+0 
-;computador.c,781 :: 		if (intn_d == 1)
+;computador.c,804 :: 		if (intn_d == 1)
 	MOVF        Debounce_INT_intn_d_L0+0, 0 
 	XORLW       1
 	BTFSS       STATUS+0, 2 
 	GOTO        L_Debounce_INT62
-;computador.c,782 :: 		j++;
+;computador.c,805 :: 		j++;
 	INCF        Debounce_INT_j_L0+0, 1 
 L_Debounce_INT62:
-;computador.c,779 :: 		for(i = 0; i < 5; i++) {
+;computador.c,802 :: 		for(i = 0; i < 5; i++) {
 	INCF        Debounce_INT_i_L0+0, 1 
-;computador.c,783 :: 		}
+;computador.c,806 :: 		}
 	GOTO        L_Debounce_INT59
 L_Debounce_INT60:
-;computador.c,784 :: 		if (j > 2)
+;computador.c,807 :: 		if (j > 2)
 	MOVF        Debounce_INT_j_L0+0, 0 
 	SUBLW       2
 	BTFSC       STATUS+0, 0 
 	GOTO        L_Debounce_INT63
-;computador.c,785 :: 		return 1;
+;computador.c,808 :: 		return 1;
 	MOVLW       1
 	MOVWF       R0 
 	RETURN      0
 L_Debounce_INT63:
-;computador.c,787 :: 		return 0;
+;computador.c,810 :: 		return 0;
 	CLRF        R0 
-;computador.c,788 :: 		}
+;computador.c,811 :: 		}
 	RETURN      0
 ; end of _Debounce_INT
 
 _Initialize:
 	CLRF        Initialize_i_L0+0 
-;computador.c,790 :: 		void Initialize() {
-;computador.c,793 :: 		LQI = 0;
+;computador.c,813 :: 		void Initialize() {
+;computador.c,816 :: 		LQI = 0;
 	CLRF        _LQI+0 
-;computador.c,794 :: 		RSSI2 = 0;
+;computador.c,817 :: 		RSSI2 = 0;
 	CLRF        _RSSI2+0 
-;computador.c,795 :: 		SEQ_NUMBER = 0x64;
+;computador.c,818 :: 		SEQ_NUMBER = 0x64;
 	MOVLW       100
 	MOVWF       _SEQ_NUMBER+0 
-;computador.c,796 :: 		lost_data = 0;
+;computador.c,819 :: 		lost_data = 0;
 	CLRF        _lost_data+0 
-;computador.c,797 :: 		address_RX_FIFO = 0x300;
+;computador.c,820 :: 		address_RX_FIFO = 0x300;
 	MOVLW       0
 	MOVWF       _address_RX_FIFO+0 
 	MOVLW       3
 	MOVWF       _address_RX_FIFO+1 
-;computador.c,798 :: 		address_TX_normal_FIFO = 0;
+;computador.c,821 :: 		address_TX_normal_FIFO = 0;
 	CLRF        _address_TX_normal_FIFO+0 
 	CLRF        _address_TX_normal_FIFO+1 
-;computador.c,800 :: 		for (i = 0; i < 2; i++) {
+;computador.c,823 :: 		for (i = 0; i < 2; i++) {
 	CLRF        Initialize_i_L0+0 
 L_Initialize65:
 	MOVLW       128
@@ -1876,7 +1942,7 @@ L_Initialize65:
 	SUBWF       R0, 0 
 	BTFSC       STATUS+0, 0 
 	GOTO        L_Initialize66
-;computador.c,801 :: 		ADDRESS_short_1[i] = 1;
+;computador.c,824 :: 		ADDRESS_short_1[i] = 1;
 	MOVLW       _ADDRESS_short_1+0
 	MOVWF       FSR1L 
 	MOVLW       hi_addr(_ADDRESS_short_1+0
@@ -1889,7 +1955,7 @@ L_Initialize65:
 	ADDWFC      FSR1H, 1 
 	MOVLW       1
 	MOVWF       POSTINC1+0 
-;computador.c,802 :: 		ADDRESS_short_2[i] = 2;
+;computador.c,825 :: 		ADDRESS_short_2[i] = 2;
 	MOVLW       _ADDRESS_short_2+0
 	MOVWF       FSR1L 
 	MOVLW       hi_addr(_ADDRESS_short_2+0
@@ -1902,7 +1968,7 @@ L_Initialize65:
 	ADDWFC      FSR1H, 1 
 	MOVLW       2
 	MOVWF       POSTINC1+0 
-;computador.c,803 :: 		PAN_ID_1[i] = 3;
+;computador.c,826 :: 		PAN_ID_1[i] = 3;
 	MOVLW       _PAN_ID_1+0
 	MOVWF       FSR1L 
 	MOVLW       hi_addr(_PAN_ID_1+0
@@ -1915,7 +1981,7 @@ L_Initialize65:
 	ADDWFC      FSR1H, 1 
 	MOVLW       3
 	MOVWF       POSTINC1+0 
-;computador.c,804 :: 		PAN_ID_2[i] = 3;
+;computador.c,827 :: 		PAN_ID_2[i] = 3;
 	MOVLW       _PAN_ID_2+0
 	MOVWF       FSR1L 
 	MOVLW       hi_addr(_PAN_ID_2+0
@@ -1928,12 +1994,12 @@ L_Initialize65:
 	ADDWFC      FSR1H, 1 
 	MOVLW       3
 	MOVWF       POSTINC1+0 
-;computador.c,800 :: 		for (i = 0; i < 2; i++) {
+;computador.c,823 :: 		for (i = 0; i < 2; i++) {
 	INCF        Initialize_i_L0+0, 1 
-;computador.c,805 :: 		}
+;computador.c,828 :: 		}
 	GOTO        L_Initialize65
 L_Initialize66:
-;computador.c,807 :: 		for (i = 0; i < 8; i++) {
+;computador.c,830 :: 		for (i = 0; i < 8; i++) {
 	CLRF        Initialize_i_L0+0 
 L_Initialize68:
 	MOVLW       128
@@ -1944,7 +2010,7 @@ L_Initialize68:
 	SUBWF       R0, 0 
 	BTFSC       STATUS+0, 0 
 	GOTO        L_Initialize69
-;computador.c,808 :: 		ADDRESS_long_1[i] = 1;
+;computador.c,831 :: 		ADDRESS_long_1[i] = 1;
 	MOVLW       _ADDRESS_long_1+0
 	MOVWF       FSR1L 
 	MOVLW       hi_addr(_ADDRESS_long_1+0
@@ -1957,7 +2023,7 @@ L_Initialize68:
 	ADDWFC      FSR1H, 1 
 	MOVLW       1
 	MOVWF       POSTINC1+0 
-;computador.c,809 :: 		ADDRESS_long_2[i] = 2;
+;computador.c,832 :: 		ADDRESS_long_2[i] = 2;
 	MOVLW       _ADDRESS_long_2+0
 	MOVWF       FSR1L 
 	MOVLW       hi_addr(_ADDRESS_long_2+0
@@ -1970,47 +2036,47 @@ L_Initialize68:
 	ADDWFC      FSR1H, 1 
 	MOVLW       2
 	MOVWF       POSTINC1+0 
-;computador.c,807 :: 		for (i = 0; i < 8; i++) {
+;computador.c,830 :: 		for (i = 0; i < 8; i++) {
 	INCF        Initialize_i_L0+0, 1 
-;computador.c,810 :: 		}
+;computador.c,833 :: 		}
 	GOTO        L_Initialize68
 L_Initialize69:
-;computador.c,812 :: 		ADCON1 = 0x0F;
+;computador.c,835 :: 		ADCON1 = 0x0F;
 	MOVLW       15
 	MOVWF       ADCON1+0 
-;computador.c,813 :: 		GIE_bit = 0;           // Disable interrupts
+;computador.c,836 :: 		GIE_bit = 0;           // Disable interrupts
 	BCF         GIE_bit+0, 7 
-;computador.c,815 :: 		TRISA = 0x00;          // Set direction to be output
+;computador.c,838 :: 		TRISA = 0x00;          // Set direction to be output
 	CLRF        TRISA+0 
-;computador.c,816 :: 		TRISB = 0x00;          // Set direction to be output
+;computador.c,839 :: 		TRISB = 0x00;          // Set direction to be output
 	CLRF        TRISB+0 
-;computador.c,817 :: 		TRISC = 0x00;          // Set direction to be output
+;computador.c,840 :: 		TRISC = 0x00;          // Set direction to be output
 	CLRF        TRISC+0 
-;computador.c,818 :: 		TRISD = 0x00;          // Set direction to be output
+;computador.c,841 :: 		TRISD = 0x00;          // Set direction to be output
 	CLRF        TRISD+0 
-;computador.c,820 :: 		CS2_Direction = 0;      // Set direction to be output
+;computador.c,843 :: 		CS2_Direction = 0;      // Set direction to be output
 	BCF         TRISC0_bit+0, 0 
-;computador.c,821 :: 		RST_Direction  = 0;    // Set direction to be output
+;computador.c,844 :: 		RST_Direction  = 0;    // Set direction to be output
 	BCF         TRISC1_bit+0, 1 
-;computador.c,822 :: 		INT_Direction  = 1;    // Set direction to be input
+;computador.c,845 :: 		INT_Direction  = 1;    // Set direction to be input
 	BSF         TRISC6_bit+0, 6 
-;computador.c,823 :: 		WAKE_Direction = 0;    // Set direction to be output
+;computador.c,846 :: 		WAKE_Direction = 0;    // Set direction to be output
 	BCF         TRISC2_bit+0, 2 
-;computador.c,825 :: 		DATA_TX[0] = 0;        // Initialize first byte
+;computador.c,848 :: 		DATA_TX[0] = 0;        // Initialize first byte
 	CLRF        _DATA_TX+0 
-;computador.c,826 :: 		DATA_TX[1] = 0;        // Initialize first byte
+;computador.c,849 :: 		DATA_TX[1] = 0;        // Initialize first byte
 	CLRF        _DATA_TX+1 
-;computador.c,827 :: 		DATA_TX[2] = 0;        // Initialize first byte
+;computador.c,850 :: 		DATA_TX[2] = 0;        // Initialize first byte
 	CLRF        _DATA_TX+2 
-;computador.c,828 :: 		DATA_TX[3] = 0;        // Initialize first byte
+;computador.c,851 :: 		DATA_TX[3] = 0;        // Initialize first byte
 	CLRF        _DATA_TX+3 
-;computador.c,829 :: 		DATA_TX[4] = 0;        // Initialize first byte
+;computador.c,852 :: 		DATA_TX[4] = 0;        // Initialize first byte
 	CLRF        _DATA_TX+4 
-;computador.c,831 :: 		PORTD = 0;             // Clear PORTD register
+;computador.c,854 :: 		PORTD = 0;             // Clear PORTD register
 	CLRF        PORTD+0 
-;computador.c,832 :: 		LATD  = 0;             // Clear LATD register
+;computador.c,855 :: 		LATD  = 0;             // Clear LATD register
 	CLRF        LATD+0 
-;computador.c,834 :: 		Delay_ms(15);
+;computador.c,857 :: 		Delay_ms(15);
 	MOVLW       49
 	MOVWF       R12, 0
 	MOVLW       178
@@ -2021,68 +2087,68 @@ L_Initialize71:
 	DECFSZ      R12, 1, 0
 	BRA         L_Initialize71
 	NOP
-;computador.c,836 :: 		Lcd_Init();                        // Initialize LCD
+;computador.c,859 :: 		Lcd_Init();                        // Initialize LCD
 	CALL        _Lcd_Init+0, 0
-;computador.c,837 :: 		Lcd_Cmd(_LCD_CLEAR);               // Clear display
+;computador.c,860 :: 		Lcd_Cmd(_LCD_CLEAR);               // Clear display
 	MOVLW       1
 	MOVWF       FARG_Lcd_Cmd_out_char+0 
 	CALL        _Lcd_Cmd+0, 0
-;computador.c,838 :: 		Lcd_Cmd(_LCD_CURSOR_OFF);          // Cursor off
+;computador.c,861 :: 		Lcd_Cmd(_LCD_CURSOR_OFF);          // Cursor off
 	MOVLW       12
 	MOVWF       FARG_Lcd_Cmd_out_char+0 
 	CALL        _Lcd_Cmd+0, 0
-;computador.c,841 :: 		SPI1_Init_Advanced(_SPI_MASTER_OSC_DIV4, _SPI_DATA_SAMPLE_MIDDLE, _SPI_CLK_IDLE_LOW, _SPI_LOW_2_HIGH);
+;computador.c,864 :: 		SPI1_Init_Advanced(_SPI_MASTER_OSC_DIV4, _SPI_DATA_SAMPLE_MIDDLE, _SPI_CLK_IDLE_LOW, _SPI_LOW_2_HIGH);
 	CLRF        FARG_SPI1_Init_Advanced_master+0 
 	CLRF        FARG_SPI1_Init_Advanced_data_sample+0 
 	CLRF        FARG_SPI1_Init_Advanced_clock_idle+0 
 	MOVLW       1
 	MOVWF       FARG_SPI1_Init_Advanced_transmit_edge+0 
 	CALL        _SPI1_Init_Advanced+0, 0
-;computador.c,842 :: 		pin_reset();                              // Activate reset from pin
+;computador.c,865 :: 		pin_reset();                              // Activate reset from pin
 	CALL        _pin_reset+0, 0
-;computador.c,843 :: 		software_reset();                         // Activate software reset
+;computador.c,866 :: 		software_reset();                         // Activate software reset
 	CALL        _software_reset+0, 0
-;computador.c,844 :: 		RF_reset();                               // RF reset
+;computador.c,867 :: 		RF_reset();                               // RF reset
 	CALL        _RF_reset+0, 0
-;computador.c,845 :: 		set_WAKE_from_pin();                      // Set wake from pin
+;computador.c,868 :: 		set_WAKE_from_pin();                      // Set wake from pin
 	CALL        _set_wake_from_pin+0, 0
-;computador.c,847 :: 		set_long_address(ADDRESS_long_2);         // Set long address
+;computador.c,870 :: 		set_long_address(ADDRESS_long_2);         // Set long address
 	MOVLW       _ADDRESS_long_2+0
 	MOVWF       FARG_set_long_address_address+0 
 	MOVLW       hi_addr(_ADDRESS_long_2+0
 	MOVWF       FARG_set_long_address_address+1 
 	CALL        _set_long_address+0, 0
-;computador.c,848 :: 		set_short_address(ADDRESS_short_2);       // Set short address
+;computador.c,871 :: 		set_short_address(ADDRESS_short_2);       // Set short address
 	MOVLW       _ADDRESS_short_2+0
 	MOVWF       FARG_set_short_address_address+0 
 	MOVLW       hi_addr(_ADDRESS_short_2+0
 	MOVWF       FARG_set_short_address_address+1 
 	CALL        _set_short_address+0, 0
-;computador.c,849 :: 		set_PAN_ID(PAN_ID_2);                     // Set PAN_ID
+;computador.c,872 :: 		set_PAN_ID(PAN_ID_2);                     // Set PAN_ID
 	MOVLW       _PAN_ID_2+0
 	MOVWF       FARG_set_PAN_ID_address+0 
 	MOVLW       hi_addr(_PAN_ID_2+0
 	MOVWF       FARG_set_PAN_ID_address+1 
 	CALL        _set_PAN_ID+0, 0
-;computador.c,851 :: 		init_ZIGBEE_nonbeacon();                  // Initialize ZigBee module
+;computador.c,874 :: 		init_ZIGBEE_nonbeacon();                  // Initialize ZigBee module
 	CALL        _init_ZIGBEE_nonbeacon+0, 0
-;computador.c,852 :: 		nonbeacon_PAN_coordinator_device();
+;computador.c,875 :: 		nonbeacon_PAN_coordinator_device();
 	CALL        _nonbeacon_PAN_coordinator_device+0, 0
-;computador.c,853 :: 		set_TX_power(31);                         // Set max TX power
+;computador.c,876 :: 		set_TX_power(31);                         // Set max TX power
 	MOVLW       31
 	MOVWF       FARG_set_TX_power_power+0 
 	CALL        _set_TX_power+0, 0
-;computador.c,854 :: 		set_frame_format_filter(1);               // 1 all frames, 3 data frame only
+;computador.c,877 :: 		set_frame_format_filter(1);               // 1 all frames, 3 data frame only
 	MOVLW       1
 	MOVWF       FARG_set_frame_format_filter_fff_mode+0 
 	CALL        _set_frame_format_filter+0, 0
-;computador.c,855 :: 		set_reception_mode(1);                    // 1 normal mode
+;computador.c,878 :: 		set_reception_mode(1);                    // 1 normal mode
 	MOVLW       1
 	MOVWF       FARG_set_reception_mode_r_mode+0 
 	CALL        _set_reception_mode+0, 0
-;computador.c,857 :: 		pin_wake();                               // Wake from pin
+;computador.c,880 :: 		pin_wake();                               // Wake from pin
 	CALL        _pin_wake+0, 0
-;computador.c,858 :: 		}
+;computador.c,881 :: 		}
 	RETURN      0
 ; end of _Initialize
 
@@ -2104,19 +2170,19 @@ _main:
 	CLRF        main_seqN_L0+0 
 	CLRF        main_d2_L0+0 
 	CLRF        main_d1_L0+0 
-;computador.c,860 :: 		void main() {
-;computador.c,868 :: 		Initialize();                      // Initialize MCU and Bee click board
+;computador.c,883 :: 		void main() {
+;computador.c,891 :: 		Initialize();                      // Initialize MCU and Bee click board
 	CALL        _Initialize+0, 0
-;computador.c,869 :: 		write_TX_normal_FIFO();
+;computador.c,892 :: 		write_TX_normal_FIFO();
 	CALL        _write_TX_normal_FIFO+0, 0
-;computador.c,874 :: 		while(1) {
+;computador.c,897 :: 		while(1) {
 L_main72:
-;computador.c,875 :: 		if(trans == 0){
+;computador.c,898 :: 		if(trans == 0){
 	MOVF        main_trans_L0+0, 0 
 	XORLW       0
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main74
-;computador.c,876 :: 		Lcd_Chr(2,5,'b');
+;computador.c,899 :: 		Lcd_Chr(2,5,'b');
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       5
@@ -2124,33 +2190,33 @@ L_main72:
 	MOVLW       98
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;computador.c,877 :: 		if(Debounce_INT() == 0 ){
+;computador.c,900 :: 		if(Debounce_INT() == 0 ){
 	CALL        _Debounce_INT+0, 0
 	MOVF        R0, 0 
 	XORLW       0
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main75
-;computador.c,878 :: 		temp1 = read_ZIGBEE_short(INTSTAT); // Read and flush register INTSTAT
+;computador.c,901 :: 		temp1 = read_ZIGBEE_short(INTSTAT); // Read and flush register INTSTAT
 	MOVLW       49
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
 	MOVF        R0, 0 
 	MOVWF       _temp1+0 
-;computador.c,879 :: 		read_RX_FIFO();                     // Read receive data
+;computador.c,902 :: 		read_RX_FIFO();                     // Read receive data
 	CALL        _read_RX_FIFO+0, 0
-;computador.c,880 :: 		d1=DATA_RX[0];
-	MOVF        _DATA_RX+0, 0 
+;computador.c,903 :: 		d1=DATA_RX[15];
+	MOVF        _DATA_RX+15, 0 
 	MOVWF       main_d1_L0+0 
-;computador.c,881 :: 		d2=DATA_RX[1];
+;computador.c,904 :: 		d2=DATA_RX[1];
 	MOVF        _DATA_RX+1, 0 
 	MOVWF       main_d2_L0+0 
-;computador.c,885 :: 		cond = 1;
+;computador.c,908 :: 		cond = 1;
 	MOVLW       1
 	MOVWF       main_cond_L0+0 
-;computador.c,887 :: 		}
+;computador.c,910 :: 		}
 	GOTO        L_main76
 L_main75:
-;computador.c,888 :: 		else if(cond > 0){
+;computador.c,911 :: 		else if(cond > 0){
 	MOVLW       128
 	MOVWF       R0 
 	MOVLW       128
@@ -2164,7 +2230,7 @@ L_main75:
 L__main104:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_main77
-;computador.c,889 :: 		Delay_us(910);
+;computador.c,912 :: 		Delay_us(910);
 	MOVLW       3
 	MOVWF       R12, 0
 	MOVLW       243
@@ -2175,21 +2241,21 @@ L_main78:
 	DECFSZ      R12, 1, 0
 	BRA         L_main78
 	NOP
-;computador.c,890 :: 		cond ++;
+;computador.c,913 :: 		cond ++;
 	INCF        main_cond_L0+0, 1 
-;computador.c,891 :: 		if(cond == 100){
+;computador.c,914 :: 		if(cond == 100){
 	MOVF        main_cond_L0+0, 0 
 	XORLW       100
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main79
-;computador.c,892 :: 		trans = 1;
+;computador.c,915 :: 		trans = 1;
 	MOVLW       1
 	MOVWF       main_trans_L0+0 
-;computador.c,893 :: 		Initialize();                      // Initialize MCU and Bee click board
+;computador.c,916 :: 		Initialize();                      // Initialize MCU and Bee click board
 	CALL        _Initialize+0, 0
-;computador.c,894 :: 		write_TX_normal_FIFO();
+;computador.c,917 :: 		write_TX_normal_FIFO();
 	CALL        _write_TX_normal_FIFO+0, 0
-;computador.c,895 :: 		Lcd_Chr(2,1,'b');
+;computador.c,918 :: 		Lcd_Chr(2,1,'b');
 	MOVLW       2
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       1
@@ -2197,14 +2263,14 @@ L_main78:
 	MOVLW       98
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;computador.c,896 :: 		write_TX_normal_FIFO();
+;computador.c,919 :: 		write_TX_normal_FIFO();
 	CALL        _write_TX_normal_FIFO+0, 0
-;computador.c,897 :: 		}
+;computador.c,920 :: 		}
 L_main79:
-;computador.c,898 :: 		}
+;computador.c,921 :: 		}
 	GOTO        L_main80
 L_main77:
-;computador.c,900 :: 		Delay_us(910);
+;computador.c,923 :: 		Delay_us(910);
 	MOVLW       3
 	MOVWF       R12, 0
 	MOVLW       243
@@ -2215,10 +2281,10 @@ L_main81:
 	DECFSZ      R12, 1, 0
 	BRA         L_main81
 	NOP
-;computador.c,901 :: 		cond2++;
+;computador.c,924 :: 		cond2++;
 	INFSNZ      main_cond2_L0+0, 1 
 	INCF        main_cond2_L0+1, 1 
-;computador.c,902 :: 		Lcd_Chr(1,5,'C');
+;computador.c,925 :: 		Lcd_Chr(1,5,'C');
 	MOVLW       1
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       5
@@ -2226,7 +2292,7 @@ L_main81:
 	MOVLW       67
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;computador.c,903 :: 		if(cond2 == 1500){
+;computador.c,926 :: 		if(cond2 == 1500){
 	MOVF        main_cond2_L0+1, 0 
 	XORLW       5
 	BTFSS       STATUS+0, 2 
@@ -2236,9 +2302,9 @@ L_main81:
 L__main105:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main82
-;computador.c,904 :: 		write_TX_normal_FIFO();
+;computador.c,927 :: 		write_TX_normal_FIFO();
 	CALL        _write_TX_normal_FIFO+0, 0
-;computador.c,905 :: 		Delay_ms(1000);
+;computador.c,928 :: 		Delay_ms(1000);
 	MOVLW       13
 	MOVWF       R11, 0
 	MOVLW       175
@@ -2253,22 +2319,22 @@ L_main83:
 	DECFSZ      R11, 1, 0
 	BRA         L_main83
 	NOP
-;computador.c,906 :: 		trans = 1;
+;computador.c,929 :: 		trans = 1;
 	MOVLW       1
 	MOVWF       main_trans_L0+0 
-;computador.c,907 :: 		}
+;computador.c,930 :: 		}
 L_main82:
-;computador.c,908 :: 		}
+;computador.c,931 :: 		}
 L_main80:
 L_main76:
-;computador.c,910 :: 		} //final trans = 0
+;computador.c,933 :: 		} //final trans = 0
 L_main74:
-;computador.c,911 :: 		if(trans == 1){
+;computador.c,934 :: 		if(trans == 1){
 	MOVF        main_trans_L0+0, 0 
 	XORLW       1
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main84
-;computador.c,912 :: 		Delay_ms(3000);
+;computador.c,935 :: 		Delay_ms(3000);
 	MOVLW       39
 	MOVWF       R11, 0
 	MOVLW       13
@@ -2283,32 +2349,32 @@ L_main85:
 	DECFSZ      R11, 1, 0
 	BRA         L_main85
 	NOP
-;computador.c,914 :: 		DATA_TX[0]='3';
+;computador.c,937 :: 		DATA_TX[0]='3';
 	MOVLW       51
 	MOVWF       _DATA_TX+0 
-;computador.c,915 :: 		DATA_TX[1]=dig2;
+;computador.c,938 :: 		DATA_TX[1]=dig2;
 	MOVF        _dig2+0, 0 
 	MOVWF       _DATA_TX+1 
-;computador.c,916 :: 		DATA_TX[2]=dig3;
+;computador.c,939 :: 		DATA_TX[2]=dig3;
 	MOVF        _dig3+0, 0 
 	MOVWF       _DATA_TX+2 
-;computador.c,917 :: 		DATA_TX[3]=degrees;
+;computador.c,940 :: 		DATA_TX[3]=degrees;
 	MOVF        _degrees+0, 0 
 	MOVWF       _DATA_TX+3 
-;computador.c,918 :: 		DATA_TX[4]=battery;
+;computador.c,941 :: 		DATA_TX[4]=battery;
 	MOVF        _battery+0, 0 
 	MOVWF       _DATA_TX+4 
-;computador.c,919 :: 		write_TX_normal_FIFO();
+;computador.c,942 :: 		write_TX_normal_FIFO();
 	CALL        _write_TX_normal_FIFO+0, 0
-;computador.c,920 :: 		i = read_ZIGBEE_short(TXSTAT);
+;computador.c,943 :: 		i = read_ZIGBEE_short(TXSTAT);
 	MOVLW       36
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
 	MOVF        R0, 0 
 	MOVWF       main_i_L0+0 
-;computador.c,922 :: 		SEQ_NUMBER++;
+;computador.c,945 :: 		SEQ_NUMBER++;
 	INCF        _SEQ_NUMBER+0, 1 
-;computador.c,924 :: 		if((i & 1) == 0){
+;computador.c,947 :: 		if((i & 1) == 0){
 	MOVLW       1
 	ANDWF       R0, 0 
 	MOVWF       R1 
@@ -2325,16 +2391,16 @@ L_main85:
 L__main106:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main86
-;computador.c,925 :: 		trans = 0;
+;computador.c,948 :: 		trans = 0;
 	CLRF        main_trans_L0+0 
-;computador.c,926 :: 		cond = 0;
+;computador.c,949 :: 		cond = 0;
 	CLRF        main_cond_L0+0 
-;computador.c,927 :: 		cond2 = 0;
+;computador.c,950 :: 		cond2 = 0;
 	CLRF        main_cond2_L0+0 
 	CLRF        main_cond2_L0+1 
-;computador.c,928 :: 		Initialize();
+;computador.c,951 :: 		Initialize();
 	CALL        _Initialize+0, 0
-;computador.c,929 :: 		Lcd_Chr(1,1,'a');
+;computador.c,952 :: 		Lcd_Chr(1,1,'a');
 	MOVLW       1
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       1
@@ -2342,7 +2408,7 @@ L__main106:
 	MOVLW       97
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;computador.c,930 :: 		Delay_ms(900);
+;computador.c,953 :: 		Delay_ms(900);
 	MOVLW       12
 	MOVWF       R11, 0
 	MOVLW       107
@@ -2358,10 +2424,10 @@ L_main87:
 	BRA         L_main87
 	NOP
 	NOP
-;computador.c,931 :: 		}
+;computador.c,954 :: 		}
 	GOTO        L_main88
 L_main86:
-;computador.c,932 :: 		else if((i & 1) == 1){
+;computador.c,955 :: 		else if((i & 1) == 1){
 	MOVLW       1
 	ANDWF       main_i_L0+0, 0 
 	MOVWF       R1 
@@ -2369,11 +2435,11 @@ L_main86:
 	XORLW       1
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main89
-;computador.c,933 :: 		Lcd_Cmd(_LCD_CLEAR);
+;computador.c,956 :: 		Lcd_Cmd(_LCD_CLEAR);
 	MOVLW       1
 	MOVWF       FARG_Lcd_Cmd_out_char+0 
 	CALL        _Lcd_Cmd+0, 0
-;computador.c,934 :: 		Lcd_Chr(1,1,d1);
+;computador.c,957 :: 		Lcd_Chr(1,1,d1);
 	MOVLW       1
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       1
@@ -2381,7 +2447,7 @@ L_main86:
 	MOVF        main_d1_L0+0, 0 
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;computador.c,935 :: 		Lcd_Chr(1,2,d2);
+;computador.c,958 :: 		Lcd_Chr(1,2,d2);
 	MOVLW       1
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       2
@@ -2389,13 +2455,13 @@ L_main86:
 	MOVF        main_d2_L0+0, 0 
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;computador.c,936 :: 		}
+;computador.c,959 :: 		}
 L_main89:
 L_main88:
-;computador.c,937 :: 		}   //final trans ==1
+;computador.c,960 :: 		}   //final trans ==1
 L_main84:
-;computador.c,938 :: 		}//final while
+;computador.c,961 :: 		}//final while
 	GOTO        L_main72
-;computador.c,939 :: 		}
+;computador.c,962 :: 		}
 	GOTO        $+0
 ; end of _main
