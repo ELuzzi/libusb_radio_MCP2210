@@ -151,7 +151,7 @@ short int ADDRESS_short_2[2], ADDRESS_long_2[8];        // Destination address
 short int PAN_ID_1[2];               // Source PAN ID
 short int PAN_ID_2[2];               // Destination PAN ID
 short int DATA_RX[DATA_LENGHT], DATA_TX[DATA_LENGHT], data_TX_normal_FIFO[DATA_LENGHT + HEADER_LENGHT + 2];
-short int LQI, RSSI2, SEQ_NUMBER, SN;
+short int LQI, RSSI2, SEQ_NUMBER = 0, SN = 0;
 short int temp1;
 
 int dig1 = '1', dig2 = '2', dig3 = '0', degrees = 0, battery = 0;
@@ -815,7 +815,7 @@ void Initialize() {
   //variable initialization
   LQI = 0;
   RSSI2 = 0;
-  SEQ_NUMBER = 0x64;
+  //SEQ_NUMBER = 0x64;
   lost_data = 0;
   address_RX_FIFO = 0x300;
   address_TX_normal_FIFO = 0;
@@ -882,9 +882,9 @@ void Initialize() {
 
 void main() {
      char d1=0, d2=0, d3=0, deg=0, bat=0, seqN=0;
-     char lastD1=0xFF, lastD2=0, lastD3=0, lastDeg=0, lastBat=0, lastSN=0;
+     char lastD1=0xFF, lastD2=0, lastD3=0, lastDeg=0, lastBat=0, lastSN=0, addr = 0;
      short int i = 1, cont = 0,cond = 0, repPack = 0;
-     int cond2;
+     int cond2, cond3 = 0;
      char texto[16];
      char trans = 1; //quando trans = 1 está operando no modo transmissor, se trans = 0 está no modo receptor
 
@@ -895,6 +895,22 @@ void main() {
      read_RX_FIFO();*/
 
      while(1) {
+              if(cond3 == 50){
+                       if(trans == 2){
+                                EEPROM_Write(addr, SEQ_NUMBER);
+                       }
+                       else{
+                            EEPROM_Write(addr, 0xFF);
+                       }
+                       cond3 = 0;
+                       trans = 1;
+
+                       addr++;
+                       SEQ_NUMBER =0;
+              }
+              if(addr == 0xFF){
+                      trans = 3;
+              }
               if(trans == 0){
                       Lcd_Chr(2,5,'b');
                       if(Debounce_INT() == 0 ){
@@ -917,6 +933,9 @@ void main() {
                                    write_TX_normal_FIFO();
                                    Lcd_Chr(2,1,'b');
                                    write_TX_normal_FIFO();
+
+                                   trans = 2;
+                                   cond3 ++;
                            }
                       }
                       else{
@@ -927,6 +946,7 @@ void main() {
                                     write_TX_normal_FIFO();
                                     Delay_ms(1);
                                     trans = 1;
+                                    cond3 ++;
                            }
                       }
 
@@ -942,6 +962,7 @@ void main() {
                       write_TX_normal_FIFO();
                       i = read_ZIGBEE_short(TXSTAT);
                       
+                      cond3 ++;
                       SEQ_NUMBER++;
 
                       if((i & 0b00000001) == 0){
@@ -957,6 +978,18 @@ void main() {
                            Lcd_Chr(1,1,d1);
                            Lcd_Chr(1,2,d2);
                       }
+                      
+                     /*if(SEQ_NUMBER<127){
+                          SEQ_NUMBER++;
+                      }
+                      else{
+                           trans=3;
+                           Lcd_Chr(1,1,'F');
+                      }*/
               }   //final trans ==1
+              if(trans == 2){
+                       Delay_ms(10);
+                       cond3 ++;
+              }
       }//final while
 }

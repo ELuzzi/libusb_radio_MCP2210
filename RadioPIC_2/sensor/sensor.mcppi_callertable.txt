@@ -117,6 +117,7 @@ main
 		read_ZIGBEE_long
 			SPI1_Write
 			SPI1_Read
+	EEPROM_Write
 	write_TX_normal_FIFO
 		write_ZIGBEE_long
 			SPI1_Write

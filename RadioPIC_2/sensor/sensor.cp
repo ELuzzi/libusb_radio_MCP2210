@@ -52,7 +52,7 @@ short int ADDRESS_short_2[2], ADDRESS_long_2[8];
 short int PAN_ID_1[2];
 short int PAN_ID_2[2];
 short int DATA_RX[DATA_LENGHT], DATA_TX[DATA_LENGHT], data_TX_normal_FIFO[DATA_LENGHT + HEADER_LENGHT + 2];
-short int LQI, RSSI2, SEQ_NUMBER, SN;
+short int LQI, RSSI2, SEQ_NUMBER = 0, SN = 0;
 short int temp1;
 
 
@@ -858,7 +858,7 @@ void Initialize() {
 
  LQI = 0;
  RSSI2 = 0;
- SEQ_NUMBER = 0x01;
+
  lost_data = 0;
  address_RX_FIFO = 0x300;
  address_TX_normal_FIFO = 0;
@@ -933,8 +933,8 @@ void Initialize() {
 
 void main() {
  char d1=0, d2=0, d3=0, deg=0, bat=0;
- char lastD1=0, lastD2=0, lastD3=0, lastDeg=0, lastBat=0, lastSN=0;
- short int i, cont = 0, cond=0;
+ char lastD1=0, lastD2=0, lastD3=0, lastDeg=0, lastBat=0, lastSN=0, adr = 2;
+ short int i, cont = 0, cond=0, lost = 0, lostT = 0;
  int sleep = 4;
  char texto[16];
  char trans = 0;
@@ -967,6 +967,14 @@ void main() {
  d3=DATA_RX[2];
  deg=DATA_RX[3];
  bat=DATA_RX[4];
+
+
+
+ lost = SN + lastSN;
+ lostT += lost;
+ lastSN = SN;
+ EEPROM_Write(0x00, lostT);
+
 
  cond = 1;
 
@@ -1001,6 +1009,8 @@ void main() {
  Initialize();
  Lcd_Chr(1,1,'a');
 
+ EEPROM_Write(adr, 300);
+ adr ++;
  }
  else if((i & 1) == 1){
  Lcd_Chr(1,1,'r');

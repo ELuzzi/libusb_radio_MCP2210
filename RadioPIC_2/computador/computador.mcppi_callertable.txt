@@ -100,6 +100,7 @@ main
 		start_transmit
 			write_ZIGBEE_short
 				SPI1_Write
+	EEPROM_Write
 	Lcd_Chr
 		Lcd_Cmd
 			Delay_1us

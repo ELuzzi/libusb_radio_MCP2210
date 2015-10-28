@@ -2878,9 +2878,6 @@ _Initialize:
 	CLRF        _LQI+0 
 ;sensor.c,1049 :: 		RSSI2 = 0;
 	CLRF        _RSSI2+0 
-;sensor.c,1050 :: 		SEQ_NUMBER = 0x01;
-	MOVLW       1
-	MOVWF       _SEQ_NUMBER+0 
 ;sensor.c,1051 :: 		lost_data = 0;
 	CLRF        _lost_data+0 
 ;sensor.c,1052 :: 		address_RX_FIFO = 0x300;
@@ -3130,8 +3127,11 @@ _main:
 	MOVWF       main_sleep_L0+0 
 	MOVLW       0
 	MOVWF       main_sleep_L0+1 
+	CLRF        main_lostT_L0+0 
 	CLRF        main_cond_L0+0 
 	CLRF        main_cont_L0+0 
+	MOVLW       2
+	MOVWF       main_adr_L0+0 
 	CLRF        main_lastSN_L0+0 
 	CLRF        main_lastBat_L0+0 
 	CLRF        main_lastDeg_L0+0 
@@ -3221,13 +3221,30 @@ L_main186:
 	MOVWF       _temp1+0 
 ;sensor.c,1153 :: 		read_RX_FIFO();                     // Read receive data
 	CALL        _read_RX_FIFO+0, 0
-;sensor.c,1160 :: 		cond = 1;
+;sensor.c,1162 :: 		lost = SN + lastSN;
+	MOVF        main_lastSN_L0+0, 0 
+	ADDWF       _SN+0, 0 
+	MOVWF       R0 
+;sensor.c,1163 :: 		lostT += lost;
+	MOVF        main_lostT_L0+0, 0 
+	ADDWF       R0, 1 
+	MOVF        R0, 0 
+	MOVWF       main_lostT_L0+0 
+;sensor.c,1164 :: 		lastSN = SN;
+	MOVF        _SN+0, 0 
+	MOVWF       main_lastSN_L0+0 
+;sensor.c,1165 :: 		EEPROM_Write(0x00, lostT);
+	CLRF        FARG_EEPROM_Write_address+0 
+	MOVF        R0, 0 
+	MOVWF       FARG_EEPROM_Write_data_+0 
+	CALL        _EEPROM_Write+0, 0
+;sensor.c,1168 :: 		cond = 1;
 	MOVLW       1
 	MOVWF       main_cond_L0+0 
-;sensor.c,1162 :: 		}
+;sensor.c,1170 :: 		}
 	GOTO        L_main190
 L_main189:
-;sensor.c,1163 :: 		else if(cond > 0){
+;sensor.c,1171 :: 		else if(cond > 0){
 	MOVLW       128
 	MOVWF       R0 
 	MOVLW       128
@@ -3241,18 +3258,18 @@ L_main189:
 L__main234:
 	BTFSC       STATUS+0, 0 
 	GOTO        L_main191
-;sensor.c,1165 :: 		cond ++;
+;sensor.c,1173 :: 		cond ++;
 	INCF        main_cond_L0+0, 1 
-;sensor.c,1166 :: 		if(cond == 7){
+;sensor.c,1174 :: 		if(cond == 7){
 	MOVF        main_cond_L0+0, 0 
 	XORLW       7
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main192
-;sensor.c,1167 :: 		Initialize();                      // Initialize MCU and Bee click board
+;sensor.c,1175 :: 		Initialize();                      // Initialize MCU and Bee click board
 	CALL        _Initialize+0, 0
-;sensor.c,1168 :: 		write_TX_normal_FIFO();
+;sensor.c,1176 :: 		write_TX_normal_FIFO();
 	CALL        _write_TX_normal_FIFO+0, 0
-;sensor.c,1169 :: 		Lcd_Chr(1,1,'b');
+;sensor.c,1177 :: 		Lcd_Chr(1,1,'b');
 	MOVLW       1
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       1
@@ -3260,22 +3277,22 @@ L__main234:
 	MOVLW       98
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;sensor.c,1170 :: 		trans = 1;
+;sensor.c,1178 :: 		trans = 1;
 	MOVLW       1
 	MOVWF       main_trans_L0+0 
-;sensor.c,1171 :: 		}
+;sensor.c,1179 :: 		}
 L_main192:
-;sensor.c,1172 :: 		}
+;sensor.c,1180 :: 		}
 L_main191:
 L_main190:
-;sensor.c,1173 :: 		} //final trans = 0
+;sensor.c,1181 :: 		} //final trans = 0
 L_main188:
-;sensor.c,1174 :: 		if(trans == 1){
+;sensor.c,1182 :: 		if(trans == 1){
 	MOVF        main_trans_L0+0, 0 
 	XORLW       1
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main193
-;sensor.c,1175 :: 		Delay_ms(9);
+;sensor.c,1183 :: 		Delay_ms(9);
 	MOVLW       30
 	MOVWF       R12, 0
 	MOVLW       55
@@ -3285,32 +3302,32 @@ L_main194:
 	BRA         L_main194
 	DECFSZ      R12, 1, 0
 	BRA         L_main194
-;sensor.c,1177 :: 		DATA_TX[15]='3';
+;sensor.c,1185 :: 		DATA_TX[15]='3';
 	MOVLW       51
 	MOVWF       _DATA_TX+15 
-;sensor.c,1178 :: 		DATA_TX[1]='4';
+;sensor.c,1186 :: 		DATA_TX[1]='4';
 	MOVLW       52
 	MOVWF       _DATA_TX+1 
-;sensor.c,1179 :: 		DATA_TX[2]=dig3;
+;sensor.c,1187 :: 		DATA_TX[2]=dig3;
 	MOVF        _dig3+0, 0 
 	MOVWF       _DATA_TX+2 
-;sensor.c,1180 :: 		DATA_TX[3]=degrees;
+;sensor.c,1188 :: 		DATA_TX[3]=degrees;
 	MOVF        _degrees+0, 0 
 	MOVWF       _DATA_TX+3 
-;sensor.c,1181 :: 		DATA_TX[4]=battery;
+;sensor.c,1189 :: 		DATA_TX[4]=battery;
 	MOVF        _battery+0, 0 
 	MOVWF       _DATA_TX+4 
-;sensor.c,1182 :: 		write_TX_normal_FIFO();
+;sensor.c,1190 :: 		write_TX_normal_FIFO();
 	CALL        _write_TX_normal_FIFO+0, 0
-;sensor.c,1183 :: 		i = read_ZIGBEE_short(TXSTAT);
+;sensor.c,1191 :: 		i = read_ZIGBEE_short(TXSTAT);
 	MOVLW       36
 	MOVWF       FARG_read_ZIGBEE_short_address+0 
 	CALL        _read_ZIGBEE_short+0, 0
 	MOVF        R0, 0 
 	MOVWF       main_i_L0+0 
-;sensor.c,1185 :: 		SEQ_NUMBER++;
+;sensor.c,1193 :: 		SEQ_NUMBER++;
 	INCF        _SEQ_NUMBER+0, 1 
-;sensor.c,1187 :: 		if((i & 1) == 0){
+;sensor.c,1195 :: 		if((i & 1) == 0){
 	MOVLW       1
 	ANDWF       R0, 0 
 	MOVWF       R1 
@@ -3327,14 +3344,14 @@ L_main194:
 L__main235:
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main195
-;sensor.c,1188 :: 		trans = 2;
+;sensor.c,1196 :: 		trans = 2;
 	MOVLW       2
 	MOVWF       main_trans_L0+0 
-;sensor.c,1189 :: 		cond = 0;
+;sensor.c,1197 :: 		cond = 0;
 	CLRF        main_cond_L0+0 
-;sensor.c,1190 :: 		Initialize();
+;sensor.c,1198 :: 		Initialize();
 	CALL        _Initialize+0, 0
-;sensor.c,1191 :: 		Lcd_Chr(1,1,'a');
+;sensor.c,1199 :: 		Lcd_Chr(1,1,'a');
 	MOVLW       1
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       1
@@ -3342,10 +3359,18 @@ L__main235:
 	MOVLW       97
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;sensor.c,1193 :: 		}
+;sensor.c,1201 :: 		EEPROM_Write(adr, 300);
+	MOVF        main_adr_L0+0, 0 
+	MOVWF       FARG_EEPROM_Write_address+0 
+	MOVLW       44
+	MOVWF       FARG_EEPROM_Write_data_+0 
+	CALL        _EEPROM_Write+0, 0
+;sensor.c,1202 :: 		adr ++;
+	INCF        main_adr_L0+0, 1 
+;sensor.c,1203 :: 		}
 	GOTO        L_main196
 L_main195:
-;sensor.c,1194 :: 		else if((i & 1) == 1){
+;sensor.c,1204 :: 		else if((i & 1) == 1){
 	MOVLW       1
 	ANDWF       main_i_L0+0, 0 
 	MOVWF       R1 
@@ -3353,7 +3378,7 @@ L_main195:
 	XORLW       1
 	BTFSS       STATUS+0, 2 
 	GOTO        L_main197
-;sensor.c,1195 :: 		Lcd_Chr(1,1,'r');
+;sensor.c,1205 :: 		Lcd_Chr(1,1,'r');
 	MOVLW       1
 	MOVWF       FARG_Lcd_Chr_row+0 
 	MOVLW       1
@@ -3361,15 +3386,15 @@ L_main195:
 	MOVLW       114
 	MOVWF       FARG_Lcd_Chr_out_char+0 
 	CALL        _Lcd_Chr+0, 0
-;sensor.c,1196 :: 		}
+;sensor.c,1206 :: 		}
 L_main197:
 L_main196:
-;sensor.c,1197 :: 		}   //final trans ==1
+;sensor.c,1207 :: 		}   //final trans ==1
 L_main193:
-;sensor.c,1199 :: 		sleep++;
+;sensor.c,1209 :: 		sleep++;
 	INFSNZ      main_sleep_L0+0, 1 
 	INCF        main_sleep_L0+1, 1 
-;sensor.c,1200 :: 		Delay_us(910);
+;sensor.c,1210 :: 		Delay_us(910);
 	MOVLW       3
 	MOVWF       R12, 0
 	MOVLW       243
@@ -3380,8 +3405,8 @@ L_main198:
 	DECFSZ      R12, 1, 0
 	BRA         L_main198
 	NOP
-;sensor.c,1202 :: 		}//final while
+;sensor.c,1212 :: 		}//final while
 	GOTO        L_main184
-;sensor.c,1203 :: 		}
+;sensor.c,1213 :: 		}
 	GOTO        $+0
 ; end of _main
