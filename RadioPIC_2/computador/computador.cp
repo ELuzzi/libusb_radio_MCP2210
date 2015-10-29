@@ -702,21 +702,22 @@ void main() {
  write_TX_normal_FIFO();
 #line 897 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
  while(1) {
- if(cond3 == 50){
+ if(addr > 0xFF){
+ trans = 3;
+ }
+ if(cond3 == 62){
  if(trans == 2){
  EEPROM_Write(addr, SEQ_NUMBER);
  }
  else{
- EEPROM_Write(addr, 0xFF);
+ EEPROM_Write(addr, 0xF0);
  }
+
  cond3 = 0;
  trans = 1;
 
  addr++;
  SEQ_NUMBER =0;
- }
- if(addr == 0xFF){
- trans = 3;
  }
  if(trans == 0){
  Lcd_Chr(2,5,'b');
@@ -737,6 +738,7 @@ void main() {
  if(cond == 7){
  trans = 1;
  Initialize();
+ cond3 += 3;
  write_TX_normal_FIFO();
  Lcd_Chr(2,1,'b');
  write_TX_normal_FIFO();
@@ -777,6 +779,7 @@ void main() {
  cond = 0;
  cond2 = 0;
  Initialize();
+ cond3 += 3;
  Lcd_Chr(1,1,'a');
 
  }
@@ -785,10 +788,9 @@ void main() {
  Lcd_Chr(1,1,d1);
  Lcd_Chr(1,2,d2);
  }
-#line 989 "C:/Users/User/Documents/libusb_radio_MCP2210/RadioPIC_2/computador/computador.c"
  }
  if(trans == 2){
- Delay_ms(10);
+ Delay_ms(9);
  cond3 ++;
  }
  }

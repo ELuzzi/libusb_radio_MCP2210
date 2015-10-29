@@ -895,21 +895,22 @@ void main() {
      read_RX_FIFO();*/
 
      while(1) {
-              if(cond3 == 50){
+              if(addr > 0xFF){
+                      trans = 3;
+              }
+              if(cond3 == 62){
                        if(trans == 2){
                                 EEPROM_Write(addr, SEQ_NUMBER);
                        }
                        else{
-                            EEPROM_Write(addr, 0xFF);
+                            EEPROM_Write(addr, 0xF0);
                        }
+                       
                        cond3 = 0;
                        trans = 1;
 
                        addr++;
                        SEQ_NUMBER =0;
-              }
-              if(addr == 0xFF){
-                      trans = 3;
               }
               if(trans == 0){
                       Lcd_Chr(2,5,'b');
@@ -930,6 +931,7 @@ void main() {
                            if(cond == 7){
                                    trans = 1;
                                    Initialize();                      // Initialize MCU and Bee click board
+                                   cond3 += 3;
                                    write_TX_normal_FIFO();
                                    Lcd_Chr(2,1,'b');
                                    write_TX_normal_FIFO();
@@ -970,6 +972,7 @@ void main() {
                              cond = 0;
                              cond2 = 0;
                              Initialize();
+                             cond3 += 3;
                              Lcd_Chr(1,1,'a');
                              //Delay_us(800);
                       }
@@ -978,17 +981,9 @@ void main() {
                            Lcd_Chr(1,1,d1);
                            Lcd_Chr(1,2,d2);
                       }
-                      
-                     /*if(SEQ_NUMBER<127){
-                          SEQ_NUMBER++;
-                      }
-                      else{
-                           trans=3;
-                           Lcd_Chr(1,1,'F');
-                      }*/
               }   //final trans ==1
               if(trans == 2){
-                       Delay_ms(10);
+                       Delay_ms(9);
                        cond3 ++;
               }
       }//final while
